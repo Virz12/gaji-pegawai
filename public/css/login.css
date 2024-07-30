@@ -1,0 +1,44 @@
+:root {
+    --light: #f3f6f9;
+    --primary: #FFC55A;
+    --primary-hover: #fdb838;
+    --black: #0f0f0f;
+    --white: #fff;
+}
+
+.bg-log {
+    background-color: var(--white);
+}
+
+.icon {
+    position: absolute;
+    right: 30px;
+}
+
+.button {
+    background-color: var(--primary);
+}
+
+.button:hover {
+    background-color: #000000;
+    color: var(--white);
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 .2rem var(--primary);
+}
+
+
+@media (min-width: 1920px) {
+    .h-custom-2 {
+        height: 100%;
+    }
+
+    .bg-log {
+        width: 30%;
+    }
+
+    .width-xxl {
+        width: 70%;
+    }
+}
