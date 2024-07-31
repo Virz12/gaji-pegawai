@@ -27,7 +27,7 @@
                 </ul>
                 <hr>
                 <div class="d-md-flex justify-content-end me-2 mt-2 mt-md-0 mb-2 mb-md-0" style="width: 176px">
-                    <a class="text-decoration-none nav-link" href="#"><button type="button" class="btn btn-outline-danger btn-sm">Log Out</button></a>
+                    <a class="text-decoration-none nav-link" href="/logout"><button type="button" class="btn btn-outline-danger btn-sm">Log Out</button></a>
                 </div>
             </div>
         </div>
@@ -63,7 +63,9 @@
         <section class="col-md-6 col-xxl-8 mt-4 mt-md-3">
             <h4 class="mb-3"><strong>Buat Pesan</strong></h4>
             <div class="border border-success border-1 rounded p-3 p-md-4">
-                <form action="">
+                <form action="{{route('send.whatsapp')}}" method="POST">
+                    @csrf
+                    @method('POST')
                     <div class="row g-2">
                         <div class="col-lg-9">
                             <select class="form-select border-success-subtle" aria-label="Default select example">
