@@ -16,7 +16,6 @@ class LoginController extends Controller
 
     function storelogin(Request $request)
     {
-
         $messages = [
             'required' => 'Kolom :attribute wajib diisi',
             'username.alpha' => 'Kolom :attribute hanya boleh berisi huruf',

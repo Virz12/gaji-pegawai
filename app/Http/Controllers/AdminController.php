@@ -13,8 +13,6 @@ class AdminController extends Controller
 {
     public function index()
     {
-        
-
         return view('main.dashboard');
     }
 
@@ -32,11 +30,11 @@ class AdminController extends Controller
             'unique' => ':attribute sudah dipakai',
         ];
 
-        // flash()
-        // ->killer(true)
-        // ->layout('bottomRight')
-        // ->timeout(3000)
-        // ->error('<b>Error!</b><br>Tambah Siswa Gagal');
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->error('<b>Error!</b><br>Penambahan Pegawai Gagal.');
 
         $request->validate([
             'nip' => 'required|numeric|unique:data_pegawai',
@@ -52,19 +50,19 @@ class AdminController extends Controller
         ];
 
         if($datapegawai = DataPegawai::create($data)){
-            // flash()
-            // ->killer(true)
-            // ->layout('bottomRight')
-            // ->timeout(3000)
-            // ->success('<b>Berhasil!</b><br>Siswa sudah Di Tambah.');
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->success('<b>Berhasil!</b><br>Data Pegawai Sudah Ditambah.');
 
             return redirect('/dashboard')->withInput();
         }else{
-            // flash()
-            // ->killer(true)
-            // ->layout('bottomRight')
-            // ->timeout(3000)
-            // ->error('<b>Error!</b><br>Tambah Siswa Gagal');
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->error('<b>Error!</b><br>Penambahan Pegawai Gagal.');
             return redirect('/tambahpegawai');
         }
     }
@@ -74,11 +72,11 @@ class AdminController extends Controller
         $dpegawai = DataPegawai::findOrFail($id);
         $dpegawai->delete();
 
-        // flash()
-        // ->killer(true)
-        // ->layout('bottomRight')
-        // ->timeout(3000)
-        // ->success('<b>Berhasil!</b><br>Data Siswa sudah Dihapus.');
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->success('<b>Berhasil!</b><br>Data Pegawai Sudah Dihapus.');
         
         return redirect('/dashboard');
     }
@@ -107,11 +105,11 @@ class AdminController extends Controller
             'password.regex'=>'hanya berisi Huruf, Angka(0-9), a-z, A-Z ,karakter khusus yang Diizinkan[!@#$?&*] masing-masing Minimal 1 dan Tanpa Spasi'
         ];
 
-        // flash()
-        // ->killer(true)
-        // ->layout('bottomRight')
-        // ->timeout(3000)
-        // ->error('<b>Error!</b><br>Password gagal diubah');
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->error('<b>Error!</b><br>Perubahan Password Gagal.');
 
         $request->validate([
             'passwordSekarang' => 'required',
@@ -130,11 +128,11 @@ class AdminController extends Controller
                     'password' => $request->input('password'),
                 ]);
             } else {
-                // flash()
-                // ->killer(true)
-                // ->layout('bottomRight')
-                // ->timeout(3000)
-                // ->error('<b>Error!</b><br>Password gagal diubah');
+                flash()
+                ->killer(true)
+                ->layout('bottomRight')
+                ->timeout(3000)
+                ->error('<b>Error!</b><br>Perubahan Password Gagal.');
 
                 return redirect('/ubahpassword')->withErrors([
                     'password' => 'Password tidak sama',
@@ -142,19 +140,19 @@ class AdminController extends Controller
                 ])->withInput();
             }
         }else {
-            // flash()
-            // ->killer(true)
-            // ->layout('bottomRight')
-            // ->timeout(3000)
-            // ->error('<b>Error!</b><br>Password gagal diubah');
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->error('<b>Error!</b><br>Perubahan Password Gagal.');
             
             return redirect('/ubahpassword')->withErrors(['passwordSekarang' => 'Password tidak sesuai'])->withInput();
         }
-        // flash()
-        // ->killer(true)
-        // ->layout('bottomRight')
-        // ->timeout(3000)
-        // ->success('<b>Berhasil!</b><br>Password sudah diubah');
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->success('<b>Berhasil!</b><br>Password Sudah Diubah.');
 
         return redirect('/ubahpassword');
     }
