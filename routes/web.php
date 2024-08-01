@@ -11,7 +11,7 @@ Route::middleware(['preventBackHistory','guest'])->group(function () {
         return redirect('/login');
     });
     Route::get('/login', [LoginController::class, 'login'])->name('login');
-    Route::post('/login', [LoginController::class, 'storelogin'])->middleware('resetDaily');
+    Route::post('/login', [LoginController::class, 'storelogin']);
 });
 
 Route::middleware(['preventBackHistory','auth'])->group(function () {
@@ -21,8 +21,12 @@ Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
-Route::middleware(['preventBackHistory','auth','userAccess:admin'])->group(function () {
+Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('main.dashboard');
+    Route::get('/ubahpassword', [AdminController::class, 'ubahpw'])->name('main.ubahpassword');
     
-    Route::post('/dashboard/gaji', [WhatsappController::class, 'whatsapp'])->name('send.whatsapp');
+    
+    Route::post('/dashboard/send', [WhatsappController::class, 'whatsapp'])->name('main.whatsapp');
+    Route::put('/ubahpassword/update', [AdminController::class, 'updatePassword'])->name('main.updatepassword');
+    
 });

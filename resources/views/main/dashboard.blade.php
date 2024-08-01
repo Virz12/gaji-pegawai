@@ -22,7 +22,7 @@
                         <a class="nav-link active fw-medium text-success d-inline-block" aria-current="page" href="#">Kirim Pesan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="#">Tambah Pegawai</a>
+                        <a class="nav-link text-black d-inline-block" href="">Tambah Pegawai</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-black d-inline-block" href="#">Arsip Pesan</a>
@@ -35,7 +35,7 @@
                             Sang Admin
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Ubah Password</a></li>
+                            <li><a class="dropdown-item" href="/ubahpassword">Ubah Password</a></li>
                             <li><a class="dropdown-item" href="/logout">Log Out</a></li>
                         </ul>
                     </span>                
@@ -70,13 +70,13 @@
         <section class="col-md-6 col-xxl-8 mt-4 mt-md-3">
             <div class="card p-3">
                 <h4 class="mb-3"><strong>Buat Pesan</strong></h4>
-                <form action="{{route('send.whatsapp')}}" method="POST">
+                <form action="{{route('main.whatsapp')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
                     <div class="input-group mb-2">
                         <label class="input-group-text" for="nomor">Nomor Telepon</label>
                         <input class="form-control" id="nomor" type="number" placeholder="08354876892" disabled>
-                      </div>
+                    </div>
                     <div class="row g-2">
                         <div class="col-lg-9">
                             <div class="input-group">
@@ -93,9 +93,9 @@
                     </div>
                     <div class="input-group mt-2">
                         <label class="input-group-text" for="pesan">Pesan</label>
-                        <textarea class="form-control" placeholder="Masukan Pesan" style="resize: none; height: 150px"></textarea>
+                        <textarea class="form-control" name="pesan" id="pesan" style="resize: none; height: 150px"></textarea>
                     </div>
-                    <input class="form-control mt-2" type="file">
+                    <input class="form-control mt-2" type="file" name="file" id="file">
                     <button type="submit" class="btn btn-success mt-2 w-25 min-w">Kirim</button>
                 </form>
             </div>

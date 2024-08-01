@@ -49,8 +49,7 @@
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Sang Admin
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Ubah Password</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end">                           
                             <li><a class="dropdown-item" href="/logout">Log Out</a></li>
                         </ul>
                     </span>                
@@ -61,22 +60,33 @@
     <div class="d-flex align-items-center justify-content-center" style="height: calc(100vh - 58px)">
         <div class="card p-3 w-75 w-lg-50 w-xxl-25">
             <h4 class="mb-3"><strong>Ubah Password</strong></h4>
-            <form action="">
+            <form action="{{route('main.updatepassword')}}" method="POST">
+                @csrf
+                @method('PUT')
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="passwordSekarang" placeholder="" aria-label="passwordSekarang">
-                    <label for="passwordSekarang">Password Sekarang</label>
+                    <input type="password" name="passwordSekarang" class="form-control border-2 @error('passwordSekarang') is-invalid @enderror" id="passwordSekarang" placeholder="" aria-label="passwordSekarang">
+                    <label for="passwordSekarang">Password Sekarang<span class="text-danger">*</span></label>
+                    @error('passwordSekarang')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="passwordBaru" placeholder="" aria-label="passwordBaru">
-                    <label  for="passwordBaru">Password Baru</label>
+                    <input type="password" name="password" class="form-control border-2 @error('password') is-invalid @enderror" id="passwordBaru" placeholder="" aria-label="passwordBaru">
+                    <label  for="passwordBaru">Password Baru<span class="text-danger">*</span></label>
+                    @error('password')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="passwordKonfirmasi" placeholder="" aria-label="passwordKonfirmasi">
-                    <label for="passwordKonfirmasi">Konfirmasi Password</label>
+                    <input type="password" name="passwordKonfirmasi" class="form-control border-2 @error('passwordKonfirmasi') is-invalid @enderror" id="passwordKonfirmasi" placeholder="" aria-label="passwordKonfirmasi">
+                    <label for="passwordKonfirmasi">Konfirmasi Password<span class="text-danger">*</span></label>
+                    @error('passwordKonfirmasi')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <a href=""><button type="submit" class="btn btn-secondary w-100">Kembali</button></a>
+                        <a href="/dashboard"class="btn btn-secondary w-100">Kembali</a>
                     </div>
                     <div class="col-6">
                         <button type="submit" class="btn btn-success w-100">Ubah</button>
