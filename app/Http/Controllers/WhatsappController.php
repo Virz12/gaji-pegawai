@@ -18,22 +18,51 @@ use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 
 
-class GajiController extends Controller
+class WhatsappController extends Controller
 {
-    public function whatsapp(Request $request)
-    {
-        
+    protected $whatsapp;
 
-        $whatsapp_cloud_api = new WhatsAppCloudApi([
-            'from_phone_number_id' => '386632231198502',
-            'access_token' => 'EAAL8DfhS4ZBgBO0WLNblWiBqq6dfyc9y5nX15LMB5NCJ4BVNpglCayHXO6uOQlzp2KqKOtNlySs1WTl48hMU89n6eXqPcMZAxvZBwBZAlGxtMACtzCJ3omXsqxPPKnhM0hZAmWJlPXijBK5J2EuLCCTfIGrN8i4jbZCZAkpcSqGyyF3RngZB6Vr30IquDI2P49LZAYp9XFZBnXQPf5wIaoDkotopF6G1psHLAGZC3Wq',
+    public function __construct()
+    {
+        $this->whatsapp = new WhatsAppCloudApi([
+            'from_phone_number_id' => env('WHATSAPP_CLOUD_API_FROM_PHONE_NUMBER'),
+            'access_token' => env('WHATSAPP_CLOUD_API_TOKEN'),
             'graph_version' => 'v20.0'
         ]);
-        
-        $whatsapp_cloud_api->sendTextMessage('6282119757291', 'Hey there! I\'m using WhatsApp Cloud API. Visit https://www.netflie.es');
+    }
 
+    public function whatsapp(Request $request)
+    {
+        $request->validate([
+            // 'template' => 'required|string',
+            'pesan' => 'required',
+            'file' => 'nullable|file'
+        ]);
 
-        return redirect('/dashboard');
+        // $template = $request->input('template');
+        $pesan = $request->input('pesan');
+        $file = $request->file('file');
+
+        $to = '6282119757291'; // Nomor tujuan harus diisi dengan benar
+
+        // Mengirim pesan teks
+        $this->whatsapp->sendTextMessage($to, $pesan);
+
+         // Jika ada file yang di-upload
+        if ($file) {
+            $mimeType = $file->getClientMimeType();
+            $mediaId = $this->whatsapp->uploadMedia($file_path, $mimeType);
+
+            // Mengirim pesan media berdasarkan tipe file
+            if (strpos($mimeType, 'image') !== false) {
+                $this->whatsapp->sendImage($to, $mediaId, $file->getClientOriginalName());
+            } elseif (strpos($mimeType, 'application') !== false) {
+                $this->whatsapp->sendDocument($to, $mediaId, $file->getClientOriginalName());
+            } else {
+                // Penanganan untuk tipe file lainnya jika diperlukan
+            }
+        }
+        return redirect('/dashboard')->with('success','pesan berhasil dikirim!');
     }
 
     public function store(Request $request)
