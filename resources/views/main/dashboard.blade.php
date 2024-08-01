@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{-- Bootstrap --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    
     <title>{{ config('app.name') }} | Dashboard</title>
 </head>
 <body class="min-vh-100 bg-body-secondary">
@@ -51,8 +52,8 @@
                 <h4 class="mb-3"><strong>Cari Pegawai</strong></h4>
                 <form action="">
                     <div class="input-group mb-3">
-                        <label class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></label>
-                        <input type="text" class="form-control" placeholder="Nama Pegawai" aria-label="Nama Pegawai" aria-describedby="basic-addon1">
+                        <label class="input-group-text" for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
+                        <input type="text" class="form-control" placeholder="Nama Pegawai" aria-label="search" id="search" aria-describedby="search">
                     </div>
                     <div class="row g-2">
                         <button class="btn btn-success rounded p-2 text-start"> {{-- Status Active --}}

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{-- Bootstrap --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-    
+
     {{-- Custom CSS --}}
     <style>
         @media screen and (min-width: 992px) {
@@ -20,10 +20,23 @@
                 width: 25% !important;
             }
         }
+
+        /* Remove Arrow on Number Input */
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
     <title>{{ config('app.name') }} | Dashboard</title>
 </head>
-<body class="min-vh-100 overflow-hidden bg-body-secondary">
+<body class="min-vh-100 bg-body-secondary">
     {{-- NavBar --}}
     <nav class="navbar navbar-expand-md bg-white shadow">
         <div class="container-fluid">
@@ -34,10 +47,10 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
                 <ul class="nav nav-underline ms-auto mb-2 mb-md-0 me-auto flex-column flex-md-row">
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="/dashboard">Kirim Pesan</a>
+                        <a class="nav-link text-black d-inline-block" aria-current="page" href="/dashboard">Kirim Pesan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="#">Tambah Pegawai</a>
+                        <a class="nav-link active fw-medium text-success d-inline-block" href="">Tambah Pegawai</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-black d-inline-block" href="#">Arsip Pesan</a>
@@ -49,7 +62,8 @@
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Sang Admin
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">                           
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/ubahpassword">Ubah Password</a></li>
                             <li><a class="dropdown-item" href="/logout">Log Out</a></li>
                         </ul>
                     </span>                
@@ -60,28 +74,27 @@
     {{-- Card --}}
     <div class="d-flex align-items-center justify-content-center" style="height: calc(100vh - 58px)">
         <div class="card p-3 w-75 w-lg-50 w-xxl-25">
-            <h4 class="mb-3"><strong>Ubah Password</strong></h4>
-            <form action="{{route('main.updatepassword')}}" method="POST">
+            <h4 class="mb-3"><strong>Tambah Pegawai</strong></h4>
+            <form action="" method="POST">
                 @csrf
-                @method('PUT')
                 <div class="form-floating mb-3">
-                    <input type="password" name="passwordSekarang" class="form-control border-2 @error('passwordSekarang') is-invalid @enderror" id="passwordSekarang" placeholder="" aria-label="passwordSekarang" required>
-                    <label for="passwordSekarang">Password Sekarang<span class="text-danger">*</span></label>
-                    @error('passwordSekarang')
+                    <input type="number" name="nip" class="form-control border-2 @error('nip') is-invalid @enderror" id="nip" placeholder="" aria-label="nip" required>
+                    <label for="nip">NIP<span class="text-danger">*</span></label>
+                    @error('nip')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" name="password" class="form-control border-2 @error('password') is-invalid @enderror" id="passwordBaru" placeholder="" aria-label="passwordBaru" required>
-                    <label  for="passwordBaru">Password Baru<span class="text-danger">*</span></label>
-                    @error('password')
+                    <input type="text" name="nama" class="form-control border-2 @error('nama') is-invalid @enderror" id="nama" placeholder="" aria-label="nama" required>
+                    <label  for="nama">Nama Pegawai<span class="text-danger">*</span></label>
+                    @error('nama')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" name="passwordKonfirmasi" class="form-control border-2 @error('passwordKonfirmasi') is-invalid @enderror" id="passwordKonfirmasi" placeholder="" aria-label="passwordKonfirmasi" required>
-                    <label for="passwordKonfirmasi">Konfirmasi Password<span class="text-danger">*</span></label>
-                    @error('passwordKonfirmasi')
+                    <input type="number" name="nomorWa" class="form-control border-2 @error('nomorWa') is-invalid @enderror" id="nomorWa" placeholder="" aria-label="nomorWa" required>
+                    <label for="nomorWa">Nomor WhatsApp<span class="text-danger">*</span></label>
+                    @error('nomorWa')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                 </div>

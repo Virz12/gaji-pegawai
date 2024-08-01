@@ -20,7 +20,7 @@
                 alt="Login image" class="w-100  vh-100" style="object-fit: cover; object-position: left;">
             </div>
             <div class="col-md-5 bg-log" style="height: 100vh"> 
-                <div class="mx-auto mt-3" style="width: 140px;">
+                <div class="mx-auto mt-3" style="width: 100px;">
                     <img src="{{asset('img/logo.png')}}" class="logo img-fluid" >
                 </div>
                 <h1 class="text-center mt-3"><strong>WhatsApp Sender</strong></h1>
@@ -49,16 +49,6 @@
                 </div>
             </div>
         </div>
-        {{-- Alert --}}
-        @if($errors->any())
-            <div class="position-fixed bottom-0 end-0 p-3">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
-                    Username atau Password tidak cocok!
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-        @endif
     </div>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
