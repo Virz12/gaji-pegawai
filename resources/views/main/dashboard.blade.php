@@ -59,14 +59,46 @@
                     </div>
                     <div class="row g-2">
                     @forelse ( $datapegawai as $pegawai)
-                        {{-- <button class="btn btn-success rounded p-2 text-start"> 
+                        {{-- <div class="btn btn-success rounded p-2 text-start"> 
                             
-                        </button> --}}
+                        </div> --}}
 
-                        <button class="btn btn-outline-success rounded p-2 text-start"> 
+                        <div type="button" class="btn btn-outline-success rounded p-2 text-start d-flex justify-content-between align-items-center"> 
                             {{$pegawai->nama}}
-                        </button>
-
+                            <div class="btn-group dropend">
+                                <button type="button" class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Edit</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Hapus{{ $pegawai->nip }}">Hapus</a></li>
+                                </ul>
+                              </div>
+                        </div>
+                        {{-- Confirmation Modal --}}
+                        <div class="modal fade" id="Hapus{{ $pegawai->nip }}" tabindex="-1" aria-labelledby="HapusLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="HapusLabel">Hapus Data</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        Apakah anda yakin ingin menghapus data ini?<br>
+                                        <b>{{ $pegawai->nama }}</b>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="/hapuspegawai/{{ $pegawai->id }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Hapus</button>
+                                        </form>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @empty
                         <h2 class="text-secondary opacity-75 text-center">Pencarian Kosong</h2>
                     @endforelse
