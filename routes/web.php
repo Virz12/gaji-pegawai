@@ -25,6 +25,7 @@ Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('main.dashboard');
     Route::get('/ubahpassword', [AdminController::class, 'ubahpw'])->name('main.ubahpassword');
     Route::get('/tambahpegawai', [AdminController::class, 'tambahpegawai'])->name('main.tambahpegawai');
+    Route::get('/hapuspegawai/{datapegawai:id}',[AdminController::class, 'deletepegawai'])->name('main.delete');
     
 
     Route::post('/dashboard/template', [WhatsappController::class, 'simpantemplate'])->name('main.simpanTemplate');
