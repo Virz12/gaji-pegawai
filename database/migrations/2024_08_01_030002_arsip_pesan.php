@@ -9,12 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('arsip_pesan', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->string('nip');
             $table->string('nama');
-            $table->string('no_whatsapp');
+            $table->string('nomorWa');
             $table->string('pesan');
-            $table->string('file')->nullable();
+            $table->string('attachment')->nullable();
             $table->timestamps();
         });
     }

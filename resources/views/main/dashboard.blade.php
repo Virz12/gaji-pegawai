@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{-- Bootstrap --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    {{-- JQuery  --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     
     <title>{{ config('app.name') }} | Dashboard</title>
 </head>
@@ -23,7 +25,7 @@
                         <a class="nav-link active fw-medium text-success d-inline-block" aria-current="page" href="#">Kirim Pesan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="">Tambah Pegawai</a>
+                        <a class="nav-link text-black d-inline-block" href="/tambahpegawai">Tambah Pegawai</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-black d-inline-block" href="#">Arsip Pesan</a>
@@ -33,7 +35,7 @@
                 <div class="d-md-flex justify-content-end me-2 mt-2 mt-md-0 mb-2 mb-md-0" style="width: 176px">
                     <span class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Sang Admin
+                            {{ Auth::user()->username }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="/ubahpassword">Ubah Password</a></li>
@@ -56,13 +58,18 @@
                         <input type="text" class="form-control" placeholder="Nama Pegawai" aria-label="search" id="search" aria-describedby="search">
                     </div>
                     <div class="row g-2">
-                        <button class="btn btn-success rounded p-2 text-start"> {{-- Status Active --}}
-                            Fulan
+                    @forelse ( $datapegawai as $pegawai)
+                        {{-- <button class="btn btn-success rounded p-2 text-start"> 
+                            
+                        </button> --}}
+
+                        <button class="btn btn-outline-success rounded p-2 text-start"> 
+                            {{$pegawai->nama}}
                         </button>
-                        <button class="btn btn-outline-success rounded p-2 text-start"> {{-- Status Normal --}}
-                            Budi
-                        </button>
+
+                    @empty
                         <h2 class="text-secondary opacity-75 text-center">Pencarian Kosong</h2>
+                    @endforelse
                     </div>
                 </form>
             </div>
@@ -71,7 +78,7 @@
         <section class="col-md-6 col-xxl-8 mt-4 mt-md-3">
             <div class="card p-3">
                 <h4 class="mb-3"><strong>Buat Pesan</strong></h4>
-                <form action="{{route('main.whatsapp')}}" method="POST" enctype="multipart/form-data">
+                <form id="whatsappForm" action="{{route('main.whatsapp')}}" method="POST" enctype="multipart/form-data" data-save-template-url="{{ route('main.simpanTemplate') }}">
                     @csrf
                     @method('POST')
                     <div class="input-group mb-2">
@@ -82,26 +89,41 @@
                         <div class="col-lg-9">
                             <div class="input-group">
                                 <label class="input-group-text" for="template">Template Text</label>
-                                <select class="form-select" id="template">
-                                    <option selected>Pilih Template</option>
-                                    <option value="2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit, eveniet?</option>
+                                <select class="form-select" id="templateSelect">
+                                    @forelse ( $datatemplate as $template)                                                                            
+                                        <option select hidden>Pilih Template</option>
+                                        <option value="{{$template->pesan}}">{{$template->nama_template}}</option>
+                                    @empty
+                                        
+                                    @endforelse
                                 </select>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-3">
-                            <button type="submit" class="btn btn-success w-100">Simpan</button>
+                        <div class="col-12 col-lg-3 mb-2" >
+                            <button id="saveTemplateBtn" class="btn btn-success w-100">Simpan</button>
                         </div>
                     </div>
+                    <div class="input-group">
+                        <label class="input-group-text" for="nama_template">Nama Template</label>
+                        <input class="form-control" name="nama_template" id="nama_template" type="text" placeholder="'NamaTemplate1'" autocomplete="off">
+                    </div>
+                    @error('nama_template')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
                     <div class="input-group mt-2">
                         <label class="input-group-text" for="pesan">Pesan</label>
-                        <textarea class="form-control" name="pesan" id="pesan" style="resize: none; height: 150px"></textarea>
+                        <textarea class="form-control" name="pesan" id="pesan" style="resize: none; height: 150px"></textarea>                        
                     </div>
-                    <input class="form-control mt-2" type="file" name="file" id="file">
-                    <button type="submit" class="btn btn-success mt-2 w-25 min-w">Kirim</button>
+                    @error('pesan')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
+                    <input class="form-control mt-2" type="file" name="attachment" id="attachment">
+                    <button type="submit" class="btn btn-success mt-2 w-25 min-w"  id="sendBtn">Kirim</button>
                 </form>
             </div>
         </section>
     </div>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
 </html>

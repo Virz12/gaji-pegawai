@@ -9,9 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('template', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->string('nama_template')->unique();
-            $table->string('massage');
+            $table->string('pesan');
             $table->timestamps();
         });
     }

@@ -24,9 +24,11 @@ Route::middleware(['preventBackHistory','auth'])->group(function () {
 Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('main.dashboard');
     Route::get('/ubahpassword', [AdminController::class, 'ubahpw'])->name('main.ubahpassword');
+    Route::get('/tambahpegawai', [AdminController::class, 'tambahpegawai'])->name('main.tambahpegawai');
     
-    
+
+    Route::post('/dashboard/template', [WhatsappController::class, 'simpantemplate'])->name('main.simpanTemplate');
     Route::post('/dashboard/send', [WhatsappController::class, 'whatsapp'])->name('main.whatsapp');
     Route::put('/ubahpassword/update', [AdminController::class, 'updatePassword'])->name('main.updatepassword');
-    
+    Route::post('/tambahpegawai', [AdminController::class, 'storepegawai']);
 });

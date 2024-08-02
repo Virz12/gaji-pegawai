@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class datapegawai extends Model
+class arsip_pesan extends Model
 {
     use HasFactory;
 
@@ -14,12 +14,14 @@ class datapegawai extends Model
 
     public $incrementing = false;
 
-    protected $table = 'data_pegawai';
+    protected $table = 'arsip_pesan';
 
     protected $fillable = [
         'nip',
         'nama',
         'nomorWa',
+        'pesan',
+        'attachment',
     ];
 
     public static function booted() {

@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\user;
+use App\Models\template;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
@@ -41,7 +46,7 @@ class WhatsappController extends Controller
 
         // $template = $request->input('template');
         $pesan = $request->input('pesan');
-        $file = $request->file('file');
+        
 
         $to = '6282119757291'; // Nomor tujuan harus diisi dengan benar
 
@@ -49,44 +54,56 @@ class WhatsappController extends Controller
         $this->whatsapp->sendTextMessage($to, $pesan);
 
          // Jika ada file yang di-upload
-        if ($file) {
-            $mimeType = $file->getClientMimeType();
-            $mediaId = $this->whatsapp->uploadMedia($file_path, $mimeType);
+        if ($request->hasFile('attachment')) {
+            $attachment = $request->file('attachment')->path();
+            $mediaId = $this->whatsapp->uploadMedia($attachment);
 
             // Mengirim pesan media berdasarkan tipe file
-            if (strpos($mimeType, 'image') !== false) {
-                $this->whatsapp->sendImage($to, $mediaId, $file->getClientOriginalName());
-            } elseif (strpos($mimeType, 'application') !== false) {
-                $this->whatsapp->sendDocument($to, $mediaId, $file->getClientOriginalName());
-            } else {
-                // Penanganan untuk tipe file lainnya jika diperlukan
-            }
+            $this->whatsapp->sendDocument($to, $mediaId, $attachment->getClientOriginalName());
         }
+        
         return redirect('/dashboard')->with('success','pesan berhasil dikirim!');
     }
 
-    public function store(Request $request)
+    public function simpantemplate(Request $request)
     {
-        //
-    }
+        $messages = [
+            'required' => 'Kolom :attribute belum terisi.',
+            'unique' => ' :attribute sudah dipakai.',
+        ];
 
-    public function show(string $id)
-    {
-        //
-    }
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->error('<b>Error!</b><br>Template Gagal Disimpan.');
 
-    public function edit(string $id)
-    {
-        //
-    }
+        $request->validate([
+            'nama_template' => 'required|unique:template',
+            'pesan' => 'required',
+        ],$messages);
 
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        
+        $data = [   
+            'nama_template' => $request->input('nama_template'),
+            'pesan' => $request->input('pesan'),
+        ];
 
-    public function destroy(string $id)
-    {
-        //
+        if($template = template::create($data)){
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->success('<b>Berhasil!</b><br>Template Disimpan.');
+
+            return redirect('/dashboard')->withInput();
+        }else{
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->error('<b>Error!</b><br>Template Gagal Disimpan.');
+            return redirect('/dashboard');
+        }
     }
 }

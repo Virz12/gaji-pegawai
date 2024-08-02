@@ -3,31 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\user;
-use App\Models\DataPegawai;
+use App\Models\datapegawai;
+use App\Models\template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     public function index()
     {
-        return view('main.dashboard');
+        $datapegawai = datapegawai::orderBy('updated_at','DESC')
+                                    ->get();
+
+        $datatemplate = template::all();
+        
+        return view('main.dashboard')
+                    ->with('datapegawai', $datapegawai)
+                    ->with('datatemplate', $datatemplate);
     }
 
     public function tambahpegawai()
     {
-        return view('main.tambapegawai');
+        return view('main.tambahpegawai');
     }
 
-    public function storepegawai(Request $request)
+    function storepegawai(Request $request)
     {
         $messages = [
             'required' => 'Kolom :attribute belum terisi.',
-            'numeric' => 'Kolom :attribute hanya boleh berisi angka',
-            'nama.regex' => 'Kolom :attribute hanya berisi huruf besar atau kecil',
-            'unique' => ':attribute sudah dipakai',
+            'numeric' => 'Kolom :attribute hanya boleh berisi angka.',
+            'nama.regex' => 'Kolom :attribute hanya berisi huruf besar atau kecil dan spasi.',
+            'unique' => ':attribute sudah dipakai.',
         ];
 
         flash()
@@ -39,17 +48,17 @@ class AdminController extends Controller
         $request->validate([
             'nip' => 'required|numeric|unique:data_pegawai',
             'nama' => 'required|regex:/^[a-zA-Z ]+$/',
-            'no_whatsapp' => 'required|numeric',
+            'nomorWa' => 'required|numeric',
         ],$messages);
 
         
         $data = [   
             'nip' => $request->input('nip'),
             'nama' => $request->input('nama'),
-            'no_whatsapp' => $request->input('no_whatsapp'),
+            'nomorWa' => $request->input('nomorWa'),
         ];
 
-        if($datapegawai = DataPegawai::create($data)){
+        if($datapegawai = datapegawai::create($data)){
             flash()
             ->killer(true)
             ->layout('bottomRight')
@@ -69,7 +78,7 @@ class AdminController extends Controller
 
     public function deletepegawai($id) 
     {   
-        $dpegawai = DataPegawai::findOrFail($id);
+        $dpegawai = datapegawai::findOrFail($id);
         $dpegawai->delete();
 
         flash()

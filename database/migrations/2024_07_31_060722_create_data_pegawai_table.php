@@ -12,7 +12,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nip')->unique();
             $table->string('nama');
-            $table->string('no_whatsapp');
+            $table->string('nomorWa');
             $table->timestamps();
         });
     }
