@@ -38,7 +38,7 @@
             -moz-appearance: textfield;
         }
     </style>
-    <title>{{ config('app.name') }} | Dashboard</title>
+    <title>{{ config('app.name') }} | Tambah Pegawai</title>
 </head>
 <body class="min-vh-100 bg-body-secondary">
     {{-- NavBar --}}
@@ -56,12 +56,9 @@
                     <li class="nav-item">
                         <a class="nav-link active fw-medium text-success d-inline-block" href="">Tambah Pegawai</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="#">Arsip Pesan</a>
-                    </li>
                 </ul>
                 <hr>
-                <div class="d-md-flex justify-content-end me-2 mt-2 mt-md-0 mb-2 mb-md-0" style="width: 176px">
+                <div class="d-md-flex justify-content-end me-2 mt-2 mt-md-0 mb-2 mb-md-0" style="width: 165px">
                     <span class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ Auth::user()->username }}
@@ -75,8 +72,8 @@
             </div>
         </div>
     </nav>
-    {{-- Card --}}
-    <div class="d-flex align-items-center justify-content-center" style="height: calc(100vh - 58px)">
+    {{-- Main Card --}}
+    <main class="d-flex align-items-center justify-content-center" style="height: calc(100vh - 58px)">
         <div class="card p-3 w-75 w-lg-50 w-xxl-25">
             <h4 class="mb-3"><strong>Tambah Pegawai</strong></h4>
             <form action="" method="POST">
@@ -112,7 +109,7 @@
                 </div>
             </form>
         </div>
-    </div>
+    </main>
     {{-- Script --}}
     <script src="{{ asset('js/phoneNumber.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
