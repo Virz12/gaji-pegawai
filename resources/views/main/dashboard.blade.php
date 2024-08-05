@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A dashboard for WhatsApp Sender">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{-- Bootstrap --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -36,6 +37,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="/ubahpassword">Ubah Password</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="/logout">Log Out</a></li>
                         </ul>
                     </span>                
@@ -64,7 +66,7 @@
                     <div type="button" class="btn btn-outline-success rounded p-2 text-start d-flex justify-content-between align-items-center"> 
                         {{$pegawai->nama}}
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button type="button" class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-expanded="false" aria-label="dropdown">
                                 <i class="fa-solid fa-ellipsis"></i>
                             </button>
                             <ul class="dropdown-menu">
@@ -72,7 +74,7 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{route('main.editpegawai',['datapegawai' => $pegawai])}}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Hapus{{ $pegawai->nip }}">Hapus</a></li>
+                                <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Hapus{{ $pegawai->nip }}">Hapus</li>
                             </ul>
                             </div>
                     </div>
@@ -117,9 +119,9 @@
                         <input class="form-control" id="nomor" type="number" placeholder="08354876892" disabled>
                     </div>
                     <div class="row g-2">
-                        <div class="col-lg-9">
+                        <div class="col-xl-8">
                             <div class="input-group">
-                                <label class="input-group-text" for="template">Template Text</label>
+                                <label class="input-group-text" for="templateSelect">Template Text</label>
                                 <select class="form-select" id="templateSelect">
                                     @forelse ( $datatemplate as $template)                                                                            
                                         <option select hidden>Pilih Template</option>
@@ -130,7 +132,10 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-3 mb-2" >
+                        <div class="col-6 col-xl-2">
+                            <button id="deleteTemplateBtn" class="btn btn-danger w-100">Hapus</button>
+                        </div>
+                        <div class="col-6 col-xl-2 mb-2" >
                             <button id="saveTemplateBtn" class="btn btn-success w-100">Simpan</button>
                         </div>
                     </div>
@@ -148,7 +153,7 @@
                     @error('pesan')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
-                    <input class="form-control mt-2" type="file" name="attachment" id="attachment">
+                    <input class="form-control mt-2" type="file" name="attachment" id="attachment" aria-label="File Attachment">
                     <button type="submit" class="btn btn-success mt-2 w-25 min-w"  id="sendBtn">Kirim</button>
                 </form>
             </div>

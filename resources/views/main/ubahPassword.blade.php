@@ -87,7 +87,25 @@
                         <a href="/dashboard"class="btn btn-secondary w-100">Kembali</a>
                     </div>
                     <div class="col-6">
-                        <button type="submit" class="btn btn-success w-100">Ubah</button>
+                        <a class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#konfirmasiButton">Ubah</a>
+                    </div>
+                </div>
+                {{-- Confirmation Modal --}}
+                <div class="modal fade" id="konfirmasiButton" tabindex="-1" aria-labelledby="ubahLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="ubahLabel">Ubah Password</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <strong>Apakah anda yakin ingin mengubah Password?</strong><br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                                <button type="submit" class="btn btn-success">Ubah</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>

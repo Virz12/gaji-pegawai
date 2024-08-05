@@ -53,7 +53,7 @@
                         <a class="nav-link text-black d-inline-block" aria-current="page" href="/dashboard">Kirim Pesan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active fw-medium text-success d-inline-block" href="">Tambah Pegawai</a>
+                        <a class="nav-link text-black d-inline-block" href="">Tambah Pegawai</a>
                     </li>
                 </ul>
                 <hr>
@@ -64,6 +64,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="/ubahpassword">Ubah Password</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="/logout">Log Out</a></li>
                         </ul>
                     </span>                
@@ -104,7 +105,25 @@
                         <a href="/dashboard"class="btn btn-secondary w-100">Kembali</a>
                     </div>
                     <div class="col-6">
-                        <button type="submit" class="btn btn-success w-100">Ubah</button>
+                        <a class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#konfirmasiButton">Ubah</a>
+                    </div>
+                </div>
+                {{-- Confirmation Modal --}}
+                <div class="modal fade" id="konfirmasiButton" tabindex="-1" aria-labelledby="ubahLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="ubahLabel">Ubah Data Pegawai</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <strong>Apakah anda yakin ingin mengubah Data ini?</strong><br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                                <button type="submit" class="btn btn-success">Ubah</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
