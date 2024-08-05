@@ -75,24 +75,25 @@
     <main class="d-flex align-items-center justify-content-center" style="height: calc(100vh - 58px)">
         <div class="card p-3 w-75 w-lg-50 w-xxl-25">
             <h4 class="mb-3"><strong>Edit Pegawai</strong></h4>
-            <form action="" method="POST">
+            <form action="{{ route('main.updatepegawai', ['datapegawai' => $datapegawai]) }}" method="POST">
                 @csrf
+                @method('PUT')
                 <div class="form-floating mb-3">
-                    <input type="number" name="nip" class="form-control border-2 @error('nip') is-invalid @enderror" id="nip" placeholder="" aria-label="nip" autocomplete="off" required>
+                    <input type="number" value="{{$datapegawai->nip}}" name="nip" class="form-control border-2 @error('nip') is-invalid @enderror" id="nip" placeholder="" aria-label="nip" autocomplete="off" required>
                     <label for="nip">NIP<span class="text-danger">*</span></label>
                     @error('nip')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" name="nama" class="form-control border-2 @error('nama') is-invalid @enderror" id="nama" placeholder="" aria-label="nama" autocomplete="off" required>
+                    <input type="text" value="{{$datapegawai->nama}}" name="nama" class="form-control border-2 @error('nama') is-invalid @enderror" id="nama" placeholder="" aria-label="nama" autocomplete="off" required>
                     <label  for="nama">Nama Pegawai<span class="text-danger">*</span></label>
                     @error('nama')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="number" name="nomorWa" class="form-control border-2 @error('nomorWa') is-invalid @enderror" id="nomorWa" placeholder="" aria-label="nomorWa" autocomplete="off" required>
+                    <input type="number" value="{{$datapegawai->nomorWa}}" name="nomorWa" class="form-control border-2 @error('nomorWa') is-invalid @enderror" id="nomorWa" placeholder="" aria-label="nomorWa" autocomplete="off" required>
                     <label for="nomorWa">Nomor WhatsApp<span class="text-danger">*</span></label>
                     @error('nomorWa')
                         <div class="text-danger"><small>{{ $message }}</small></div>

@@ -8,6 +8,7 @@ use App\Models\template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 
@@ -75,6 +76,62 @@ class AdminController extends Controller
             return redirect('/tambahpegawai');
         }
     }
+    
+    public function editpegawai(datapegawai $datapegawai)
+    {
+
+        return view('main.editpegawai')
+                    ->with('datapegawai', $datapegawai);
+    }
+
+    function updatepegawai(Request $request, datapegawai $datapegawai)
+    {
+        $messages = [
+            'required' => 'Kolom :attribute belum terisi.',
+            'numeric' => 'Kolom :attribute hanya boleh berisi angka.',
+            'nama.regex' => 'Kolom :attribute hanya berisi huruf besar atau kecil dan spasi.',
+            'unique' => ':attribute sudah dipakai.',
+            'digits_between' => 'hanya 1 - 20 digit',
+        ];
+
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->error('<b>Error!</b><br>Pegawai Gagal Diperbarui.');
+
+        Validator::make($request->all(),[
+            'nip' => ['required', 'numeric', 'digits_between:1,20', Rule::unique('data_pegawai','nip')->ignore($datapegawai->id)],
+            'nama' => 'required|regex:/^[a-zA-Z ]+$/',
+            'nomorWa' => 'required|numeric',
+        ],$messages)->validate();
+
+        
+        $data = [   
+            'nip' => $request->input('nip'),
+            'nama' => $request->input('nama'),
+            'nomorWa' => $request->input('nomorWa'),
+        ];
+
+        if($datapegawai->update($data)){
+            $datapegawai->save();
+
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->success('<b>Berhasil!</b><br>Data Pegawai Diperbarui.');
+
+            return redirect('/dashboard')->withInput();
+        }else{
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->error('<b>Error!</b><br>Pegawai Gagal Diperbarui.');
+            return redirect('/editpegawai');
+        }
+    }
 
     public function deletepegawai($id) 
     {   
@@ -90,14 +147,10 @@ class AdminController extends Controller
         return redirect('/dashboard');
     }
 
-    public function edit(string $id)
+    public function pesanarsip()
     {
-        //
-    }
 
-    public function update(Request $request, string $id)
-    {
-        //
+        return view('main.arsip');
     }
 
     public function ubahpw()

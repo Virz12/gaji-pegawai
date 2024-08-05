@@ -70,6 +70,7 @@ class WhatsappController extends Controller
         $messages = [
             'required' => 'Kolom :attribute belum terisi.',
             'unique' => ' :attribute sudah dipakai.',
+            'nama_template.regex' => ':attribute hanya berisi huruf besar atau kecil dan angka tanpa spasi'
         ];
 
         flash()
@@ -79,7 +80,7 @@ class WhatsappController extends Controller
         ->error('<b>Error!</b><br>Template Gagal Disimpan.');
 
         $request->validate([
-            'nama_template' => 'required|unique:template',
+            'nama_template' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:template',
             'pesan' => 'required',
         ],$messages);
 

@@ -70,7 +70,7 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/arsip">Arsip Pesan</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Edit</a></li>
+                                <li><a class="dropdown-item" href="{{route('main.editpegawai',['datapegawai' => $pegawai])}}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Hapus{{ $pegawai->nip }}">Hapus</a></li>
                             </ul>
