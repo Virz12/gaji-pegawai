@@ -14,15 +14,18 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-    public function index(template $template)
-    {
-        $datapegawai = datapegawai::orderBy('updated_at','DESC')
-                                    ->get();
+    public function index(template $template, Request $request)
+    {   
+        if ($request->ajax()) {
+            $query = $request->get('query');
+            $datapegawai = datapegawai::where('nama', 'LIKE', "{$query}%")->get();
+
+            return response()->json($datapegawai);
+        }
 
         $datatemplate = template::all();
         
         return view('main.dashboard')
-                    ->with('datapegawai', $datapegawai)
                     ->with('datatemplate', $datatemplate)
                     ->with('template', $template);
     }
