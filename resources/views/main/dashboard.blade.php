@@ -5,11 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A dashboard for WhatsApp Sender">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- Bootstrap --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
     {{-- JQuery  --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    
+    <script>
+        const search = "{{ route('main.dashboard') }}";
+    </script>
+
+    {{-- Custom CSS --}}
+    <style>
+        @media screen and (min-width: 576px) {
+            .w-sm-auto {
+                width: auto !important;
+            }
+
+            .rounded-sm-none {
+                border-radius: 0 !important;
+            }
+
+            .rounded-sm-end {
+                border-radius: 0 0.25rem 0.25rem 0 !important
+            }
+        }
+
+        @media screen and (min-width: 992px) {
+            .w-lg-25 {
+                width: 25% !important;
+            }
+        }
+    </style>
     <title>{{ config('app.name') }} | Dashboard</title>
 </head>
 <body class="min-vh-100 bg-body-secondary">
@@ -54,56 +81,14 @@
                 <form action="">
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
-                        <input type="text" class="form-control" placeholder="Nama Pegawai" aria-label="search" id="search" aria-describedby="search">
+                        <input type="text" class="form-control" placeholder="Nama Pegawai" aria-label="search" id="search" aria-describedby="search" autocomplete="off">
                     </div>
                 </form>
-                <div class="row g-2">
-                @forelse ( $datapegawai as $pegawai)
+                <div class="row g-2" id="pegawai-list">
                     {{-- <div class="btn btn-success rounded p-2 text-start"> 
                         
                     </div> --}}
-
-                    <div type="button" class="btn btn-outline-success rounded p-2 text-start d-flex justify-content-between align-items-center"> 
-                        {{$pegawai->nama}}
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-expanded="false" aria-label="dropdown">
-                                <i class="fa-solid fa-ellipsis"></i>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/arsip">Arsip Pesan</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{route('main.editpegawai',['datapegawai' => $pegawai])}}">Edit</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Hapus{{ $pegawai->nip }}">Hapus</li>
-                            </ul>
-                            </div>
-                    </div>
-                    {{-- Confirmation Modal --}}
-                    <div class="modal fade" id="Hapus{{ $pegawai->nip }}" tabindex="-1" aria-labelledby="HapusLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="HapusLabel">Hapus Data</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-center">
-                                    Apakah anda yakin ingin menghapus data ini?<br>
-                                    <b>{{ $pegawai->nama }}</b>
-                                </div>
-                                <div class="modal-footer">
-                                    <form action="/hapuspegawai/{{ $pegawai->id }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Hapus</button>
-                                    </form>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @empty
                     <h2 class="text-secondary opacity-75 text-center">Pencarian Kosong</h2>
-                @endforelse
                 </div>
             </div>
         </section>
@@ -122,16 +107,17 @@
                         <div class="col-xl-10">
                             <div class="input-group">
                                 <label class="input-group-text" for="templateSelect">Template Text</label>
-                                <input class="form-control"  name="nama_template" id="nama_template" type="text"  placeholder="'NamaTemplate1'" autocomplete="off">                                
-                                <button class=" input-group-text dropdown-toggle" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
+                                <input class="form-control rounded-end rounded-sm-none"  name="nama_template" id="nama_template" type="text"  placeholder="'NamaTemplate1'" autocomplete="off">                                
+                                <button class="input-group-text dropdown-toggle w-100 w-sm-auto rounded rounded-sm-end mt-2 mt-sm-0" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
                                     Pilih Template
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="templateSelectBtn">
                                     @forelse ($datatemplate as $template)
                                         <li class="d-flex justify-content-between">
                                             <a class="dropdown-item" href="#" data-value="{{ $template->pesan }}" data-name="{{ $template->nama_template }}">{{ $template->nama_template }}</a>
-                                            <button type="button"  class="btn btn-outline-danger " data-bs-toggle="modal" data-bs-target="#Hapus{{ $template->nama_template }}"><i class="fa-solid fa-trash-can fs-6"></i></button>
+                                            <a class="py-1 px-3" role="button" data-bs-toggle="modal" data-bs-target="#Hapus{{ $template->nama_template }}"><i class="fa-solid fa-trash-can fs-6 text-danger"></i></a>
                                         </li>
+                                        <li><hr class="dropdown-divider"></li>
                                     @empty
                                         
                                     @endforelse
@@ -141,7 +127,7 @@
                                 <div class="text-danger"><small>{{ $message }}</small></div>
                             @enderror
                         </div>
-                        <div class="col-6 col-xl-2 mb-2" >
+                        <div class="col-12 col-xl-2 mb-2" >
                             <button id="saveTemplateBtn" class="btn btn-success w-100">Simpan</button>
                         </div>
                     </div>
@@ -153,7 +139,7 @@
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                     <input class="form-control mt-2" type="file" name="attachment" id="attachment" aria-label="File Attachment">
-                    <button type="submit" class="btn btn-success mt-2 w-25 min-w"  id="sendBtn">Kirim</button>
+                    <button type="submit" class="btn btn-success mt-2 w-50 w-lg-25"  id="sendBtn">Kirim</button>
                 </form>
             </div>
         </section>
