@@ -119,33 +119,32 @@
                         <input class="form-control" id="nomor" type="number" placeholder="08354876892" disabled>
                     </div>
                     <div class="row g-2">
-                        <div class="col-xl-8">
+                        <div class="col-xl-10">
                             <div class="input-group">
                                 <label class="input-group-text" for="templateSelect">Template Text</label>
-                                <select class="form-select" id="templateSelect">
-                                    @forelse ( $datatemplate as $template)                                                                            
-                                        <option select hidden>Pilih Template</option>
-                                        <option value="{{$template->pesan}}">{{$template->nama_template}}</option>
+                                <input class="form-control"  name="nama_template" id="nama_template" type="text"  placeholder="'NamaTemplate1'" autocomplete="off">                                
+                                <button class=" input-group-text dropdown-toggle" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
+                                    Pilih Template
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="templateSelectBtn">
+                                    @forelse ($datatemplate as $template)
+                                        <li class="d-flex justify-content-between">
+                                            <a class="dropdown-item" href="#" data-value="{{ $template->pesan }}" data-name="{{ $template->nama_template }}">{{ $template->nama_template }}</a>
+                                            <button type="button"  class="btn btn-outline-danger " data-bs-toggle="modal" data-bs-target="#Hapus{{ $template->nama_template }}"><i class="fa-solid fa-trash-can fs-6"></i></button>
+                                        </li>
                                     @empty
                                         
                                     @endforelse
-                                </select>
+                                </ul>                                
                             </div>
-                        </div>
-                        <div class="col-6 col-xl-2">
-                            <button id="deleteTemplateBtn" class="btn btn-danger w-100">Hapus</button>
+                            @error('nama_template')
+                                <div class="text-danger"><small>{{ $message }}</small></div>
+                            @enderror
                         </div>
                         <div class="col-6 col-xl-2 mb-2" >
                             <button id="saveTemplateBtn" class="btn btn-success w-100">Simpan</button>
                         </div>
                     </div>
-                    <div class="input-group">
-                        <label class="input-group-text" for="nama_template">Nama Template</label>
-                        <input class="form-control" name="nama_template" id="nama_template" type="text" placeholder="'NamaTemplate1'" autocomplete="off">
-                    </div>
-                    @error('nama_template')
-                        <div class="text-danger"><small>{{ $message }}</small></div>
-                    @enderror
                     <div class="input-group mt-2">
                         <label class="input-group-text" for="pesan">Pesan</label>
                         <textarea class="form-control" name="pesan" id="pesan" style="resize: none; height: 150px"></textarea>                        
@@ -158,6 +157,33 @@
                 </form>
             </div>
         </section>
+        {{-- Confirmation Modal --}}
+        @forelse ( $datatemplate as $template)
+            <div class="modal fade" id="Hapus{{ $template->nama_template }}" tabindex="-1" aria-labelledby="Hapus" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="Hapus">Hapus Data</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            Apakah anda yakin ingin menghapus data ini?<br>
+                            <b>{{ $template->nama_template }}</b>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="/hapustemplate/{{ $template->id }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Hapus</button>
+                            </form>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @empty
+            
+        @endforelse
     </main>
     <script src="{{ asset('js/dashboard.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>

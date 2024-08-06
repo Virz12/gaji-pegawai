@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function index(template $template)
     {
         $datapegawai = datapegawai::orderBy('updated_at','DESC')
                                     ->get();
@@ -23,7 +23,8 @@ class AdminController extends Controller
         
         return view('main.dashboard')
                     ->with('datapegawai', $datapegawai)
-                    ->with('datatemplate', $datatemplate);
+                    ->with('datatemplate', $datatemplate)
+                    ->with('template', $template);
     }
 
     public function tambahpegawai()

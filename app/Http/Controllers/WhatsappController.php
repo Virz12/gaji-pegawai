@@ -73,38 +73,63 @@ class WhatsappController extends Controller
             'nama_template.regex' => ':attribute hanya berisi huruf besar atau kecil dan angka tanpa spasi'
         ];
 
+        $existingTemplate = template::where('nama_template', $request->input('nama_template'))->first();
+
+        if ($existingTemplate) {
+            $request->validate([
+                'pesan' => 'required',
+            ], $messages);
+
+            $existingTemplate->update(['pesan' => $request->input('pesan')]);
+
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->success('<b>Berhasil!</b><br>Template Diperbarui.');
+
+            return redirect('/dashboard')->withInput();
+        } else {
+            $request->validate([
+                'nama_template' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:template',
+                'pesan' => 'required',
+            ], $messages);
+
+            $data = [   
+                'nama_template' => $request->input('nama_template'),
+                'pesan' => $request->input('pesan'),
+            ];
+
+            if ($template = template::create($data)) {
+                flash()
+                ->killer(true)
+                ->layout('bottomRight')
+                ->timeout(3000)
+                ->success('<b>Berhasil!</b><br>Template Disimpan.');
+
+                return redirect('/dashboard')->withInput();
+            } else {
+                flash()
+                ->killer(true)
+                ->layout('bottomRight')
+                ->timeout(3000)
+                ->error('<b>Error!</b><br>Template Gagal Disimpan.');
+                return redirect('/dashboard');
+            }
+        }
+    }
+
+    public function deletetemplate($id) 
+    {   
+        $template = template::findOrFail($id);
+        $template->delete();
+
         flash()
         ->killer(true)
         ->layout('bottomRight')
         ->timeout(3000)
-        ->error('<b>Error!</b><br>Template Gagal Disimpan.');
-
-        $request->validate([
-            'nama_template' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:template',
-            'pesan' => 'required',
-        ],$messages);
-
+        ->success('<b>Berhasil!</b><br>Template Sudah Dihapus.');
         
-        $data = [   
-            'nama_template' => $request->input('nama_template'),
-            'pesan' => $request->input('pesan'),
-        ];
-
-        if($template = template::create($data)){
-            flash()
-            ->killer(true)
-            ->layout('bottomRight')
-            ->timeout(3000)
-            ->success('<b>Berhasil!</b><br>Template Disimpan.');
-
-            return redirect('/dashboard')->withInput();
-        }else{
-            flash()
-            ->killer(true)
-            ->layout('bottomRight')
-            ->timeout(3000)
-            ->error('<b>Error!</b><br>Template Gagal Disimpan.');
-            return redirect('/dashboard');
-        }
+        return redirect('/dashboard');
     }
 }

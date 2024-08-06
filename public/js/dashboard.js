@@ -12,10 +12,15 @@ $(document).ready(function() {
         $('#whatsappForm').attr('action');
     });
 
-    $('#templateSelect').change(function() {
-        var selectedTemplate = $(this).val();
+    $('#templateSelectBtn').dropdown();
+    
+    $('.dropdown-item').on('click', function() {
+        var selectedTemplate = $(this).data('value');
+        var templateName = $(this).data('name');
         $('#pesan').val(selectedTemplate);
+        $('#nama_template').val(templateName);
     });
     
+
 });
 

@@ -35,4 +35,5 @@ Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::post('/tambahpegawai', [AdminController::class, 'storepegawai']);
     Route::put('/updatepegawai/{datapegawai}', [AdminController::class, 'updatepegawai'])->name('main.updatepegawai');
     Route::get('/hapuspegawai/{datapegawai:id}',[AdminController::class, 'deletepegawai'])->name('main.delete');
+    Route::get('/hapustemplate/{template:id}',[WhatsappController::class, 'deletetemplate'])->name('main.templatedelete');
 });
