@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-    public function index(template $template, Request $request)
+    public function index(Request $request)
     {   
         if ($request->ajax()) {
             $query = $request->get('query');
@@ -26,8 +26,7 @@ class AdminController extends Controller
         $datatemplate = template::all();
         
         return view('main.dashboard')
-                    ->with('datatemplate', $datatemplate)
-                    ->with('template', $template);
+                    ->with('datatemplate', $datatemplate);
     }
 
     public function tambahpegawai()

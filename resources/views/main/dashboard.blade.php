@@ -106,7 +106,7 @@
                     <div class="row g-2">
                         <div class="col-xl-10">
                             <div class="input-group">
-                                <label class="input-group-text" for="templateSelect">Template Text</label>
+                                <label class="input-group-text" for="nama_template">Template Text</label>
                                 <input class="form-control rounded-end rounded-sm-none"  name="nama_template" id="nama_template" type="text"  placeholder="'NamaTemplate1'" autocomplete="off">                                
                                 <button class="input-group-text dropdown-toggle w-100 w-sm-auto rounded rounded-sm-end mt-2 mt-sm-0" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
                                     Pilih Template
@@ -115,7 +115,7 @@
                                     @forelse ($datatemplate as $template)
                                         <li class="d-flex justify-content-between">
                                             <a class="dropdown-item" href="#" data-value="{{ $template->pesan }}" data-name="{{ $template->nama_template }}">{{ $template->nama_template }}</a>
-                                            <a class="py-1 px-3" role="button" data-bs-toggle="modal" data-bs-target="#Hapus{{ $template->nama_template }}"><i class="fa-solid fa-trash-can fs-6 text-danger"></i></a>
+                                            <a class=" py-1 px-3" role="button" data-bs-toggle="modal" data-bs-target="#Hapus{{ $template->nama_template }}"><i class="fa-solid fa-trash-can fs-6 text-danger"></i></a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
                                     @empty
@@ -138,7 +138,18 @@
                     @error('pesan')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
-                    <input class="form-control mt-2" type="file" name="attachment" id="attachment" aria-label="File Attachment">
+                    <div class="input-group mt-2">
+                        <input class="form-control " type="file" name="attachment" id="attachment" aria-label="File Attachment">
+                        
+                        <input type="radio" class="btn-check" name="options-outlined" id="gambar" autocomplete="off" >
+                        <label class="btn btn-outline-success" for="gambar">Gambar</label>
+                        
+                        <input type="radio" class="btn-check" name="options-outlined" id="dokumen" autocomplete="off">
+                        <label class="btn btn-outline-success" for="dokumen">Dokumen</label>
+                    </div>
+                    @error('attachment')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
                     <button type="submit" class="btn btn-success mt-2 w-50 w-lg-25"  id="sendBtn">Kirim</button>
                 </form>
             </div>
