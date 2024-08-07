@@ -22,11 +22,13 @@ class AdminController extends Controller
 
             return response()->json($datapegawai);
         }
+        $datapegawai = datapegawai::orderBy('updated_at','DESC')->get();
 
         $datatemplate = template::all();
         
         return view('main.dashboard')
-                    ->with('datatemplate', $datatemplate);
+                    ->with('datatemplate', $datatemplate)
+                    ->with('datapegawai', $datapegawai);
     }
 
     public function tambahpegawai()
