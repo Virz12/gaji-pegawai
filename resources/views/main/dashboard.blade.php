@@ -85,10 +85,52 @@
                     </div>
                 </form>
                 <div class="row g-2" id="pegawai-list">
+                    @forelse ( $datapegawai as $pegawai)
                     {{-- <div class="btn btn-success rounded p-2 text-start"> 
                         
                     </div> --}}
+
+                    <div type="button" class="btn btn-outline-success rounded p-2 text-start d-flex justify-content-between align-items-center"> 
+                        {{$pegawai->nama}}
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-expanded="false" aria-label="dropdown">
+                                <i class="fa-solid fa-ellipsis"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/arsip">Arsip Pesan</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{route('main.editpegawai',['datapegawai' => $pegawai])}}">Edit</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Hapus{{ $pegawai->nip }}">Hapus</li>
+                            </ul>
+                            </div>
+                    </div>
+                    {{-- Confirmation Modal --}}
+                    <div class="modal fade" id="Hapus{{ $pegawai->nip }}" tabindex="-1" aria-labelledby="HapusLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="HapusLabel">Hapus Data</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    Apakah anda yakin ingin menghapus data ini?<br>
+                                    <b>{{ $pegawai->nama }}</b>
+                                </div>
+                                <div class="modal-footer">
+                                    <form action="/hapuspegawai/{{ $pegawai->id }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Hapus</button>
+                                    </form>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
                     <h2 class="text-secondary opacity-75 text-center">Pencarian Kosong</h2>
+                @endforelse
                 </div>
             </div>
         </section>
@@ -140,12 +182,13 @@
                     @enderror
                     <div class="input-group mt-2">
                         <input class="form-control " type="file" name="attachment" id="attachment" aria-label="File Attachment">
-                        
-                        <input type="radio" class="btn-check" name="options-outlined" id="gambar" autocomplete="off" >
-                        <label class="btn btn-outline-success" for="gambar">Gambar</label>
-                        
-                        <input type="radio" class="btn-check" name="options-outlined" id="dokumen" autocomplete="off">
-                        <label class="btn btn-outline-success" for="dokumen">Dokumen</label>
+                        <div class="w-100 w-sm-auto mt-2 mt-sm-0 d-flex">
+                            <input type="radio" class="btn-check" name="options-outlined" id="gambar" autocomplete="off" >
+                            <label class="btn btn-outline-success flex-fill rounded-start-2 rounded-end-0 rounded-sm-none" for="gambar">Gambar</label>
+                            
+                            <input type="radio" class="btn-check" name="options-outlined" id="dokumen" autocomplete="off">
+                            <label class="btn btn-outline-success flex-fill rounded-start-0 rounded-end-2" for="dokumen">Dokumen</label>
+                        </div>
                     </div>
                     @error('attachment')
                         <div class="text-danger"><small>{{ $message }}</small></div>
