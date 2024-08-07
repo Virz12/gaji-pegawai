@@ -30,7 +30,7 @@ $(document).ready(function() {
             data: { 'query': query },
             success: function(data) {
                 $('#pegawai-list').empty();
-                if (data.length > 0 && query.length > 0) {
+                if (data.length > 0) {
                     data.forEach(pegawai => {
                         let pegawaiHtml = `
                             <div type="button" class="btn btn-outline-success rounded p-2 text-start d-flex justify-content-between align-items-center">
@@ -74,7 +74,6 @@ $(document).ready(function() {
                         $('#pegawai-list').append(pegawaiHtml);
                     });
                 } else {
-                    $('#pegawai-list').empty();
                     $('#pegawai-list').append('<h2 class="text-secondary opacity-75 text-center">Pencarian Kosong</h2>');
                 }
             }
