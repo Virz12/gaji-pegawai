@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\user;
-use App\Models\datapegawai;
 use App\Models\template;
+use App\Models\datapegawai;
+use App\Models\arsip_pesan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +25,7 @@ class AdminController extends Controller
         }
         $datapegawai = datapegawai::orderBy('updated_at','DESC')->get();
 
-        $datatemplate = template::all();
+        $datatemplate = template::orderBy('nama_template','ASC')->get();
         
         return view('main.dashboard')
                     ->with('datatemplate', $datatemplate)
@@ -152,10 +153,14 @@ class AdminController extends Controller
         return redirect('/dashboard');
     }
 
-    public function pesanarsip()
+    public function pesanarsip(datapegawai $datapegawai)
     {
+        $arsipPesan = arsip_pesan::orderBy('created_at', 'DESC')
+                                    ->paginate(8);
 
-        return view('main.arsip');
+        return view('main.arsip')
+                ->with('arsipPesan', $arsipPesan)
+                ->with('datapegawai', $datapegawai);
     }
 
     public function ubahpw()

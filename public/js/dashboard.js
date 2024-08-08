@@ -10,6 +10,10 @@ $(document).ready(function() {
 
     $('#sendBtn').on('click', function() {
         $('#whatsappForm').attr('action');
+        let pesanType = $('input[name=options-outlined]:checked').attr('id');
+        $('#pesan_type').val(pesanType);
+
+        $('#whatsappForm').submit();
     });
 
     $('#templateSelectBtn').dropdown();
@@ -79,4 +83,6 @@ $(document).ready(function() {
             }
         });
     });
+
+    
 });

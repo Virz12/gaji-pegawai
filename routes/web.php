@@ -26,7 +26,7 @@ Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::get('/ubahpassword', [AdminController::class, 'ubahpw'])->name('main.ubahpassword');
     Route::get('/tambahpegawai', [AdminController::class, 'tambahpegawai'])->name('main.tambahpegawai');
     Route::get('/editpegawai/{datapegawai}', [AdminController::class, 'editpegawai'])->name('main.editpegawai');
-    Route::get('/arsip', [AdminController::class, 'pesanarsip'])->name('main.arsip');
+    Route::get('/arsip/{datapegawai}', [AdminController::class, 'pesanarsip'])->name('main.arsip');
     
 
     Route::post('/dashboard/template', [WhatsappController::class, 'simpantemplate'])->name('main.simpanTemplate');

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
-use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
@@ -42,19 +41,23 @@ class WhatsappController extends Controller
     {
         $messages = [
             'required' => 'Kolom :attribute belum terisi.',
-            'numeric' => ' :attribute hanya berisi angka',            
+            'pesan_type.required' => 'Silakan pilih tipe pesan Gambar atau Dokumen ',
+            'numeric' => ' :attribute hanya berisi angka',
+
         ];
 
         $request->validate([
             // 'nomorWa' => 'required',
             'pesan' => 'required',
-            'attachment' => 'nullable|file'
+            'attachment' => 'nullable|file',
+            'pesan_type' => 'required'
         ], $messages);
 
         $to = '6282119757291'; 
 
         // $nomorWa = $request->input('nomorWa');
-        $pesan = $request->input('pesan');        
+        $pesan = $request->input('pesan');
+        
         try {
             if ($request->hasFile('attachment')) {
                 $file = $request->file('attachment');
@@ -62,13 +65,21 @@ class WhatsappController extends Controller
                 $filePath = storage_path('app/' . $path);
                 
                 $response = $this->whatsapp->uploadMedia($filePath);
-
                 $media_id = new MediaObjectID($response->decodedBody()['id']);
-                $this->whatsapp->sendDocument(
-                    $to, 
-                    $media_id, 
-                    $file->getClientOriginalName(),
-                    $pesan);
+
+                $pesanType = $request->input('pesan_type');
+                if ($pesanType === 'gambar') {
+                    $this->whatsapp->sendImage(
+                        $to, 
+                        $media_id, 
+                        $pesan);
+                } elseif ($pesanType === 'dokumen') {
+                    $this->whatsapp->sendDocument(
+                        $to, 
+                        $media_id, 
+                        $file->getClientOriginalName(),
+                        $pesan);
+                }
 
                 Storage::delete($path);
             }else{
@@ -83,19 +94,22 @@ class WhatsappController extends Controller
 
         } catch (\Exception $e) {
                 Storage::delete($path);
-                return redirect('/dashboard')->with('error', 'Terjadi kesalahan saat mengupload file: ' . $e->getMessage());
+                flash()
+                ->killer(true)
+                ->layout('bottomRight')
+                ->timeout(3000)
+                ->error('<b>Error!</b><br>Terjadi kesalahan saat mengupload file: '. $e->getMessage());
+                return redirect('/dashboard');
         }
 
-        // Save the message and attachment information to the database
-        // arsip_pesan::create([
-        //     'to' => $to,
-        //     'pesan' => $pesan,
-        //     'attachment' => $file
-        // ]);
-
+        arsip_pesan::create([
+            'to' => $to,
+            'pesan' => $pesan,
+            'attachment' => $file->getClientOriginalName()
+        ]);
         return redirect('/dashboard');
     }
-
+        
     public function simpantemplate(Request $request)
     {
         $messages = [
@@ -159,7 +173,7 @@ class WhatsappController extends Controller
         ->killer(true)
         ->layout('bottomRight')
         ->timeout(3000)
-        ->success('<b>Berhasil!</b><br>Template Sudah Dihapus.');
+        ->success('<b>Berhasil!</b><br>Template Dihapus.');
         
         return redirect('/dashboard');
     }

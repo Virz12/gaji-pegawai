@@ -17,6 +17,11 @@
 
     {{-- Custom CSS --}}
     <style>
+        .dropdown-menu-scrollable {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
         @media screen and (min-width: 576px) {
             .w-sm-auto {
                 width: auto !important;
@@ -74,6 +79,7 @@
     </nav>
     {{-- Main --}}
     <main class="row mx-2 mb-4 justify-content-between">
+
         {{-- Cari Pegawai --}}
         <section class="col-md-6 col-xxl-4 mt-3">
             <div class="card p-3">
@@ -97,7 +103,7 @@
                                 <i class="fa-solid fa-ellipsis"></i>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/arsip">Arsip Pesan</a></li>
+                                <li><a class="dropdown-item" href="{{route('main.arsip',['datapegawai' => $pegawai])}}">Arsip Pesan</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{route('main.editpegawai',['datapegawai' => $pegawai])}}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
@@ -134,6 +140,7 @@
                 </div>
             </div>
         </section>
+
         {{-- Buat Pesan --}}
         <section class="col-md-6 col-xxl-8 mt-4 mt-md-3">
             <div class="card p-3">
@@ -153,7 +160,7 @@
                                 <button class="input-group-text dropdown-toggle w-100 w-sm-auto rounded rounded-sm-end mt-2 mt-sm-0" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
                                     Pilih Template
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="templateSelectBtn">
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-scrollable" aria-labelledby="templateSelectBtn">
                                     @forelse ($datatemplate as $template)
                                         <li class="d-flex justify-content-between">
                                             <a class="dropdown-item" href="#" data-value="{{ $template->pesan }}" data-name="{{ $template->nama_template }}">{{ $template->nama_template }}</a>
@@ -170,7 +177,7 @@
                             @enderror
                         </div>
                         <div class="col-12 col-xl-2 mb-2" >
-                            <button id="saveTemplateBtn" class="btn btn-success w-100">Simpan</button>
+                            <button id="saveTemplateBtn" class="btn btn-success w-100"><i class="fa-solid fa-file-arrow-up"></i> Simpan</button>
                         </div>
                     </div>
                     <div class="input-group mt-2">
@@ -183,31 +190,36 @@
                     <div class="input-group mt-2">
                         <input class="form-control " type="file" name="attachment" id="attachment" aria-label="File Attachment">
                         <div class="w-100 w-sm-auto mt-2 mt-sm-0 d-flex">
-                            <input type="radio" class="btn-check" name="options-outlined" id="gambar" autocomplete="off" >
-                            <label class="btn btn-outline-success flex-fill rounded-start-2 rounded-end-0 rounded-sm-none" for="gambar">Gambar</label>
+                            <input type="radio" class="btn-check" name="options-outlined" id="gambar" checked autocomplete="off" >
+                            <label class="btn btn-outline-success flex-fill rounded-start-2 rounded-end-0 rounded-sm-none" for="gambar"><i class="fa-solid fa-image"></i> Gambar</label>
                             
                             <input type="radio" class="btn-check" name="options-outlined" id="dokumen" autocomplete="off">
-                            <label class="btn btn-outline-success flex-fill rounded-start-0 rounded-end-2" for="dokumen">Dokumen</label>
+                            <label class="btn btn-outline-success flex-fill rounded-start-0 rounded-end-2" for="dokumen"><i class="fa-solid fa-file"></i> Dokumen</label>
                         </div>
                     </div>
                     @error('attachment')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
+                    @error('pesan_type')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
+                    <input type="hidden" name="pesan_type" id="pesan_type" value="">
                     <button type="submit" class="btn btn-success mt-2 w-50 w-lg-25"  id="sendBtn">Kirim</button>
                 </form>
             </div>
         </section>
+
         {{-- Confirmation Modal --}}
         @forelse ( $datatemplate as $template)
             <div class="modal fade" id="Hapus{{ $template->nama_template }}" tabindex="-1" aria-labelledby="Hapus" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="Hapus">Hapus Data</h1>
+                            <h1 class="modal-title fs-5" id="Hapus">Hapus Template</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center">
-                            Apakah anda yakin ingin menghapus data ini?<br>
+                            Apakah anda yakin ingin menghapus Template ini?<br>
                             <b>{{ $template->nama_template }}</b>
                         </div>
                         <div class="modal-footer">

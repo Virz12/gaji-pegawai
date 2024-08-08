@@ -56,6 +56,7 @@
             </form>
         </section>
         <section class="row g-3">
+        @forelse ( $arsipPesan as $arsip)
             {{-- Card --}}
             <div class="col-12 col-sm-6 col-lg-4 col-xxl-3">
                 <div class="card">
@@ -78,69 +79,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-lg-4 col-xxl-3">
-                <div class="card">
-                    <h5 class="card-header">05/08/2024 - Senin</h5>
-                    <div class="overflow-hidden rounded">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-user text-decoration-underline"></i> Nama Pegawai</h4>
-                                <span class="card-text fs-5">Asep Garong</span>
-                            </li>
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Pesan</h4>
-                                <p class="card-text fs-6">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil eaque ad officia voluptatum aut. Asperiores voluptates molestiae dolorum laudantium sunt.</p>
-                            </li>
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> File</h4>
-                                <span class="card-text fs-5">Elden-Ring-DE-SteamRIP.com.rar</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-4 col-xxl-3">
-                <div class="card">
-                    <h5 class="card-header">05/08/2024 - Senin</h5>
-                    <div class="overflow-hidden rounded">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-user text-decoration-underline"></i> Nama Pegawai</h4>
-                                <span class="card-text fs-5">Asep Garong</span>
-                            </li>
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Pesan</h4>
-                                <p class="card-text fs-6">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil eaque ad officia voluptatum aut. Asperiores voluptates molestiae dolorum laudantium sunt.</p>
-                            </li>
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> File</h4>
-                                <span class="card-text fs-5">Elden-Ring-DE-SteamRIP.com.rar</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-4 col-xxl-3">
-                <div class="card">
-                    <h5 class="card-header">05/08/2024 - Senin</h5>
-                    <div class="overflow-hidden rounded">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-user text-decoration-underline"></i> Nama Pegawai</h4>
-                                <span class="card-text fs-5">Asep Garong</span>
-                            </li>
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Pesan</h4>
-                                <p class="card-text fs-6">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil eaque ad officia voluptatum aut. Asperiores voluptates molestiae dolorum laudantium sunt.</p>
-                            </li>
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> File</h4>
-                                <span class="card-text fs-5">Elden-Ring-DE-SteamRIP.com.rar</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        @empty
+            <h2 class="text-secondary opacity-75 text-center">Arsip Kosong</h2>
+        @endforelse
         </section>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
