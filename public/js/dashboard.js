@@ -25,6 +25,7 @@ $(document).ready(function() {
         $('#nama_template').val(templateName);
     });
 
+    // Live Search
     $('#search').on('keyup', function() {
         let query = $(this).val();
 
@@ -37,7 +38,8 @@ $(document).ready(function() {
                 if (data.length > 0) {
                     data.forEach(pegawai => {
                         let pegawaiHtml = `
-                            <div type="button" class="btn btn-outline-success rounded p-2 text-start d-flex justify-content-between align-items-center">
+                            <div type="button" class="btn btn-outline-success rounded p-2 text-start d-flex justify-content-between align-items-center search-item"
+                                data-nomor="${pegawai.nomorWa}">
                                 ${pegawai.nama}
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-expanded="false" aria-label="dropdown">
@@ -84,5 +86,18 @@ $(document).ready(function() {
         });
     });
 
-    
+    // Pegawai List click function
+    $(document).on('click','.search-item', function() {
+        // Update search item color
+        $('.search-item').removeClass('btn-success').addClass('btn-outline-success');
+        $(this).removeClass('btn-outline-success').addClass('btn-success');
+
+        var nomor = $(this).data('nomor');
+        
+        // Update form fields
+        $('#nomorWa').attr('placeholder', nomor);
+        $('#nama_template').val('');
+        $('#pesan').val('');
+        $('#attachment').val('');
+    });
 });
