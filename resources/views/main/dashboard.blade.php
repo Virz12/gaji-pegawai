@@ -21,6 +21,11 @@
             max-height: 200px;
             overflow-y: auto;
         }
+        
+        .search-menu-scrollable {
+            max-height: 300px;
+            overflow-y: auto;
+        }
 
         @media screen and (min-width: 576px) {
             .w-sm-auto {
@@ -90,13 +95,10 @@
                         <input type="text" class="form-control" placeholder="Nama Pegawai" aria-label="search" id="search" aria-describedby="search" autocomplete="off">
                     </div>
                 </form>
-                <div class="row g-2" id="pegawai-list">
+                <div class="row g-2 search-menu-scrollable" id="pegawai-list">
                     @forelse ( $datapegawai as $pegawai)
-                    {{-- <div class="btn btn-success rounded p-2 text-start"> 
-                        
-                    </div> --}}
-
-                    <div type="button" class="btn btn-outline-success rounded p-2 text-start d-flex justify-content-between align-items-center"> 
+                    <div type="button" class="btn btn-outline-success rounded p-2 text-start d-flex justify-content-between align-items-center search-item"
+                        data-nomor="{{ $pegawai->nomorWa }}"> 
                         {{$pegawai->nama}}
                         <div class="btn-group">
                             <button type="button" class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-expanded="false" aria-label="dropdown">
@@ -109,7 +111,7 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Hapus{{ $pegawai->nip }}">Hapus</li>
                             </ul>
-                            </div>
+                        </div>
                     </div>
                     {{-- Confirmation Modal --}}
                     <div class="modal fade" id="Hapus{{ $pegawai->nip }}" tabindex="-1" aria-labelledby="HapusLabel" aria-hidden="true">
@@ -149,14 +151,14 @@
                     @csrf
                     @method('POST')
                     <div class="input-group mb-2">
-                        <label class="input-group-text" for="nomor">Nomor Telepon</label>
-                        <input class="form-control" id="nomor" type="number" placeholder="08354876892" disabled>
+                        <label class="input-group-text" for="nomorWa">Nomor Telepon</label>
+                        <input class="form-control" id="nomorWa" type="number" placeholder="-" disabled>
                     </div>
                     <div class="row g-2">
                         <div class="col-xl-10">
                             <div class="input-group">
                                 <label class="input-group-text" for="nama_template">Template Text</label>
-                                <input class="form-control rounded-end rounded-sm-none"  name="nama_template" id="nama_template" type="text"  placeholder="'NamaTemplate1'" autocomplete="off">                                
+                                <input class="form-control rounded-end rounded-sm-none" name="nama_template" id="nama_template" type="text"  placeholder="'NamaTemplate1'" autocomplete="off">                                
                                 <button class="input-group-text dropdown-toggle w-100 w-sm-auto rounded rounded-sm-end mt-2 mt-sm-0" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
                                     Pilih Template
                                 </button>
