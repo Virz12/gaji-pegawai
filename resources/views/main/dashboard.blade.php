@@ -153,7 +153,11 @@
                     <div class="input-group mb-2">
                         <label class="input-group-text" for="nomorWa">Nomor Telepon</label>
                         <input class="form-control" id="nomorWa" type="number" placeholder="-" disabled>
+                        <input type="hidden" id="nomorWaHidden" name="nomorWa" type="number" value="">
                     </div>
+                    @error('nomorWa')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
                     <div class="row g-2">
                         <div class="col-xl-10">
                             <div class="input-group">

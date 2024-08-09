@@ -66,7 +66,7 @@ $(document).ready(function() {
                                             <b>${pegawai.nama}</b>
                                         </div>
                                         <div class="modal-footer">
-                                            <form action="/hapuspegawai/${pegawai.id}" method="POST">
+                                            <form action="/hapuspegawai/${pegawai.id}">
                                                 <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
                                                 <input type="hidden" name="_method" value="DELETE">
                                                 <button type="submit" class="btn btn-danger">Hapus</button>
@@ -99,5 +99,10 @@ $(document).ready(function() {
         $('#nama_template').val('');
         $('#pesan').val('');
         $('#attachment').val('');
+
+        $('#nomorWa').val(nomor);  
+        $('#nomorWaHidden').val(nomor);
     });
+
+
 });

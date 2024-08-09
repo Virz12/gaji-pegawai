@@ -47,15 +47,48 @@ class WhatsappController extends Controller
         ];
 
         $request->validate([
-            // 'nomorWa' => 'required',
+            'nomorWa' => 'required|numeric',
             'pesan' => 'required',
-            'attachment' => 'nullable|file',
+            'attachment' => [
+                'nullable',
+                'file',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->input('pesan_type') === 'gambar') {
+                        if (!in_array($value->getClientOriginalExtension(), ['jpeg', 'jpg', 'png'])) {
+                            $fail('Gambar harus berformat jpeg, jpg, atau png.');
+                        }
+                        if ($value->getSize() > 5120 * 1024) { 
+                            $fail('Ukuran gambar maksimal adalah 5MB.');
+                        }
+                        if ($value->getSize() < 5 * 1024) { 
+                            $fail('Ukuran gambar minimal adalah 5KB.');
+                        }
+                    } elseif ($request->input('pesan_type') === 'dokumen') {
+                        if (!in_array($value->getClientOriginalExtension(), [
+                            'pdf',
+                            'txt', 
+                            'doc', 
+                            'docx',                             
+                            'xls', 
+                            'xlsx',
+                            'ppt',
+                            'pptx',
+                            ])) {
+                            $fail('Dokumen harus berformat pdf, txt, doc, docx, xls, xlsx, ppt, dan pptx');
+                        }
+                        if ($value->getSize() > 102400 * 1024) { 
+                            $fail('Ukuran dokumen maksimal adalah 100MB.');
+                        }
+                        if ($value->getSize() < 5 * 1024) { 
+                            $fail('Ukuran dokumen minimal adalah 5KB.');
+                        }
+                    }
+                }
+        ],
             'pesan_type' => 'required'
         ], $messages);
 
-        $to = '6282119757291'; 
-
-        // $nomorWa = $request->input('nomorWa');
+        $nomorWa = $request->input('nomorWa');
         $pesan = $request->input('pesan');
         
         try {
@@ -70,12 +103,12 @@ class WhatsappController extends Controller
                 $pesanType = $request->input('pesan_type');
                 if ($pesanType === 'gambar') {
                     $this->whatsapp->sendImage(
-                        $to, 
+                        $nomorWa, 
                         $media_id, 
                         $pesan);
                 } elseif ($pesanType === 'dokumen') {
                     $this->whatsapp->sendDocument(
-                        $to, 
+                        $nomorWa, 
                         $media_id, 
                         $file->getClientOriginalName(),
                         $pesan);
@@ -83,8 +116,14 @@ class WhatsappController extends Controller
 
                 Storage::delete($path);
             }else{
-                $this->whatsapp->sendTextMessage($to, $pesan);
+                $this->whatsapp->sendTextMessage($nomorWa, $pesan);
             }
+
+        // arsip_pesan::create([
+        //     'to' => $to,
+        //     'pesan' => $pesan,
+        //     'attachment' => $file->getClientOriginalName()
+        // ]);
 
             flash()
             ->killer(true)
@@ -102,11 +141,7 @@ class WhatsappController extends Controller
                 return redirect('/dashboard');
         }
 
-        arsip_pesan::create([
-            'to' => $to,
-            'pesan' => $pesan,
-            'attachment' => $file->getClientOriginalName()
-        ]);
+        
         return redirect('/dashboard');
     }
         
