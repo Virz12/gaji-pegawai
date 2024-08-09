@@ -26,7 +26,7 @@ $(document).ready(function() {
     });
 
     // Live Search
-    $('#search').on('keyup', function() {
+    $(document).on('keyup', '#search' , function() {
         let query = $(this).val();
 
         $.ajax({
@@ -38,7 +38,7 @@ $(document).ready(function() {
                 if (data.length > 0) {
                     data.forEach(pegawai => {
                         let pegawaiHtml = `
-                            <div type="button" class="btn btn-outline-success rounded p-2 text-start d-flex justify-content-between align-items-center search-item"
+                            <div type="button" class="btn btn-outline-success h-49 rounded p-2 text-start d-flex justify-content-between align-items-center search-item"
                                 data-nomor="${pegawai.nomorWa}">
                                 ${pegawai.nama}
                                 <div class="btn-group">
@@ -46,7 +46,7 @@ $(document).ready(function() {
                                         <i class="fa-solid fa-ellipsis"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="/arsip">Arsip Pesan</a></li>
+                                        <li><a class="dropdown-item" href="/arsip/${pegawai.id}">Arsip Pesan</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item" href="/editpegawai/${pegawai.id}">Edit</a></li>
                                         <li><hr class="dropdown-divider"></li>
