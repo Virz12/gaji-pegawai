@@ -23,8 +23,13 @@
         }
         
         .search-menu-scrollable {
+            min-height: 300px;
             max-height: 300px;
             overflow-y: auto;
+        }
+
+        .h-49 {
+            max-height: 49px;
         }
 
         @media screen and (min-width: 576px) {
@@ -95,9 +100,9 @@
                         <input type="text" class="form-control" placeholder="Nama Pegawai" aria-label="search" id="search" aria-describedby="search" autocomplete="off">
                     </div>
                 </form>
-                <div class="row g-2 search-menu-scrollable" id="pegawai-list">
+                <div class="row g-2 search-menu-scrollable align-content-start" id="pegawai-list">
                     @forelse ( $datapegawai as $pegawai)
-                    <div type="button" class="btn btn-outline-success rounded p-2 text-start d-flex justify-content-between align-items-center search-item"
+                    <div type="button" class="btn btn-outline-success h-32 rounded p-2 text-start d-flex justify-content-between align-items-center search-item"
                         data-nomor="{{ $pegawai->nomorWa }}"> 
                         {{$pegawai->nama}}
                         <div class="btn-group">

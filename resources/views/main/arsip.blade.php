@@ -8,6 +8,9 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     {{-- JQuery  --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        const search = "{{ route('main.arsip') }}";
+    </script>
     
     <title>{{ config('app.name') }} | Arsip Pesan</title>
 </head>
@@ -55,25 +58,25 @@
                 </div>
             </form>
         </section>
-        <section class="row g-3">
+        <section class="row g-3" id="arsip-list">
         @forelse ( $arsipPesan as $arsip)
             {{-- Card --}}
             <div class="col-12 col-sm-6 col-lg-4 col-xxl-3">
                 <div class="card">
-                    <h5 class="card-header">05/08/2024 - Senin</h5>
+                    <h5 class="card-header">{{ $arsip->created_at }}</h5>
                     <div class="overflow-hidden rounded">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-user text-decoration-underline"></i> Nama Pegawai</h4>
-                                <span class="card-text fs-5">Asep Garong</span>
+                                <span class="card-text fs-5">{{ $arsip->nama }}</span>
                             </li>
                             <li class="list-group-item">
                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Pesan</h4>
-                                <p class="card-text fs-6">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil eaque ad officia voluptatum aut. Asperiores voluptates molestiae dolorum laudantium sunt.</p>
+                                <p class="card-text fs-6">{{ $arsip->pesan }}</p>
                             </li>
                             <li class="list-group-item">
                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> File</h4>
-                                <span class="card-text fs-5">Elden-Ring-DE-SteamRIP.com.rar</span>
+                                <span class="card-text fs-5">{{ $arsip->attachment }}</span>
                             </li>
                         </ul>
                     </div>
