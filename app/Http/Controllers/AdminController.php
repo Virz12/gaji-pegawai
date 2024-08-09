@@ -153,8 +153,13 @@ class AdminController extends Controller
         return redirect('/dashboard');
     }
 
-    public function pesanarsip(datapegawai $datapegawai)
+    public function pesanarsip(datapegawai $datapegawai, Request $request)
     {
+        if ($request->ajax()) {
+            $arsipPesan = arsip_pesan::orderBy('created_at', 'DESC')
+                                    ->paginate(8);
+        }
+
         $arsipPesan = arsip_pesan::orderBy('created_at', 'DESC')
                                     ->paginate(8);
 
