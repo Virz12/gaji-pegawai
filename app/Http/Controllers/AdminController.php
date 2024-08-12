@@ -157,7 +157,8 @@ class AdminController extends Controller
     {
         if ($request->ajax()) {
             $query = $request->get('query');
-            $arsipPesan = arsip_pesan::whereAny(['nama', 'pesan', 'attachment','created_at'], 'LIKE', "{$query}%")->get();
+            $arsipPesan = arsip_pesan::where('nip', $datapegawai->nip)
+                                    ->whereAny(['nama', 'pesan', 'attachment','created_at'], 'LIKE', "{$query}%")->get();
 
             return response()->json($arsipPesan);
         }
