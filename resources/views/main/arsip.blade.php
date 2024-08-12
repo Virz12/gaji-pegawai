@@ -86,6 +86,7 @@
             <h2 class="text-secondary opacity-75 text-center">Arsip Kosong</h2>
         @endforelse
         </section>
+        <script src="{{ asset('js/arsip.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
 </html>
