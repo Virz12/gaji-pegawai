@@ -13,10 +13,13 @@ $(document).ready(function() {
                 $('#arsip-list').empty();
                 if (data.length > 0) {
                     data.forEach(arsip => {
+                        let createdAt = new Date(arsip.created_at);
+                        let formatDate = createdAt.toISOString().split('T')[0] + ' ' + createdAt.toISOString().split('T')[1].split('.')[0];
+
                         let arsipHtml = `
                             <div class="col-12 col-sm-6 col-lg-4 col-xxl-3">
                                 <div class="card">
-                                    <h5 class="card-header">${arsip.created_at}</h5>
+                                    <h5 class="card-header">${formatDate}</h5>
                                     <div class="overflow-hidden rounded">
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item">
