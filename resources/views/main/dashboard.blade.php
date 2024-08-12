@@ -103,7 +103,7 @@
                 <div class="row g-2 search-menu-scrollable align-content-start" id="pegawai-list">
                     @forelse ( $datapegawai as $pegawai)
                     <div type="button" class="btn btn-outline-success h-32 rounded p-2 text-start d-flex justify-content-between align-items-center search-item"
-                        data-nomor="{{ $pegawai->nomorWa }}"> 
+                        data-nomor="{{ $pegawai->nomorWa }}" data-nip="{{ $pegawai->nip }}" data-nama="{{ $pegawai->nama }}"> 
                         {{$pegawai->nama}}
                         <div class="btn-group">
                             <button type="button" class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-expanded="false" aria-label="dropdown">
@@ -114,7 +114,7 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{route('main.editpegawai',['datapegawai' => $pegawai])}}">Edit</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Hapus{{ $pegawai->nip }}">Hapus</li>
+                                <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Hapus{{ $pegawai->nip }}">Hapus</i></li>
                             </ul>
                         </div>
                     </div>
@@ -155,9 +155,11 @@
                 <form id="whatsappForm" action="{{route('main.whatsapp')}}" method="POST" enctype="multipart/form-data" data-save-template-url="{{ route('main.simpanTemplate') }}">
                     @csrf
                     @method('POST')
+                    <input type="hidden" id="nipHidden" name="nip" type="text" value="">
+                    <input type="hidden" id="namaHidden" name="nama" type="text" value="">
                     <div class="input-group mb-2">
                         <label class="input-group-text" for="nomorWa">Nomor Telepon</label>
-                        <input class="form-control" id="nomorWa" type="number" placeholder="-" disabled>
+                        <input class="form-control @error('nomorWa') is-invalid @enderror" id="nomorWa" type="number" placeholder="-" disabled>
                         <input type="hidden" id="nomorWaHidden" name="nomorWa" type="number" value="">
                     </div>
                     @error('nomorWa')
@@ -167,7 +169,7 @@
                         <div class="col-xl-10">
                             <div class="input-group">
                                 <label class="input-group-text" for="nama_template">Template Text</label>
-                                <input class="form-control rounded-end rounded-sm-none" name="nama_template" id="nama_template" type="text"  placeholder="'NamaTemplate1'" autocomplete="off">                                
+                                <input class="form-control rounded-end rounded-sm-none  @error('nama_template') is-invalid @enderror" name="nama_template" id="nama_template" type="text"  placeholder="'NamaTemplate1'" autocomplete="off">                                
                                 <button class="input-group-text dropdown-toggle w-100 w-sm-auto rounded rounded-sm-end mt-2 mt-sm-0" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
                                     Pilih Template
                                 </button>
@@ -192,14 +194,15 @@
                         </div>
                     </div>
                     <div class="input-group mt-2">
-                        <label class="input-group-text" for="pesan">Pesan</label>
-                        <textarea class="form-control" name="pesan" id="pesan" style="resize: none; height: 150px"></textarea>                        
+                        <label class="input-group-text" for="pesan"><span class="text-danger">*</span>Pesan</label>
+                        <textarea class="form-control @error('pesan') is-invalid @enderror" name="pesan" id="pesan" style="resize: none; height: 150px"></textarea>                        
                     </div>
                     @error('pesan')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                     <div class="input-group mt-2">
-                        <input class="form-control " type="file" name="attachment" id="attachment" aria-label="File Attachment">
+                        <label class="input-group-text" for="attachment" data-toggle="tooltip" data-placement="top" title="Lampiran"><i class="fa-solid fa-file-circle-plus"></i></label>
+                        <input class="form-control @error('attachment') is-invalid @enderror" type="file" name="attachment" id="attachment" aria-label="File Attachment">
                         <div class="w-100 w-sm-auto mt-2 mt-sm-0 d-flex">
                             <input type="radio" class="btn-check" name="options-outlined" id="gambar" checked autocomplete="off" >
                             <label class="btn btn-outline-success flex-fill rounded-start-2 rounded-end-0 rounded-sm-none" for="gambar"><i class="fa-solid fa-image"></i> Gambar</label>

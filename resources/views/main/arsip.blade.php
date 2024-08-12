@@ -9,7 +9,7 @@
     {{-- JQuery  --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script>
-        const search = "{{ route('main.arsip') }}";
+        const search = "{{ route('main.arsip',['datapegawai' => $datapegawai]) }}";
     </script>
     
     <title>{{ config('app.name') }} | Arsip Pesan</title>

@@ -153,14 +153,17 @@ class AdminController extends Controller
         return redirect('/dashboard');
     }
 
-    public function pesanarsip(datapegawai $datapegawai, Request $request)
+    public function pesanArsip( Request $request, datapegawai $datapegawai)
     {
         if ($request->ajax()) {
-            $arsipPesan = arsip_pesan::orderBy('created_at', 'DESC')
-                                    ->paginate(8);
+            $query = $request->get('query');
+            $arsipPesan = arsip_pesan::whereAny(['nama', 'pesan', 'attachment','created_at'], 'LIKE', "{$query}%")->get();
+
+            return response()->json($arsipPesan);
         }
 
         $arsipPesan = arsip_pesan::orderBy('created_at', 'DESC')
+                                    ->where('nip', $datapegawai->nip)
                                     ->paginate(8);
 
         return view('main.arsip')

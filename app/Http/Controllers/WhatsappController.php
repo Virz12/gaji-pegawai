@@ -46,7 +46,15 @@ class WhatsappController extends Controller
 
         ];
 
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->error('<b>Error!</b><br>Pengiriman Pesan Gagal.');
+
         $request->validate([
+            'nip' => 'required|numeric',
+            'nama' => 'required',
             'nomorWa' => 'required|numeric',
             'pesan' => 'required',
             'attachment' => [
@@ -88,60 +96,67 @@ class WhatsappController extends Controller
             'pesan_type' => 'required'
         ], $messages);
 
+        $nip = $request->input('nip');
+        $nama = $request->input('nama');
         $nomorWa = $request->input('nomorWa');
         $pesan = $request->input('pesan');
-        
-        try {
-            if ($request->hasFile('attachment')) {
-                $file = $request->file('attachment');
-                $path = $file->store('public/attachments');
-                $filePath = storage_path('app/' . $path);
-                
-                $response = $this->whatsapp->uploadMedia($filePath);
-                $media_id = new MediaObjectID($response->decodedBody()['id']);
 
-                $pesanType = $request->input('pesan_type');
-                if ($pesanType === 'gambar') {
-                    $this->whatsapp->sendImage(
-                        $nomorWa, 
-                        $media_id, 
-                        $pesan);
-                } elseif ($pesanType === 'dokumen') {
-                    $this->whatsapp->sendDocument(
-                        $nomorWa, 
-                        $media_id, 
-                        $file->getClientOriginalName(),
-                        $pesan);
-                }
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $path = $file->store('public/attachments');
+            $filePath = storage_path('app/' . $path);
+            
+            $response = $this->whatsapp->uploadMedia($filePath);
+            $media_id = new MediaObjectID($response->decodedBody()['id']);
 
-                Storage::delete($path);
-            }else{
-                $this->whatsapp->sendTextMessage($nomorWa, $pesan);
+            $pesanType = $request->input('pesan_type');
+            sleep(4);
+            if ($pesanType === 'gambar') {
+                $this->whatsapp->sendImage(
+                    $nomorWa, 
+                    $media_id, 
+                    $pesan);
+            } elseif ($pesanType === 'dokumen') {
+                $this->whatsapp->sendDocument(
+                    $nomorWa, 
+                    $media_id, 
+                    $file->getClientOriginalName(),
+                    $pesan);
             }
+            Storage::delete($path);
 
-        // arsip_pesan::create([
-        //     'to' => $to,
-        //     'pesan' => $pesan,
-        //     'attachment' => $file->getClientOriginalName()
-        // ]);
-
+            arsip_pesan::create([
+                'nip' => $nip,
+                'nama' => $nama,
+                'nomorWa' => $nomorWa,
+                'pesan' => $pesan,
+                'attachment' => $file->getClientOriginalName(),
+            ]);
+        
             flash()
             ->killer(true)
             ->layout('bottomRight')
             ->timeout(3000)
             ->success('<b>Berhasil!</b><br>Pesan Terkirim.');
+            
+        }else{
+            sleep(4);
+            $this->whatsapp->sendTextMessage($nomorWa, $pesan);
 
-        } catch (\Exception $e) {
-                Storage::delete($path);
-                flash()
-                ->killer(true)
-                ->layout('bottomRight')
-                ->timeout(3000)
-                ->error('<b>Error!</b><br>Terjadi kesalahan saat mengupload file: '. $e->getMessage());
-                return redirect('/dashboard');
+            arsip_pesan::create([
+                'nip' => $nip,
+                'nama' => $nama,
+                'nomorWa' => $nomorWa,
+                'pesan' => $pesan,
+            ]);
+        
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->success('<b>Berhasil!</b><br>Pesan Terkirim.');
         }
 
-        
         return redirect('/dashboard');
     }
         

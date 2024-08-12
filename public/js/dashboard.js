@@ -25,6 +25,8 @@ $(document).ready(function() {
         $('#nama_template').val(templateName);
     });
 
+    $('[data-toggle="tooltip"]').tooltip();   
+
     // Live Search
     $(document).on('keyup', '#search' , function() {
         let query = $(this).val();
@@ -92,6 +94,9 @@ $(document).ready(function() {
         $('.search-item').removeClass('btn-success').addClass('btn-outline-success');
         $(this).removeClass('btn-outline-success').addClass('btn-success');
 
+
+        var nip = $(this).data('nip');
+        var nama = $(this).data('nama');
         var nomor = $(this).data('nomor');
         
         // Update form fields
@@ -100,9 +105,11 @@ $(document).ready(function() {
         $('#pesan').val('');
         $('#attachment').val('');
 
-        $('#nomorWa').val(nomor);  
+
+        $('#nomorWa').val(nomor); 
+
         $('#nomorWaHidden').val(nomor);
+        $('#nipHidden').val(nip);
+        $('#namaHidden').val(nama);
     });
-
-
 });
