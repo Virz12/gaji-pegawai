@@ -51,10 +51,10 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
                 <ul class="nav nav-underline ms-auto mb-2 mb-md-0 me-auto flex-column flex-md-row">
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" aria-current="page" href="/dashboard">Kirim Pesan</a>
+                        <a class="nav-link text-black d-inline-block" aria-current="page" href="/dashboard"><i class="fa-solid fa-comment"></i> Kirim Pesan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active fw-medium text-success d-inline-block" href="">Tambah Pegawai</a>
+                        <a class="nav-link active fw-medium text-success d-inline-block" href="/tambahpegawai"><i class="fa-solid fa-plus"></i> Tambah Pegawai</a>
                     </li>
                 </ul>
                 <hr>
@@ -64,9 +64,9 @@
                             {{ Auth::user()->username }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/ubahpassword">Ubah Password</a></li>
+                            <li><a class="dropdown-item" href="/ubahpassword"><i class="fa-solid fa-lock"></i> Ubah Password</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+                            <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a></li>
                         </ul>
                     </span>                
                 </div>

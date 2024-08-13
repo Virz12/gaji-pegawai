@@ -25,10 +25,10 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
                 <ul class="nav nav-underline ms-auto mb-2 mb-md-0 me-auto flex-column flex-md-row">
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="/dashboard">Kirim Pesan</a>
+                        <a class="nav-link text-black d-inline-block" href="/dashboard"><i class="fa-solid fa-comment"></i> Kirim Pesan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="/tambahpegawai">Tambah Pegawai</a>
+                        <a class="nav-link text-black d-inline-block" href="/tambahpegawai"><i class="fa-solid fa-plus"></i> Tambah Pegawai</a>
                     </li>
                 </ul>
                 <hr>
@@ -38,9 +38,9 @@
                             {{ Auth::user()->username }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/ubahpassword">Ubah Password</a></li>
+                            <li><a class="dropdown-item" href="/ubahpassword"><i class="fa-solid fa-lock"></i> Ubah Password</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+                            <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a></li>
                         </ul>
                     </span>                
                 </div>
@@ -51,32 +51,33 @@
     <main class="container-fluid ps-3 my-4">
         <section class="row g-2 justify-content-between">
             <a href="/dashboard" class="btn btn-success mb-sm-3 ms-1 col-auto"><i class="fa-solid fa-arrow-left me-2"></i>Kembali</a>
-            <form action="" class="col-12 col-sm-auto">
+            <form action="" class="col-12 col-md-auto">
                 <div class="input-group mb-3">
                     <label class="input-group-text shadow-sm" for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
-                    <input type="text" class="form-control shadow-sm" placeholder="Nama Pegawai" aria-label="search" id="search" aria-describedby="search">
+                    <input type="text" class="form-control shadow-sm" placeholder="Cari" aria-label="search" id="search" aria-describedby="search">
                 </div>
             </form>
         </section>
-        <section class="row g-3" id="arsip-list">
+        <h4 class="text-center p-2 m-auto mb-2 col-auto"><i class="fa-solid fa-user "></i> {{$datapegawai->nama}}<br><span class="mt-2 badge rounded-pill text-bg-secondary">NIP : {{$datapegawai->nip}}</span></h4>
+        <section class="row g-3 mb-3" id="arsip-list">
         @forelse ( $arsipPesan as $arsip)
             {{-- Card --}}
             <div class="col-12 col-sm-6 col-lg-4 col-xxl-3">
                 <div class="card">
-                    <h5 class="card-header">{{ $arsip->created_at }}</h5>
+                    <h5 class="card-header d-flex justify-content-between"><span><i class="fa-solid fa-calendar"></i> {{ $arsip->created_at->timezone('Asia/Jakarta')->format('j/n/Y') }}</span><span><i class="fa-solid fa-clock"></i> {{ $arsip->created_at->timezone('Asia/Jakarta')->format('H:i:s') }}</span></h5>
                     <div class="overflow-hidden rounded">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-user text-decoration-underline"></i> Nama Pegawai</h4>
-                                <span class="card-text fs-5">{{ $arsip->nama }}</span>
-                            </li>
+                        <ul class="list-group list-group-flush">                
                             <li class="list-group-item">
                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Pesan</h4>
                                 <p class="card-text fs-6">{{ $arsip->pesan }}</p>
                             </li>
                             <li class="list-group-item">
                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> File</h4>
-                                <span class="card-text fs-5">{{ $arsip->attachment }}</span>
+                                @if ($arsip->attachment == true)
+                                    <span class="card-text fs-5">{{ $arsip->attachment }}</span>
+                                @else
+                                    <span class="card-text fs-5">-</span>
+                                @endif
                             </li>
                         </ul>
                     </div>
@@ -86,6 +87,7 @@
             <h2 class="text-secondary opacity-75 text-center">Arsip Kosong</h2>
         @endforelse
         </section>
+        <div>{!! $arsipPesan->links() !!}</div>
         <script src="{{ asset('js/arsip.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>

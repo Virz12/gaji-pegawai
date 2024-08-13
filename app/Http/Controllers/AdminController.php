@@ -157,15 +157,16 @@ class AdminController extends Controller
     {
         if ($request->ajax()) {
             $query = $request->get('query');
-            $arsipPesan = arsip_pesan::where('nip', $datapegawai->nip)
-                                    ->whereAny(['nama', 'pesan', 'attachment','created_at'], 'LIKE', "{$query}%")->get();
+            $arsipPesan = arsip_pesan::orderBy('created_at', 'DESC')
+                                    ->where('nip', $datapegawai->nip)
+                                    ->whereAny(['nama', 'pesan', 'attachment','created_at'], 'LIKE', "%{$query}%")->get();
 
             return response()->json($arsipPesan);
         }
 
         $arsipPesan = arsip_pesan::orderBy('created_at', 'DESC')
                                     ->where('nip', $datapegawai->nip)
-                                    ->paginate(8);
+                                    ->paginate(6);
 
         return view('main.arsip')
                 ->with('arsipPesan', $arsipPesan)
