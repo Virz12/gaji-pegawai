@@ -19,7 +19,7 @@ class AdminController extends Controller
     {   
         if ($request->ajax()) {
             $query = $request->get('query');
-            $datapegawai = datapegawai::where('nama', 'LIKE', "{$query}%")->get();
+            $datapegawai = datapegawai::where('nama', 'LIKE', "%{$query}%")->get();
 
             return response()->json($datapegawai);
         }
@@ -30,6 +30,20 @@ class AdminController extends Controller
         return view('main.dashboard')
                     ->with('datatemplate', $datatemplate)
                     ->with('datapegawai', $datapegawai);
+    }
+
+    public function daftarpegawai(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = $request->get('query');
+            $datapegawai = datapegawai::whereAny(['nama', 'nip', 'nomorWa'], 'LIKE', "%{$query}%")->get();
+
+            return response()->json($datapegawai);
+        }
+
+        $datapegawai = datapegawai::orderBy('updated_at','DESC')->paginate(5);
+
+        return view('main.daftarpegawai')->with('datapegawai', $datapegawai);
     }
 
     public function tambahpegawai()
@@ -72,7 +86,7 @@ class AdminController extends Controller
             ->timeout(3000)
             ->success('<b>Berhasil!</b><br>Data Pegawai Sudah Ditambah.');
 
-            return redirect('/dashboard')->withInput();
+            return redirect('/daftarpegawai')->withInput();
         }else{
             flash()
             ->killer(true)
@@ -237,5 +251,15 @@ class AdminController extends Controller
         ->success('<b>Berhasil!</b><br>Password Sudah Diubah.');
 
         return redirect('/ubahpassword');
+    }
+
+    function settings() 
+    {
+        return view('main.settings');
+    }
+
+    function settingsupdate(Request $request) 
+    {
+
     }
 }
