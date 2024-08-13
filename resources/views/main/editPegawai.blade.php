@@ -53,7 +53,7 @@
                         <a class="nav-link text-black d-inline-block" aria-current="page" href="/dashboard"><i class="fa-solid fa-comment"></i> Kirim Pesan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="/tambahpegawai"><i class="fa-solid fa-plus"></i> Tambah Pegawai</a>
+                        <a class="nav-link text-black d-inline-block" href="/daftarpegawai"><i class="fa-solid fa-users"></i> Daftar Pegawai</a>
                     </li>
                 </ul>
                 <hr>
@@ -63,9 +63,11 @@
                             {{ Auth::user()->username }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/ubahpassword"><i class="fa-solid fa-lock"></i> Ubah Password</a></li>
+                            <li><a class="dropdown-item" href="/ubahpassword"><i class="fa-solid fa-lock me-2"></i> Ubah Password</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a></li>
+                            <li><a class="dropdown-item" href="/settings"><i class="fa-solid fa-gear me-2"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket me-2"></i> Log Out</a></li>
                         </ul>
                     </span>                
                 </div>
@@ -79,6 +81,10 @@
             <form action="{{ route('main.updatepegawai', ['datapegawai' => $datapegawai]) }}" method="POST">
                 @csrf
                 @method('PUT')
+                <div class="input-group mb-3">
+                    <input class="form-control @error('attachment') is-invalid @enderror" type="file" accept="image/png, image/jpeg, image/jpg" name="foto_profil" id="foto_profil" aria-label="Foto Profil">
+                    <label class="input-group-text" for="foto_profil">Foto Profil</label>
+                </div>
                 <div class="form-floating mb-3">
                     <input type="number" value="{{$datapegawai->nip}}" name="nip" class="form-control border-2 @error('nip') is-invalid @enderror" id="nip" placeholder="" aria-label="nip" autocomplete="off" required>
                     <label for="nip">NIP<span class="text-danger">*</span></label>

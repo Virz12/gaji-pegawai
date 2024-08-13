@@ -18,7 +18,7 @@
     {{-- NavBar --}}
     <nav class="navbar navbar-expand-md bg-white shadow">
         <div class="container-fluid">
-            <a class="navbar-brand text-success ms-2" href="#"><strong>Whatsapp Sender</strong></a>
+            <a class="navbar-brand text-success ms-2" href="#"><strong>WhatsApp Sender</strong></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -28,7 +28,7 @@
                         <a class="nav-link text-black d-inline-block" href="/dashboard"><i class="fa-solid fa-comment"></i> Kirim Pesan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="/tambahpegawai"><i class="fa-solid fa-plus"></i> Tambah Pegawai</a>
+                        <a class="nav-link text-black d-inline-block" href="/daftarpegawai"><i class="fa-solid fa-users"></i> Daftar Pegawai</a>
                     </li>
                 </ul>
                 <hr>
@@ -38,9 +38,11 @@
                             {{ Auth::user()->username }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/ubahpassword"><i class="fa-solid fa-lock"></i> Ubah Password</a></li>
+                            <li><a class="dropdown-item" href="/ubahpassword"><i class="fa-solid fa-lock me-2"></i> Ubah Password</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a></li>
+                            <li><a class="dropdown-item" href="/settings"><i class="fa-solid fa-gear me-2"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket me-2"></i> Log Out</a></li>
                         </ul>
                     </span>                
                 </div>
@@ -88,7 +90,8 @@
         @endforelse
         </section>
         <div>{!! $arsipPesan->links() !!}</div>
-        <script src="{{ asset('js/arsip.js') }}"></script>
+    </main>
+    <script src="{{ asset('js/arsip.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
 </html>

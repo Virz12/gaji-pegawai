@@ -23,7 +23,7 @@
                 <div class="mx-auto mt-3" style="width: 100px;">
                     <img src="{{asset('img/logo.png')}}" class="logo img-fluid" >
                 </div>
-                <h1 class="text-center mt-3"><strong>WhatsApp Sender</strong></h1>
+                <h1 class="text-center mt-3"><strong>Pusat Survey Geologi WhatsApp Sender</strong></h1>
                 <div class="d-flex align-items-center justify-content-center px-2 pb-2 mt-2">
                     <form action="" method="POST" style="width: 460px;" class="shadow-lg  mt-4 px-4 pt-4 card bg-white" style="border-radius: 1rem;">
                         @csrf

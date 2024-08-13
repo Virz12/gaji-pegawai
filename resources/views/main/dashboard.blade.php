@@ -68,7 +68,7 @@
                         <a class="nav-link active fw-medium text-success d-inline-block" aria-current="page" href="#"><i class="fa-solid fa-comment"></i> Kirim Pesan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="/tambahpegawai"><i class="fa-solid fa-plus"></i> Tambah Pegawai</a>
+                        <a class="nav-link text-black d-inline-block" href="/daftarpegawai"><i class="fa-solid fa-users"></i> Daftar Pegawai</a>
                     </li>
                 </ul>
                 <hr>
@@ -78,9 +78,11 @@
                             {{ Auth::user()->username }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/ubahpassword"><i class="fa-solid fa-lock"></i> Ubah Password</a></li>
+                            <li><a class="dropdown-item" href="/ubahpassword"><i class="fa-solid fa-lock me-2"></i> Ubah Password</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a></li>
+                            <li><a class="dropdown-item" href="/settings"><i class="fa-solid fa-gear me-2"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket me-2"></i> Log Out</a></li>
                         </ul>
                     </span>                
                 </div>
@@ -157,16 +159,45 @@
                     @method('POST')
                     <input type="hidden" id="nipHidden" name="nip" type="text" value="">
                     <input type="hidden" id="namaHidden" name="nama" type="text" value="">
-                    <div class="input-group mb-2">
-                        <label class="input-group-text" for="nomorWa">Nomor Telepon</label>
-                        <input class="form-control @error('nomorWa') is-invalid @enderror" id="nomorWa" type="number" placeholder="-" disabled>
-                        <input type="hidden" id="nomorWaHidden" name="nomorWa" type="number" value="">
+                    <input type="hidden" id="nomorWaHidden" name="nomorWa" type="number" value="">
+                    
+                    <div class="row mb-2 g-2">
+                        <div class="col-12 col-sm-3 col-md-12 col-lg-4 col-xl-3 col-xxl-2">
+                            <div class="ratio ratio-1x1">
+                                <img class="rounded" src="{{ asset('img/bglog.jpg') }}" alt="Profile picture">
+                                <label for="foto_profil"></label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row h-100">
+                                <div class="input-group mb-2">
+                                    <label class="input-group-text" for="nama">Nama Pegawai</label>
+                                    <input class="form-control @error('nama') is-invalid @enderror " id="nama" type="text" placeholder="-" disabled>
+                                </div>
+                                @error('nama')
+                                    <div class="text-danger"><small>{{ $message }}</small></div>
+                                @enderror
+    
+                                <div class="input-group mb-2">
+                                    <label class="input-group-text" for="nip">NIP Pegawai</label>
+                                    <input class="form-control @error('nip') is-invalid @enderror" id="nip" type="number" placeholder="-" disabled>
+                                </div>
+                                @error('nip')
+                                    <div class="text-danger"><small>{{ $message }}</small></div>
+                                @enderror
+            
+                                <div class="input-group">
+                                    <label class="input-group-text" for="nomorWa">Nomor Telepon</label>
+                                    <input class="form-control @error('nomorWa') is-invalid @enderror" id="nomorWa" type="number" placeholder="-" disabled>
+                                </div>
+                                @error('nomorWa')
+                                    <div class="text-danger"><small>{{ $message }}</small></div>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
-                    @error('nomorWa')
-                        <div class="text-danger"><small>{{ $message }}</small></div>
-                    @enderror
                     <div class="row g-2">
-                        <div class="col-xl-10">
+                        <div class="col-xl-9">
                             <div class="input-group">
                                 <label class="input-group-text" for="nama_template">Template Text</label>
                                 <input class="form-control rounded-end rounded-sm-none  @error('nama_template') is-invalid @enderror" name="nama_template" id="nama_template" type="text"  placeholder="'NamaTemplate1'" autocomplete="off">                                
@@ -189,7 +220,7 @@
                                 <div class="text-danger"><small>{{ $message }}</small></div>
                             @enderror
                         </div>
-                        <div class="col-12 col-xl-2 mb-2" >
+                        <div class="col-12 col-xl-3" >
                             <button id="saveTemplateBtn" class="btn btn-success w-100"><i class="fa-solid fa-file-arrow-up"></i> Simpan</button>
                         </div>
                     </div>

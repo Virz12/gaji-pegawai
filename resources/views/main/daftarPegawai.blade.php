@@ -9,7 +9,9 @@
 
     {{-- JQuery  --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    
+    <script>
+        const search = "{{ route('main.daftarpegawai') }}";
+    </script>
 
     {{-- Custom CSS --}}
     <style>
@@ -38,7 +40,7 @@
             -moz-appearance: textfield;
         }
     </style>
-    <title>{{ config('app.name') }} | Tambah Pegawai</title>
+    <title>{{ config('app.name') }} | Daftar Pegawai</title>
 </head>
 <body class="min-vh-100 bg-body-secondary">
     {{-- NavBar --}}
@@ -54,7 +56,7 @@
                         <a class="nav-link text-black d-inline-block" href="/dashboard"><i class="fa-solid fa-comment"></i> Kirim Pesan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="/daftarpegawai"><i class="fa-solid fa-users"></i> Daftar Pegawai</a>
+                        <a class="nav-link active fw-medium text-success d-inline-block" aria-current="page" href="/daftarpegawai"><i class="fa-solid fa-users"></i> Daftar Pegawai</a>
                     </li>
                 </ul>
                 <hr>
@@ -75,51 +77,49 @@
             </div>
         </div>
     </nav>
-    {{-- Main Card --}}
-    <main class="d-flex align-items-center justify-content-center" style="height: calc(100vh - 58px)">
-        <div class="card p-3 w-75 w-lg-50 w-xxl-25">
-            <h4 class="mb-3"><strong>Tambah Pegawai</strong></h4>
-            <form action="" method="POST" enctype="multipart/form-data">
-                @csrf
+    {{-- Main --}}
+    <main class="container-fluid ps-3 my-4">
+        <section class="row g-2 justify-content-between">
+            <a href="/tambahpegawai" class="btn btn-success mb-sm-3 ms-1 col-auto"><i class="fa-solid fa-plus me-2"></i>Tambah Pegawai</a>
+            <form action="" class="col-12 col-sm-auto">
                 <div class="input-group mb-3">
-                    <input class="form-control @error('attachment') is-invalid @enderror" type="file" accept="image/png, image/jpeg, image/jpg" name="foto_profil" id="foto_profil" aria-label="Foto Profil">
-                    <label class="input-group-text" for="foto_profil">Foto Profil</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="number" name="nip" class="form-control border-2 @error('nip') is-invalid @enderror" id="nip" placeholder="" aria-label="nip" autocomplete="off" required>
-                    <label for="nip">NIP<span class="text-danger">*</span></label>
-                    @error('nip')
-                        <div class="text-danger"><small>{{ $message }}</small></div>
-                    @enderror
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="text" name="nama" class="form-control border-2 @error('nama') is-invalid @enderror" id="nama" placeholder="" aria-label="nama" autocomplete="off" required>
-                    <label  for="nama">Nama Pegawai<span class="text-danger">*</span></label>
-                    @error('nama')
-                        <div class="text-danger"><small>{{ $message }}</small></div>
-                    @enderror
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="number" name="nomorWa" class="form-control border-2 @error('nomorWa') is-invalid @enderror" id="nomorWa" placeholder="" aria-label="nomorWa" autocomplete="off" required>
-                    <label for="nomorWa">Nomor WhatsApp<span class="text-danger">*</span></label>
-                    <div class="text-sedondary opacity-75"><small>Awali nomor dengan angka 62.</small></div>
-                    @error('nomorWa')
-                        <div class="text-danger"><small>{{ $message }}</small></div>
-                    @enderror
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <a href="/daftarpegawai"class="btn btn-secondary w-100">Kembali</a>
-                    </div>
-                    <div class="col-6">
-                        <button type="submit" class="btn btn-success w-100">Tambah</button>
-                    </div>
+                    <label class="input-group-text shadow-sm" for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
+                    <input type="text" class="form-control shadow-sm" placeholder="Cari" aria-label="search" id="search" aria-describedby="search">
                 </div>
             </form>
-        </div>
+        </section>
+        <section class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 g-3 mb-3" id="pegawai-list">
+        @forelse ( $datapegawai as $pegawai)
+            {{-- Card --}}
+            <div class="col">
+                <div class="card">
+                    <h5 class="card-header d-flex justify-content-between"><span><i class="fa-solid fa-calendar"></i> {{ $pegawai->created_at->timezone('Asia/Jakarta')->format('j/n/Y') }}</span><span><i class="fa-solid fa-clock"></i> {{ $pegawai->created_at->timezone('Asia/Jakarta')->format('H:i:s') }}</span></h5>
+                    <div class="overflow-hidden rounded">
+                        <ul class="list-group list-group-flush">                
+                            <li class="list-group-item">
+                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Nama Pegawai</h4>
+                                <h5 class="card-text fw-normal">{{ $pegawai->nama }}</h5>
+                            </li>
+                            <li class="list-group-item">
+                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> NIP</h4>
+                                <h5 class="card-text fw-normal">{{ $pegawai->nip }}</h5>
+                            </li>
+                            <li class="list-group-item">
+                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> Nomor Whatsapp</h4>
+                                <h5 class="card-text fw-normal">{{ $pegawai->nomorWa }}</h5>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <h2 class="m-auto text-secondary opacity-75 text-center">Arsip Kosong</h2>
+        @endforelse
+        </section>
+        <div>{!! $datapegawai->links() !!}</div>
     </main>
     {{-- Script --}}
-    <script src="{{ asset('js/phoneNumber.js') }}"></script>
+    <script src="{{ asset('js/daftarpegawai.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
 </html>

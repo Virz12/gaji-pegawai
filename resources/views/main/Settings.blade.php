@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{-- Bootstrap --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-    
+
     {{-- Custom CSS --}}
     <style>
         @media screen and (min-width: 992px) {
@@ -20,10 +20,23 @@
                 width: 25% !important;
             }
         }
+
+        /* Remove Arrow on Number Input */
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
-    <title>{{ config('app.name') }} | Ubah Password</title>
+    <title>{{ config('app.name') }} | Settings</title>
 </head>
-<body class="min-vh-100 overflow-hidden bg-body-secondary">
+<body class="min-vh-100 bg-body-secondary">
     {{-- NavBar --}}
     <nav class="navbar navbar-expand-md bg-white shadow">
         <div class="container-fluid">
@@ -61,28 +74,27 @@
     {{-- Main Card --}}
     <main class="d-flex align-items-center justify-content-center" style="height: calc(100vh - 58px)">
         <div class="card p-3 w-75 w-lg-50 w-xxl-25">
-            <h4 class="mb-3"><strong>Ubah Password</strong></h4>
-            <form action="{{route('main.updatepassword')}}" method="POST">
+            <h4 class="mb-3"><strong>Settings</strong></h4>
+            <form action="" method="POST">
                 @csrf
-                @method('PUT')
                 <div class="form-floating mb-3">
-                    <input type="password" name="passwordSekarang" class="form-control border-2 @error('passwordSekarang') is-invalid @enderror" id="passwordSekarang" placeholder="" aria-label="passwordSekarang" required>
-                    <label for="passwordSekarang">Password Sekarang<span class="text-danger">*</span></label>
-                    @error('passwordSekarang')
+                    <input type="number" name="phone_api" class="form-control border-2 @error('phone_api') is-invalid @enderror" id="phone_api" placeholder="" aria-label="Nomor Telpon API" autocomplete="off" required>
+                    <label for="phone_api">Nomor Telpon API<span class="text-danger">*</span></label>
+                    @error('phone_api')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" name="password" class="form-control border-2 @error('password') is-invalid @enderror" id="passwordBaru" placeholder="" aria-label="passwordBaru" required>
-                    <label  for="passwordBaru">Password Baru<span class="text-danger">*</span></label>
-                    @error('password')
+                    <input type="number" name="token_api" class="form-control border-2 @error('token_api') is-invalid @enderror" id="token_api" placeholder="" aria-label="Token API" autocomplete="off" required>
+                    <label for="token_api">Nomor Telpon API<span class="text-danger">*</span></label>
+                    @error('token_api')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" name="passwordKonfirmasi" class="form-control border-2 @error('passwordKonfirmasi') is-invalid @enderror" id="passwordKonfirmasi" placeholder="" aria-label="passwordKonfirmasi" required>
-                    <label for="passwordKonfirmasi">Konfirmasi Password<span class="text-danger">*</span></label>
-                    @error('passwordKonfirmasi')
+                    <input type="number" name="business_id" class="form-control border-2 @error('business_id') is-invalid @enderror" id="business_id" placeholder="" aria-label="Bisnis ID" autocomplete="off" required>
+                    <label for="business_id">Bisnis ID<span class="text-danger">*</span></label>
+                    @error('business_id')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                 </div>
@@ -99,11 +111,13 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="ubahLabel">Ubah Password</h1>
+                                <h1 class="modal-title fs-5" id="ubahLabel">Ubah Settings API</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body text-center">
-                                <strong>Apakah anda yakin ingin mengubah Password?</strong><br>
+                                <strong>Apakah anda yakin ingin mengubah Data ini?</strong>
+                                <br>
+                                <strong class="text-danger">Website akan mulai ulang setelah konfirmasi</strong>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
@@ -115,6 +129,7 @@
             </form>
         </div>
     </main>
+    {{-- Script --}}
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
 </html>
