@@ -24,9 +24,11 @@ Route::middleware(['preventBackHistory','auth'])->group(function () {
 Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('main.dashboard');
     Route::get('/ubahpassword', [AdminController::class, 'ubahpw'])->name('main.ubahpassword');
+    Route::get('/daftarpegawai', [AdminController::class, 'daftarpegawai'])->name('main.daftarpegawai');
     Route::get('/tambahpegawai', [AdminController::class, 'tambahpegawai'])->name('main.tambahpegawai');
     Route::get('/editpegawai/{datapegawai}', [AdminController::class, 'editpegawai'])->name('main.editpegawai');
     Route::get('/arsip/{datapegawai}', [AdminController::class, 'pesanArsip'])->name('main.arsip');
+    Route::get('/settings', [AdminController::class, 'settings'])->name('main.settings');
     
 
     Route::post('/dashboard/template', [WhatsappController::class, 'simpantemplate'])->name('main.simpanTemplate');
@@ -35,5 +37,6 @@ Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::post('/tambahpegawai', [AdminController::class, 'storepegawai']);
     Route::put('/updatepegawai/{datapegawai}', [AdminController::class, 'updatepegawai'])->name('main.updatepegawai');
     Route::get('/hapuspegawai/{datapegawai:id}',[AdminController::class, 'deletepegawai'])->name('main.delete');
+    Route::post('/settings', [AdminController::class, 'settingsupdate']);
     Route::get('/hapustemplate/{template:id}',[WhatsappController::class, 'deletetemplate'])->name('main.templatedelete');
 });
