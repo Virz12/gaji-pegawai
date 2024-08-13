@@ -95,19 +95,19 @@ $(document).ready(function() {
         $(this).removeClass('btn-outline-success').addClass('btn-success');
 
 
-        var nip = $(this).data('nip');
-        var nama = $(this).data('nama');
-        var nomor = $(this).data('nomor');
+        const nip = $(this).data('nip');
+        const nama = $(this).data('nama');
+        const nomor = $(this).data('nomor');
         
         // Update form fields
         $('#nomorWa').attr('placeholder', nomor);
         $('#nama_template').val('');
         $('#pesan').val('');
         $('#attachment').val('');
-
-
+        
+        $('#nama').val(nama);
+        $('#nip').val(nip);
         $('#nomorWa').val(nomor); 
-
         $('#nomorWaHidden').val(nomor);
         $('#nipHidden').val(nip);
         $('#namaHidden').val(nama);
