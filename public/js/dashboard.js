@@ -103,6 +103,7 @@ $(document).ready(function() {
         $('#nomorWa').attr('placeholder', nomor);
         $('#nama_template').val('');
         $('#pesan').val('');
+        $('#footer').val('');
         $('#attachment').val('');
         
         $('#nama').val(nama);
