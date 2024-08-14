@@ -6,12 +6,15 @@ use App\Models\user;
 use App\Models\template;
 use App\Models\datapegawai;
 use App\Models\arsip_pesan;
+use App\Models\config_api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Laravel\Facades\Image;
 
 class AdminController extends Controller
 {
@@ -58,6 +61,9 @@ class AdminController extends Controller
             'numeric' => 'Kolom :attribute hanya boleh berisi angka.',
             'nama.regex' => 'Kolom :attribute hanya berisi huruf besar atau kecil dan spasi.',
             'unique' => ':attribute sudah dipakai.',
+            'foto_pegawai.image' => 'File Harus Berupa Gambar.',
+            'foto_pegawai.max' => 'Ukuran file maksimal 2MB.',            
+            'foto_pegawai.mimes' => 'Format Harus JPEG, JPG Dan PNG', 
         ];
 
         flash()
@@ -67,19 +73,33 @@ class AdminController extends Controller
         ->error('<b>Error!</b><br>Penambahan Pegawai Gagal.');
 
         $request->validate([
-            'nip' => 'required|numeric|unique:data_pegawai',
+            'nip' => 'required|numeric|unique:data_pegawai,nip',
             'nama' => 'required|regex:/^[a-zA-Z ]+$/',
-            'nomorWa' => 'required|numeric',
+            'nomorWa' => 'required|numeric|unique:data_pegawai,nomorWa',
+            'jenis_kelamin' => 'required',
+            'foto_pegawai' => 'nullable|image|max:2048|mimes:jpeg,jpg,png',
         ],$messages);
 
         
         $data = [   
             'nip' => $request->input('nip'),
             'nama' => $request->input('nama'),
+            'jenis_kelamin' => $request->input('jenis_kelamin'),
             'nomorWa' => $request->input('nomorWa'),
         ];
 
         if($datapegawai = datapegawai::create($data)){
+            if($request->hasFile('foto_pegawai')) {
+                $image = Image::read($request->file('foto_pegawai'));
+                $imageName = time() . '.' . $request->file('foto_pegawai')->extension();
+                $imagePath = public_path('images/' . $imageName);
+
+                $image->cover(900, 900); 
+                $image->save($imagePath);
+
+                $datapegawai->update(['foto_pegawai' => ('images/'.$imageName)]);
+            }
+
             flash()
             ->killer(true)
             ->layout('bottomRight')
@@ -112,6 +132,9 @@ class AdminController extends Controller
             'nama.regex' => 'Kolom :attribute hanya berisi huruf besar atau kecil dan spasi.',
             'unique' => ':attribute sudah dipakai.',
             'digits_between' => 'hanya 1 - 20 digit',
+            'foto_pegawai.image' => 'File Harus Berupa Gambar.',
+            'foto_pegawai.max' => 'Ukuran file maksimal 2MB.',            
+            'foto_pegawai.mimes' => 'Format Harus JPEG, JPG Dan PNG', 
         ];
 
         flash()
@@ -123,17 +146,34 @@ class AdminController extends Controller
         Validator::make($request->all(),[
             'nip' => ['required', 'numeric', 'digits_between:1,20', Rule::unique('data_pegawai','nip')->ignore($datapegawai->id)],
             'nama' => 'required|regex:/^[a-zA-Z ]+$/',
-            'nomorWa' => 'required|numeric',
+            'nomorWa' => ['required', 'numeric',Rule::unique('data_pegawai','nomorWa')->ignore($datapegawai->id) ],
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'foto_pegawai' => 'nullable|image|max:2048|mimes:jpeg,jpg,png',
         ],$messages)->validate();
 
         
         $data = [   
             'nip' => $request->input('nip'),
             'nama' => $request->input('nama'),
+            'jenis_kelamin' => $request->input('jenis_kelamin'),
             'nomorWa' => $request->input('nomorWa'),
         ];
 
-        if($datapegawai->update($data)){
+        if ($datapegawai->update($data)) {
+            if ($request->hasFile('foto_pegawai')) {
+                if (File::exists($datapegawai->foto_pegawai)) {
+                    File::delete($datapegawai->foto_pegawai);
+                }
+
+                $newImage = Image::read($request->file('foto_pegawai'));
+                $imageName = time() . '.' . $request->file('foto_pegawai')->extension();
+                $imagePath = public_path('images/' . $imageName);
+
+                $newImage->cover(900, 900); 
+                $newImage->save($imagePath);
+
+                $datapegawai->foto_pegawai = 'images/' . $imageName;
+            }
             $datapegawai->save();
 
             flash()
@@ -141,9 +181,8 @@ class AdminController extends Controller
             ->layout('bottomRight')
             ->timeout(3000)
             ->success('<b>Berhasil!</b><br>Data Pegawai Diperbarui.');
-
-            return redirect('/dashboard')->withInput();
-        }else{
+            return redirect('/dashboard');
+        }else {
             flash()
             ->killer(true)
             ->layout('bottomRight')
@@ -151,12 +190,16 @@ class AdminController extends Controller
             ->error('<b>Error!</b><br>Pegawai Gagal Diperbarui.');
             return redirect('/editpegawai');
         }
+        
     }
 
-    public function deletepegawai($id) 
+    public function deletepegawai(datapegawai $datapegawai) 
     {   
-        $dpegawai = datapegawai::findOrFail($id);
-        $dpegawai->delete();
+        datapegawai::destroy($datapegawai->id);
+
+        if (File::exists(public_path($datapegawai->foto_pegawai))) {
+            File::delete(public_path($datapegawai->foto_pegawai));
+        }
 
         flash()
         ->killer(true)
@@ -260,6 +303,48 @@ class AdminController extends Controller
 
     function settingsupdate(Request $request) 
     {
+        $messages = [
+            'required' => 'Kolom :attribute belum terisi.',
+        ];
 
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->error('<b>Error!</b><br>Konfigurasi Gagal.');
+
+        $request->validate([
+            'id_nomor' => 'required|string',
+            'id_bisnis' => 'required|string',
+            'token_api' => 'required|string',
+        ] ,$messages);
+    
+        $config = config_api::first();
+    
+        if (!$config) {
+            $config = new config_api();
+        }
+        
+        $config->id_nomor = $request->input('id_nomor');
+        $config->id_bisnis = $request->input('id_bisnis');
+        $config->token_api = $request->input('token_api');
+
+        if($config->save()){
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->success('<b>Berhasil!</b><br>Konfigurasi Diubah.');
+            return redirect('/dashboard');
+        }else {
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->error('<b>Error!</b><br>Konfigurasi Gagal.');
+            return redirect('/settings');
+        }
+        
+        
     }
 }

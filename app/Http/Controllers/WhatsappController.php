@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\user;
 use App\Models\arsip_pesan;
 use App\Models\template;
+use App\Models\config_api;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -30,9 +31,16 @@ class WhatsappController extends Controller
 
     public function __construct()
     {
+        $config = config_api::first();
+
+        if (!$config) {
+            throw new \Exception('WhatsApp configuration not found.');
+        }
+
         $this->whatsapp = new WhatsAppCloudApi([
-            'from_phone_number_id' => env('WHATSAPP_CLOUD_API_FROM_PHONE_NUMBER'),
-            'access_token' => env('WHATSAPP_CLOUD_API_TOKEN'),
+            'from_phone_number_id' => $config->id_nomor,
+            'business_id' =>  $config->id_bisnis,
+            'access_token' => $config->token_api,
             'graph_version' => 'v20.0'
         ]);
     }
@@ -123,7 +131,6 @@ class WhatsappController extends Controller
                     $file->getClientOriginalName(),
                     $pesan);
             }
-            Storage::delete($path);
 
             arsip_pesan::create([
                 'nip' => $nip,

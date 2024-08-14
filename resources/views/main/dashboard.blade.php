@@ -133,7 +133,7 @@
                                     <b>{{ $pegawai->nama }}</b>
                                 </div>
                                 <div class="modal-footer">
-                                    <form action="/hapuspegawai/{{ $pegawai->id }}">
+                                    <form action="{{route('main.delete',['datapegawai' => $pegawai])}}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Hapus</button>

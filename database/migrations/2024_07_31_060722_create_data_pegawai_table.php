@@ -12,7 +12,9 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nip')->unique();
             $table->string('nama');
-            $table->string('nomorWa');
+            $table->string('nomorWa')->unique();
+            $table->enum('jenis_kelamin',['Laki-laki', 'Perempuan']);
+            $table->string('foto_pegawai')->nullable();
             $table->timestamps();
         });
     }

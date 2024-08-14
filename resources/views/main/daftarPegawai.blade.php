@@ -105,6 +105,10 @@
                                 <h5 class="card-text fw-normal">{{ $pegawai->nip }}</h5>
                             </li>
                             <li class="list-group-item">
+                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Nama Pegawai</h4>
+                                <h5 class="card-text fw-normal">{{ $pegawai->jenis_kelamin }}</h5>
+                            </li>
+                            <li class="list-group-item">
                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> Nomor Whatsapp</h4>
                                 <h5 class="card-text fw-normal">{{ $pegawai->nomorWa }}</h5>
                             </li>

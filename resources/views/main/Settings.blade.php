@@ -78,23 +78,23 @@
             <form action="" method="POST">
                 @csrf
                 <div class="form-floating mb-3">
-                    <input type="number" name="phone_api" class="form-control border-2 @error('phone_api') is-invalid @enderror" id="phone_api" placeholder="" aria-label="Nomor Telpon API" autocomplete="off" required>
-                    <label for="phone_api">Nomor Telpon API<span class="text-danger">*</span></label>
-                    @error('phone_api')
+                    <input type="number" name="id_nomor" class="form-control border-2 @error('id_nomor') is-invalid @enderror" id="id_nomor" placeholder="" aria-label="Nomor Telpon API" autocomplete="off" required>
+                    <label for="phone_api">ID Nomor Telepon<span class="text-danger">*</span></label>
+                    @error('id_nomor')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="number" name="token_api" class="form-control border-2 @error('token_api') is-invalid @enderror" id="token_api" placeholder="" aria-label="Token API" autocomplete="off" required>
-                    <label for="token_api">Nomor Telpon API<span class="text-danger">*</span></label>
+                    <input type="number" name="id_bisnis" class="form-control border-2 @error('id_bisnis') is-invalid @enderror" id="id_bisnis" placeholder="" aria-label="Bisnis ID" autocomplete="off" required>
+                    <label for="token_api">ID Bisnis<span class="text-danger">*</span></label>
+                    @error('id_bisnis')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" name="token_api" class="form-control border-2 @error('token_api') is-invalid @enderror" id="token_api" placeholder="" aria-label="Token API" autocomplete="off" required>
+                    <label for="business_id">Token API<span class="text-danger">*</span></label>
                     @error('token_api')
-                        <div class="text-danger"><small>{{ $message }}</small></div>
-                    @enderror
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="number" name="business_id" class="form-control border-2 @error('business_id') is-invalid @enderror" id="business_id" placeholder="" aria-label="Bisnis ID" autocomplete="off" required>
-                    <label for="business_id">Bisnis ID<span class="text-danger">*</span></label>
-                    @error('business_id')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                 </div>

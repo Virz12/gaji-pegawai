@@ -82,9 +82,12 @@
             <form action="" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="input-group mb-3">
-                    <input class="form-control @error('attachment') is-invalid @enderror" type="file" accept="image/png, image/jpeg, image/jpg" name="foto_profil" id="foto_profil" aria-label="Foto Profil">
-                    <label class="input-group-text" for="foto_profil">Foto Profil</label>
+                    <input class="form-control @error('foto_pegawai') is-invalid @enderror" type="file" accept="image/png, image/jpeg, image/jpg" name="foto_pegawai" id="foto_pegawai" aria-label="Foto Pegawai">
+                    <label class="input-group-text" for="foto_pegawai">Foto Pegawai</label>
                 </div>
+                    @error('foto_pegawai')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
                 <div class="form-floating mb-3">
                     <input type="number" name="nip" class="form-control border-2 @error('nip') is-invalid @enderror" id="nip" placeholder="" aria-label="nip" autocomplete="off" required>
                     <label for="nip">NIP<span class="text-danger">*</span></label>
@@ -96,6 +99,17 @@
                     <input type="text" name="nama" class="form-control border-2 @error('nama') is-invalid @enderror" id="nama" placeholder="" aria-label="nama" autocomplete="off" required>
                     <label  for="nama">Nama Pegawai<span class="text-danger">*</span></label>
                     @error('nama')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
+                </div>
+                <div class="form-floating mb-3">
+                    <select name="jenis_kelamin" class="form-select border-2 @error('jenis_kelamin') is-invalid @enderror" id="jenis_kelamin" aria-label="jenis_kelamin" autocomplete="off" required>
+                        <option  selected hidden>Jenis Kelamin</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
+                    <label  for="jenis_kelamin">Pilih Jenis Kelamin<span class="text-danger">*</span></label>
+                    @error('jenis_kelamin')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                 </div>
