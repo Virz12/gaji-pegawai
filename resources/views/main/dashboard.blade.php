@@ -196,6 +196,27 @@
                             </div>
                         </div>
                     </div>
+                    <div class="text-success">
+                        <hr>
+                    </div>
+                    <div class="row row-cols-2 row-cols-md-4 g-2 mb-2">
+                        <div class="col">
+                            <input type="radio" class="btn-check" name="waktu" id="pagi" checked autocomplete="off" >
+                            <label class="btn btn-outline-success rounded w-100" for="pagi">Pagi</label>
+                        </div>
+                        <div class="col">
+                            <input type="radio" class="btn-check" name="waktu" id="siang" autocomplete="off" >
+                            <label class="btn btn-outline-success rounded w-100" for="siang">Siang</label>
+                        </div>
+                        <div class="col">
+                            <input type="radio" class="btn-check" name="waktu" id="sore" autocomplete="off" >
+                            <label class="btn btn-outline-success rounded w-100" for="sore">Sore</label>
+                        </div>
+                        <div class="col">
+                            <input type="radio" class="btn-check" name="waktu" id="malam" autocomplete="off" >
+                            <label class="btn btn-outline-success rounded w-100" for="malam">Malam</label>
+                        </div>
+                    </div>
                     <div class="row g-2">
                         <div class="col-xl-9">
                             <div class="input-group">
@@ -225,10 +246,17 @@
                         </div>
                     </div>
                     <div class="input-group mt-2">
-                        <label class="input-group-text" for="pesan"><span class="text-danger">*</span>Pesan</label>
+                        <label class="input-group-text" for="pesan">Pesan<span class="text-danger">*</span></label>
                         <textarea class="form-control @error('pesan') is-invalid @enderror" name="pesan" id="pesan" style="resize: none; height: 150px"></textarea>                        
                     </div>
                     @error('pesan')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
+                    <div class="input-group mt-2">
+                        <label class="input-group-text" for="footer">Footer<span class="text-danger">*</span></label>
+                        <textarea class="form-control @error('footer') is-invalid @enderror" name="footer" id="footer" style="resize: none; height: 40px"></textarea>                        
+                    </div>
+                    @error('footer')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                     <div class="input-group mt-2">
