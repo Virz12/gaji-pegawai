@@ -51,7 +51,6 @@ class WhatsappController extends Controller
             'required' => 'Kolom :attribute belum terisi.',
             'pesan_type.required' => 'Silakan pilih tipe pesan Gambar atau Dokumen ',
             'numeric' => ' :attribute hanya berisi angka',
-
         ];
 
         flash()
@@ -118,7 +117,6 @@ class WhatsappController extends Controller
             $media_id = new MediaObjectID($response->decodedBody()['id']);
 
             $pesanType = $request->input('pesan_type');
-            sleep(4);
             if ($pesanType === 'gambar') {
                 $this->whatsapp->sendImage(
                     $nomorWa, 
@@ -147,7 +145,6 @@ class WhatsappController extends Controller
             ->success('<b>Berhasil!</b><br>Pesan Terkirim.');
             
         }else{
-            sleep(4);
             $this->whatsapp->sendTextMessage($nomorWa, $pesan);
 
             arsip_pesan::create([

@@ -35,6 +35,16 @@ class AdminController extends Controller
                     ->with('datapegawai', $datapegawai);
     }
 
+    public function datapegawai(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->get('id');
+            $pegawai = datapegawai::find($id);
+            
+            return response()->json($pegawai);
+        }
+    }
+
     public function daftarpegawai(Request $request)
     {
         if ($request->ajax()) {
