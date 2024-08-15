@@ -23,6 +23,7 @@ Route::middleware(['preventBackHistory','auth'])->group(function () {
 
 Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('main.dashboard');
+    Route::get('/datapegawai', [AdminController::class, 'datapegawai'])->name('main.datapegawai');
     Route::get('/ubahpassword', [AdminController::class, 'ubahpw'])->name('main.ubahpassword');
     Route::get('/daftarpegawai', [AdminController::class, 'daftarpegawai'])->name('main.daftarpegawai');
     Route::get('/tambahpegawai', [AdminController::class, 'tambahpegawai'])->name('main.tambahpegawai');
