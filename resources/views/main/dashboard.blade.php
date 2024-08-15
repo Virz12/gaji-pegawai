@@ -13,7 +13,11 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script>
         const search = "{{ route('main.dashboard') }}";
+        const dataPegawai = "{{ route('main.datapegawai') }}";
     </script>
+
+    {{-- Select2 CSS --}}
+    <link href="{{ asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet" />
 
     {{-- Custom CSS --}}
     <style>
@@ -90,70 +94,17 @@
         </div>
     </nav>
     {{-- Main --}}
-    <main class="row mx-2 mb-4 justify-content-between">
-
-        {{-- Cari Pegawai --}}
-        <section class="col-md-6 col-xxl-4 mt-3">
-            <div class="card p-3">
-                <h4 class="mb-3"><strong>Cari Pegawai</strong></h4>
-                <form action="">
-                    <div class="input-group mb-3">
-                        <label class="input-group-text" for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
-                        <input type="text" class="form-control" placeholder="Nama Pegawai" aria-label="search" id="search" aria-describedby="search" autocomplete="off">
-                    </div>
-                </form>
-                <div class="row g-2 search-menu-scrollable align-content-start" id="pegawai-list">
-                    @forelse ( $datapegawai as $pegawai)
-                    <div type="button" class="btn btn-outline-success h-32 rounded p-2 text-start d-flex justify-content-between align-items-center search-item"
-                        data-nomor="{{ $pegawai->nomorWa }}" data-nip="{{ $pegawai->nip }}" data-nama="{{ $pegawai->nama }}"> 
-                        {{$pegawai->nama}}
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-expanded="false" aria-label="dropdown">
-                                <i class="fa-solid fa-ellipsis"></i>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{route('main.arsip',['datapegawai' => $pegawai])}}">Arsip Pesan</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{route('main.editpegawai',['datapegawai' => $pegawai])}}">Edit</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Hapus{{ $pegawai->nip }}">Hapus</i></li>
-                            </ul>
-                        </div>
-                    </div>
-                    {{-- Confirmation Modal --}}
-                    <div class="modal fade" id="Hapus{{ $pegawai->nip }}" tabindex="-1" aria-labelledby="HapusLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="HapusLabel">Hapus Data</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-center">
-                                    Apakah anda yakin ingin menghapus data ini?<br>
-                                    <b>{{ $pegawai->nama }}</b>
-                                </div>
-                                <div class="modal-footer">
-                                    <form action="{{route('main.delete',['datapegawai' => $pegawai])}}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Hapus</button>
-                                    </form>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    <h2 class="text-secondary opacity-75 text-center">Pencarian Kosong</h2>
-                @endforelse
-                </div>
-            </div>
-        </section>
+    <main class="row mx-2 mb-4 justify-content-center">
 
         {{-- Buat Pesan --}}
-        <section class="col-md-6 col-xxl-8 mt-4 mt-md-3">
+        <section class="col-md-10 col-xxl-8 mt-4 mt-md-3">
             <div class="card p-3">
                 <h4 class="mb-3"><strong>Buat Pesan</strong></h4>
+                <div class="mb-2">
+                    <select class="w-100" id="pegawai-list">
+                        <option></option>
+                    </select>
+                </div>
                 <form id="whatsappForm" action="{{route('main.whatsapp')}}" method="POST" enctype="multipart/form-data" data-save-template-url="{{ route('main.simpanTemplate') }}">
                     @csrf
                     @method('POST')
@@ -162,7 +113,7 @@
                     <input type="hidden" id="nomorWaHidden" name="nomorWa" type="number" value="">
                     
                     <div class="row mb-2 g-2">
-                        <div class="col-12 col-sm-3 col-md-12 col-lg-4 col-xl-3 col-xxl-2">
+                        <div class="col-12 col-sm-3 col-md-4 col-lg-4 col-xl-3 col-xxl-2">
                             <div class="ratio ratio-1x1">
                                 <img class="rounded" src="{{ asset('img/bglog.jpg') }}" alt="Profile picture">
                                 <label for="foto_profil"></label>
@@ -277,6 +228,11 @@
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
                     <input type="hidden" name="pesan_type" id="pesan_type" value="">
+
+                    {{-- Progress Bar --}}
+                    <div id="progress-container" style="display: none; margin-top: 10px;">
+                        <div id="progress-bar" style="width: 0; height: 20px; background-color: #4caf50; transition: 1s;"></div>
+                    </div>
                     <button type="submit" class="btn btn-success mt-2 w-50 w-lg-25"  id="sendBtn">Kirim</button>
                 </form>
             </div>
@@ -310,6 +266,8 @@
             
         @endforelse
     </main>
+    {{-- Select2 Js --}}
+    <script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('js/dashboard.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
