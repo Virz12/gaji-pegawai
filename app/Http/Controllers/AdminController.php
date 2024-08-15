@@ -56,11 +56,15 @@ class AdminController extends Controller
 
     function storepegawai(Request $request)
     {
+        $nipPegawai = datapegawai::where('nip', $request->nip)->first();
+        $nomorWaPegawai = datapegawai::where('nomorWa', $request->nomorWa)->first();
+
         $messages = [
             'required' => 'Kolom :attribute belum terisi.',
             'numeric' => 'Kolom :attribute hanya boleh berisi angka.',
             'nama.regex' => 'Kolom :attribute hanya berisi huruf besar atau kecil dan spasi.',
-            'unique' => ':attribute sudah dipakai.',
+            'nip.unique' => ":attribute sudah dipakai oleh pegawai dengan nama " . ($nipPegawai ? $nipPegawai->nama : '') . ".",
+            'nomorWa.unique' => ":attribute sudah dipakai oleh pegawai dengan nama " . ($nomorWaPegawai ? $nomorWaPegawai->nama : '') . ".",
             'foto_pegawai.image' => 'File Harus Berupa Gambar.',
             'foto_pegawai.max' => 'Ukuran file maksimal 2MB.',            
             'foto_pegawai.mimes' => 'Format Harus JPEG, JPG Dan PNG', 
@@ -72,13 +76,13 @@ class AdminController extends Controller
         ->timeout(3000)
         ->error('<b>Error!</b><br>Penambahan Pegawai Gagal.');
 
-        $request->validate([
+        $validator = Validator::make($request->all(),[
             'nip' => 'required|numeric|unique:data_pegawai,nip',
             'nama' => 'required|regex:/^[a-zA-Z ]+$/',
             'nomorWa' => 'required|numeric|unique:data_pegawai,nomorWa',
             'jenis_kelamin' => 'required',
             'foto_pegawai' => 'nullable|image|max:2048|mimes:jpeg,jpg,png',
-        ],$messages);
+        ],$messages)->validate();
 
         
         $data = [   
@@ -126,11 +130,16 @@ class AdminController extends Controller
 
     function updatepegawai(Request $request, datapegawai $datapegawai)
     {
+        
+        $nipPegawai = datapegawai::where('nip', $request->nip)->first();
+        $nomorWaPegawai = datapegawai::where('nomorWa', $request->nomorWa)->first();
+
         $messages = [
             'required' => 'Kolom :attribute belum terisi.',
             'numeric' => 'Kolom :attribute hanya boleh berisi angka.',
             'nama.regex' => 'Kolom :attribute hanya berisi huruf besar atau kecil dan spasi.',
-            'unique' => ':attribute sudah dipakai.',
+            'nip.unique' => ":attribute sudah dipakai oleh pegawai dengan nama " . ($nipPegawai ? $nipPegawai->nama : '') . ".",
+            'nomorWa.unique' => ":attribute sudah dipakai oleh pegawai dengan nama " . ($nomorWaPegawai ? $nomorWaPegawai->nama : '') . ".",
             'digits_between' => 'hanya 1 - 20 digit',
             'foto_pegawai.image' => 'File Harus Berupa Gambar.',
             'foto_pegawai.max' => 'Ukuran file maksimal 2MB.',            
@@ -343,8 +352,6 @@ class AdminController extends Controller
             ->timeout(3000)
             ->error('<b>Error!</b><br>Konfigurasi Gagal.');
             return redirect('/settings');
-        }
-        
-        
+        }                
     }
 }
