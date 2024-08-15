@@ -1,18 +1,65 @@
 // public/js/dashboard.js
 
 $(document).ready(function() {
+    // Select2
+    $('#pegawai-list').select2({
+        placeholder: "Cari Pegawai",
+        language: {
+            noResults : function() {
+                return "Tidak ada hasil";
+            },
+            searching: function() {
+                return "Mencari..."; // Customize searching text
+            }
+        },
+        ajax: {
+            url: search,
+            dataType: 'json',
+            delay: 100,
+            data: function(params) {
+                return {
+                    query: params.term
+                };
+            },
+            processResults: function(data) {
+                return {
+                    results: data.map(function(item) {
+                        return {
+                            id: item.id,
+                            text: item.nama
+                        };
+                    })
+                };
+            },
+            cache: true
+        }
+    });
+
+    // Search data
+    $('#pegawai-list').on('select2:select', function(e) {
+        var data = e.params.data;
+        $.ajax({
+            url: dataPegawai,
+            type: 'GET',
+            data: { id: data.id },
+            success: function(response) {
+                // Update form fields with the selected person's details
+                $('#nipHidden').val(response.nip);
+                $('#namaHidden').val(response.nama);
+                $('#nomorWaHidden').val(response.nomorWa);
+
+                // Update other form fields if needed
+                $('#nama').val(response.nama).prop('disabled', true);
+                $('#nip').val(response.nip).prop('disabled', true);
+                $('#nomorWa').val(response.nomorWa).prop('disabled', true);
+            }
+        });
+    });
+
     $('#saveTemplateBtn').on('click', function(e) {
         e.preventDefault(); // Prevent default form submission
         let saveTemplateUrl = $('#whatsappForm').data('save-template-url');
         $('#whatsappForm').attr('action', saveTemplateUrl);
-        $('#whatsappForm').submit();
-    });
-
-    $('#sendBtn').on('click', function() {
-        $('#whatsappForm').attr('action');
-        let pesanType = $('input[name=options-outlined]:checked').attr('id');
-        $('#pesan_type').val(pesanType);
-
         $('#whatsappForm').submit();
     });
 
@@ -25,92 +72,48 @@ $(document).ready(function() {
         $('#nama_template').val(templateName);
     });
 
-    $('[data-toggle="tooltip"]').tooltip();   
+    $('[data-toggle="tooltip"]').tooltip();
 
-    // Live Search
-    $(document).on('keyup', '#search' , function() {
-        let query = $(this).val();
+    // Progress Bar
+    $('#whatsappForm').on('submit', function(e) {
+        e.preventDefault(); // Prevent the default form submission
 
-        $.ajax({
-            url: search,
-            type: "GET",
-            data: { 'query': query },
-            success: function(data) {
-                $('#pegawai-list').empty();
-                if (data.length > 0) {
-                    data.forEach(pegawai => {
-                        let pegawaiHtml = `
-                            <div type="button" class="btn btn-outline-success h-49 rounded p-2 text-start d-flex justify-content-between align-items-center search-item"
-                                data-nomor="${pegawai.nomorWa}">
-                                ${pegawai.nama}
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-expanded="false" aria-label="dropdown">
-                                        <i class="fa-solid fa-ellipsis"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="/arsip/${pegawai.id}">Arsip Pesan</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="/editpegawai/${pegawai.id}">Edit</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Hapus${pegawai.nip}">Hapus</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="Hapus${pegawai.nip}" tabindex="-1" aria-labelledby="HapusLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="HapusLabel">Hapus Data</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body text-center">
-                                            Apakah anda yakin ingin menghapus data ini?<br>
-                                            <b>${pegawai.nama}</b>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <form action="/hapuspegawai/${pegawai.id}">
-                                                <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="btn btn-danger">Hapus</button>
-                                            </form>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        $('#pegawai-list').append(pegawaiHtml);
-                    });
-                } else {
-                    $('#pegawai-list').append('<h2 class="text-secondary opacity-75 text-center">Pencarian Kosong</h2>');
-                }
+        var form = $(this)[0]; // Get the form element
+        var formData = new FormData(form);
+
+        // Tipe Pesan
+        let pesanType = $('input[name=options-outlined]:checked').attr('id');
+        $('#pesan_type').val(pesanType);
+
+        var xhr = new XMLHttpRequest();
+
+        // Set up progress listener
+        xhr.upload.addEventListener('progress', function(e) {
+            if (e.lengthComputable) {
+                var percentComplete = (e.loaded / e.total) * 100;
+                $('#progress-container').show();
+                $('#progress-bar').css('width', percentComplete + '%');
             }
         });
-    });
 
-    // Pegawai List click function
-    $(document).on('click','.search-item', function() {
-        // Update search item color
-        $('.search-item').removeClass('btn-success').addClass('btn-outline-success');
-        $(this).removeClass('btn-outline-success').addClass('btn-success');
+        // Handle form submission completion
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                form.submit();
+            }
+            $('#progress-bar').css('width', '0%'); // Reset progress bar
+            $('#progress-container').hide(); // Hide progress bar
+        };
 
+        // Handle network errors
+        xhr.onerror = function() {
+            alert('Network error.');
+            $('#progress-bar').css('width', '0%'); // Reset progress bar
+            $('#progress-container').hide(); // Hide progress bar
+        };
 
-        const nip = $(this).data('nip');
-        const nama = $(this).data('nama');
-        const nomor = $(this).data('nomor');
-        
-        // Update form fields
-        $('#nomorWa').attr('placeholder', nomor);
-        $('#nama_template').val('');
-        $('#pesan').val('');
-        $('#footer').val('');
-        $('#attachment').val('');
-        
-        $('#nama').val(nama);
-        $('#nip').val(nip);
-        $('#nomorWa').val(nomor); 
-        $('#nomorWaHidden').val(nomor);
-        $('#nipHidden').val(nip);
-        $('#namaHidden').val(nama);
+        // Submit the form data using AJAX
+        xhr.open('POST', $(this).attr('action'), true);
+        xhr.send(formData);
     });
 });
