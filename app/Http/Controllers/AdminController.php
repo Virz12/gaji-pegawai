@@ -18,7 +18,7 @@ use Intervention\Image\Laravel\Facades\Image;
 
 class AdminController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, datapegawai $datapegawai)
     {   
         if ($request->ajax()) {
             $query = $request->get('query');
@@ -26,7 +26,6 @@ class AdminController extends Controller
 
             return response()->json($datapegawai);
         }
-        $datapegawai = datapegawai::orderBy('updated_at','DESC')->get();
 
         $datatemplate = template::orderBy('nama_template','ASC')->get();
         
@@ -200,7 +199,7 @@ class AdminController extends Controller
             ->layout('bottomRight')
             ->timeout(3000)
             ->success('<b>Berhasil!</b><br>Data Pegawai Diperbarui.');
-            return redirect('/dashboard');
+            return redirect('/daftarpegawai');
         }else {
             flash()
             ->killer(true)
@@ -226,7 +225,7 @@ class AdminController extends Controller
         ->timeout(3000)
         ->success('<b>Berhasil!</b><br>Data Pegawai Sudah Dihapus.');
         
-        return redirect('/dashboard');
+        return redirect('/daftarpegawai');
     }
 
     public function pesanArsip( Request $request, datapegawai $datapegawai)

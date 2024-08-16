@@ -52,7 +52,7 @@
     {{-- Main --}}
     <main class="container-fluid ps-3 my-4">
         <section class="row g-2 justify-content-between">
-            <a href="/dashboard" class="btn btn-success mb-sm-3 ms-1 col-auto"><i class="fa-solid fa-arrow-left me-2"></i>Kembali</a>
+            <a href="/daftarpegawai" class="btn btn-success mb-sm-3 ms-1 col-auto"><i class="fa-solid fa-arrow-left me-2"></i>Kembali</a>
             <form action="" class="col-12 col-md-auto">
                 <div class="input-group mb-3">
                     <label class="input-group-text shadow-sm" for="search"><i class="fa-solid fa-magnifying-glass"></i></label>

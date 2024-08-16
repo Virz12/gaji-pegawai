@@ -97,7 +97,7 @@
     <main class="row mx-2 mb-4 justify-content-center">
 
         {{-- Buat Pesan --}}
-        <section class="col-md-10 col-xxl-8 mt-4 mt-md-3">
+        <section class="col-md-8 col-xxl-8 mt-4 mt-md-3">
             <div class="card p-3">
                 <h4 class="mb-3"><strong>Buat Pesan</strong></h4>
                 <div class="mb-2">
@@ -114,11 +114,11 @@
                     
                     <div class="row mb-2 g-2">
                         <div class="col-12 col-sm-3 col-md-4 col-lg-4 col-xl-3 col-xxl-2">
-                            <div class="ratio ratio-1x1">
-                                <img class="rounded" src="{{ asset('img/bglog.jpg') }}" alt="Profile picture">
-                                <label for="foto_profil"></label>
+                            <div class="ratio ratio-1x1">                             
+                                <img id="fotoPegawai" class="rounded" src="{{ asset($datapegawai->foto_pegawai) }}" alt="Profile picture">                    
+                                <label for="foto_pegawai"></label>
                             </div>
-                        </div>
+                        </div>                                    
                         <div class="col">
                             <div class="row h-100">
                                 <div class="input-group mb-2">

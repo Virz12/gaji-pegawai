@@ -122,7 +122,7 @@
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <a href="/dashboard"class="btn btn-secondary w-100">Kembali</a>
+                        <a href="/daftarpegawai"class="btn btn-secondary w-100">Kembali</a>
                     </div>
                     <div class="col-6">
                         <a class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#konfirmasiButton">Ubah</a>

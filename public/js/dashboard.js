@@ -43,15 +43,15 @@ $(document).ready(function() {
             type: 'GET',
             data: { id: data.id },
             success: function(response) {
-                // Update form fields with the selected person's details
                 $('#nipHidden').val(response.nip);
                 $('#namaHidden').val(response.nama);
                 $('#nomorWaHidden').val(response.nomorWa);
 
-                // Update other form fields if needed
                 $('#nama').val(response.nama).prop('disabled', true);
                 $('#nip').val(response.nip).prop('disabled', true);
                 $('#nomorWa').val(response.nomorWa).prop('disabled', true);
+
+                $('#fotoPegawai').attr('src', response.foto_pegawai);
             }
         });
     });
@@ -75,10 +75,10 @@ $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
 
     // Progress Bar
-    $('#whatsappForm').on('submit', function(e) {
+    $('#sendBtn').on('click', function(e) {
         e.preventDefault(); // Prevent the default form submission
 
-        var form = $(this)[0]; // Get the form element
+        var form = $('#whatsappForm')[0]; // Get the form element
         var formData = new FormData(form);
 
         // Tipe Pesan
@@ -90,19 +90,31 @@ $(document).ready(function() {
         // Set up progress listener
         xhr.upload.addEventListener('progress', function(e) {
             if (e.lengthComputable) {
-                var percentComplete = (e.loaded / e.total) * 100;
                 $('#progress-container').show();
-                $('#progress-bar').css('width', percentComplete + '%');
             }
         });
 
         // Handle form submission completion
         xhr.onload = function() {
             if (xhr.status === 200) {
-                form.submit();
+                // Simulate a delay before actually submitting the form
+                var delay = 5000; // 5 seconds
+                var startTime = Date.now();
+                var interval = setInterval(function() {
+                    var elapsedTime = Date.now() - startTime;
+                    var progress = Math.min(100, (elapsedTime / delay) * 100);
+    
+                    $('#progress-bar').css('width', progress + '%');
+    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(function() {
+                            form.submit();
+                        }, 0); // Immediately submit the form after the progress completes
+                    }
+                }, 50); // Update the progress bar every 50ms
+                
             }
-            $('#progress-bar').css('width', '0%'); // Reset progress bar
-            $('#progress-container').hide(); // Hide progress bar
         };
 
         // Handle network errors
@@ -113,7 +125,7 @@ $(document).ready(function() {
         };
 
         // Submit the form data using AJAX
-        xhr.open('POST', $(this).attr('action'), true);
+        xhr.open('POST', $('#whatsappForm').attr('action'), true);
         xhr.send(formData);
     });
 });
