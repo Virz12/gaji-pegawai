@@ -48,9 +48,14 @@ class AdminController extends Controller
     {
         if ($request->ajax()) {
             $query = $request->get('query');
-            $datapegawai = datapegawai::whereAny(['nama', 'nip', 'nomorWa'], 'LIKE', "%{$query}%")->get();
-
-            return response()->json($datapegawai);
+            $datapegawai = datapegawai::whereAny(['nama', 'nip', 'jenis_kelamin', 'nomorWa'], 'LIKE', "%{$query}%")
+                ->orderBy('updated_at','DESC')
+                ->paginate(5);
+    
+            return response()->json([
+                'data' => $datapegawai->items(),
+                'pagination' => (string) $datapegawai->links()
+            ]);
         }
 
         $datapegawai = datapegawai::orderBy('updated_at','DESC')->paginate(5);
@@ -232,11 +237,15 @@ class AdminController extends Controller
     {
         if ($request->ajax()) {
             $query = $request->get('query');
-            $arsipPesan = arsip_pesan::orderBy('created_at', 'DESC')
-                                    ->where('nip', $datapegawai->nip)
-                                    ->whereAny(['nama', 'pesan', 'attachment','created_at'], 'LIKE', "%{$query}%")->get();
+            $arsipPesan = arsip_pesan::where('nip', $datapegawai->nip)
+                                    ->whereAny(['nama', 'pesan', 'attachment','created_at'], 'LIKE', "%{$query}%")
+                                    ->orderBy('created_at', 'DESC')
+                                    ->paginate(6);
 
-            return response()->json($arsipPesan);
+            return response()->json([
+                'data' => $arsipPesan->items(),
+                'pagination' => (string) $arsipPesan->links()
+            ]);
         }
 
         $arsipPesan = arsip_pesan::orderBy('created_at', 'DESC')
