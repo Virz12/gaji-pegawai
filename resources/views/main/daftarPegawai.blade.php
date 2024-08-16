@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- Bootstrap --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
@@ -163,7 +164,7 @@
             <h2 class="m-auto text-secondary opacity-75 text-center">Arsip Kosong</h2>
         @endforelse
         </section>
-        <div>{!! $datapegawai->links() !!}</div>
+        <div id="pagination-links">{!! $datapegawai->links() !!}</div>
     </main>
     {{-- Script --}}
     <script src="{{ asset('js/daftarpegawai.js') }}"></script>

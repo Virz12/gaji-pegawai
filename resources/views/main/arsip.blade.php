@@ -89,7 +89,7 @@
             <h2 class="text-secondary opacity-75 text-center">Arsip Kosong</h2>
         @endforelse
         </section>
-        <div>{!! $arsipPesan->links() !!}</div>
+        <div id="pagination-links">{!! $arsipPesan->links() !!}</div>
     </main>
     <script src="{{ asset('js/arsip.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
