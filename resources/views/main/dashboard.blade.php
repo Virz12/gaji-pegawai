@@ -114,11 +114,10 @@
                     
                     <div class="row mb-2 g-2">
                         <div class="col-12 col-sm-3 col-md-4 col-lg-4 col-xl-3 col-xxl-2">
-                            <div class="ratio ratio-1x1">                             
+                            <div class="ratio ratio-1x1">
                                 <img id="fotoPegawai" class="rounded" src="{{ asset($datapegawai->foto_pegawai) }}" alt="Profile picture">                    
-                                <label for="foto_pegawai"></label>
                             </div>
-                        </div>                                    
+                        </div>
                         <div class="col">
                             <div class="row h-100">
                                 <div class="input-group mb-2">
@@ -152,19 +151,19 @@
                     </div>
                     <div class="row row-cols-2 row-cols-md-4 g-2 mb-2">
                         <div class="col">
-                            <input type="radio" class="btn-check" name="waktu" id="pagi" checked autocomplete="off" >
+                            <input type="radio" class="btn-check" name="waktu" id="pagi" value="pagi" checked autocomplete="off" >
                             <label class="btn btn-outline-success rounded w-100" for="pagi">Pagi</label>
                         </div>
                         <div class="col">
-                            <input type="radio" class="btn-check" name="waktu" id="siang" autocomplete="off" >
+                            <input type="radio" class="btn-check" name="waktu" id="siang" value="siang" autocomplete="off" >
                             <label class="btn btn-outline-success rounded w-100" for="siang">Siang</label>
                         </div>
                         <div class="col">
-                            <input type="radio" class="btn-check" name="waktu" id="sore" autocomplete="off" >
+                            <input type="radio" class="btn-check" name="waktu" id="sore" value="sore" autocomplete="off" >
                             <label class="btn btn-outline-success rounded w-100" for="sore">Sore</label>
                         </div>
                         <div class="col">
-                            <input type="radio" class="btn-check" name="waktu" id="malam" autocomplete="off" >
+                            <input type="radio" class="btn-check" name="waktu" id="malam" value="malam" autocomplete="off" >
                             <label class="btn btn-outline-success rounded w-100" for="malam">Malam</label>
                         </div>
                     </div>
