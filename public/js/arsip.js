@@ -20,6 +20,7 @@ $(document).ready(function() {
                         let [date, time] = formatDate.split(', ');
 
                         let attachment = arsip.attachment;
+                        let downloadUrl = downloadUrlTemplate.replace('__PLACEHOLDER__', arsip.id);
 
                         let arsipHtml = `
                             <div class="col-12 col-sm-6 col-lg-4 col-xxl-3">
@@ -33,30 +34,61 @@ $(document).ready(function() {
                                             </li>
                                             <li class="list-group-item">
                                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> File</h4>
-                                                ${attachment ? `<a data-bs-toggle="modal" data-bs-target="#Download${attachment}"  class="btn btn-primary">${attachment} Download</a>` : '-'}
+                                                ${attachment ? `
+                                                <span class="card-text fs-5">${attachment}</span>
+                                                <div class="d-flex justify-content-between mt-1">
+                                                    <a class="btn btn-primary w-75 me-1"  data-bs-toggle="modal" data-bs-target="#Preview${attachment}"><i class="fa-solid fa-eye"></i> Preview</a>
+                                                    <a href="${downloadUrl}"  class="btn btn-success w-25 ms-1"><i class="fa-solid fa-circle-down "></i> Unduh</a>
+                                                </div>` : 
+                                                '<span class="card-text fs-5">-</span>'}
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
-                            </div>                            
-                            <div class="modal fade" id="Download${attachment}" tabindex="-1" aria-labelledby="DownloadLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="DownlaodLabel">Download File</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body text-center">
-                                            Apakah anda yakin ingin donlot data ini?<br>
-                                            <b> --</b>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a href="{{ route('file.download', $arsip->attachment) }}" class="btn btn-primary">Download</a>
+                            </div>
+                        `;
+
+                        if (attachment) {
+                            let extension = attachment.split('.').pop().toLowerCase(); // Get file extension
+                            let filePath = `/attachments/${attachment}`; // Assuming this is the path
+
+                            // Determine modal content based on file extension
+                            let modalContent = '';
+
+                            if (['jpg', 'jpeg', 'png'].includes(extension)) {
+                                modalContent = `<img src="${filePath}" alt="Image" class="img-fluid">`;
+                            } else if (extension === 'pdf') {
+                                modalContent = `<embed src="${filePath}#page=1" type="application/pdf" width="100%" height="500px" />`;
+                            } else if (extension === 'txt') {
+                                modalContent = `<iframe src="${filePath}" width="100%" height="500px"></iframe>`;
+                            } else if (['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'].includes(extension)) {
+                                modalContent = `<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(filePath)}&page=1" width="100%" height="500px"></iframe>`;
+                            } else {
+                                modalContent = '<p>Preview tidak tersedia untuk file ini.</p>';
+                            }
+
+                            let modalHtml = `
+                                <div class="modal fade" id="Preview${attachment}" tabindex="-1" aria-labelledby="PreviewLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="PreviewLabel">${attachment}</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                ${modalContent}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>                        
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        `;
+                            `;
+                            // Append modal to the page
+                            $('#arsip-list').append(modalHtml);
+                        }
+
                         $('#arsip-list').append(arsipHtml);
                     });
 
