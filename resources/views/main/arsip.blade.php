@@ -10,6 +10,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script>
         const search = "{{ route('main.arsip',['datapegawai' => $datapegawai]) }}";
+        const downloadUrlTemplate = "{{ route('file.download', ['arsip_pesan' => '__PLACEHOLDER__']) }}";
     </script>
     
     <title>{{ config('app.name') }} | Arsip Pesan</title>
@@ -76,8 +77,8 @@
                             <li class="list-group-item">                                                                    
                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> File</h4>
                                 @if ($arsip->attachment == true)
-                                    <span class="card-text fs-5">{{$arsip->attachment}}</span> 
-                                    <div class="d-flex justify-content-between mt-1">                               
+                                    <span class="card-text fs-5">{{$arsip->attachment}}</span>
+                                    <div class="d-flex justify-content-between mt-1">
                                         <a class="btn btn-primary w-75 me-1"  data-bs-toggle="modal" data-bs-target="#Preview{{ $arsip->attachment }}"><i class="fa-solid fa-eye"></i> Preview</a>
                                         <a href="{{ route('file.download', ['arsip_pesan' => $arsip]) }}"  class="btn btn-success w-25 ms-1"><i class="fa-solid fa-circle-down "></i> Unduh</a>
                                     </div>
@@ -129,7 +130,7 @@
         </section>
         <div id="pagination-links">{!! $arsipPesan->links() !!}</div>
     </main>
-    {{-- <script src="{{ asset('js/arsip.js') }}"></script> --}}
+    <script src="{{ asset('js/arsip.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
 </html>
