@@ -79,7 +79,7 @@
                                 @if ($arsip->attachment == true)
                                     <span class="card-text fs-5">{{$arsip->attachment}}</span>
                                     <div class="d-flex justify-content-between mt-1">
-                                        <a class="btn btn-primary w-75 me-1"  data-bs-toggle="modal" data-bs-target="#Preview{{ $arsip->attachment }}"><i class="fa-solid fa-eye"></i> Preview</a>
+                                        <a class="btn btn-primary w-75 me-1"  data-bs-toggle="modal" data-bs-target="#Preview{{ str_replace([' ', '.', '-'], '', $arsip->attachment) }}"><i class="fa-solid fa-eye"></i> Preview</a>
                                         <a href="{{ route('file.download', ['arsip_pesan' => $arsip]) }}"  class="btn btn-success w-25 ms-1"><i class="fa-solid fa-circle-down "></i> Unduh</a>
                                     </div>
                                 @else
@@ -91,7 +91,7 @@
                 </div>
             </div>
             {{-- Preview Modal --}}
-            <div class="modal fade" id="Preview{{ $arsip->attachment }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="Preview{{ str_replace([' ', '.', '-'], '', $arsip->attachment) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -100,20 +100,19 @@
                         </div>
                         <div class="modal-body text-center">
                             @php
-                                $extension = strtolower(pathinfo($arsip->attachment, PATHINFO_EXTENSION));
+                                $extension = strtolower(pathinfo($arsip->attachment, PATHINFO_EXTENSION));  
                                 $filePath = asset('attachments/' . $arsip->attachment);
+                                $encodedFilePath = urlencode(asset($filePath));
                             @endphp
 
                             @if(in_array($extension, ['jpg', 'jpeg', 'png']))                                
                                 <img src="{{ $filePath }}" alt="Image" class="img-fluid">
                             @elseif($extension == 'pdf')                                
                                 <embed src="{{ $filePath }}#page=1" type="application/pdf" width="100%" height="500px" />
-                            @elseif($extension == 'txt')
-                                {{-- Display the content of the text file --}}
+                            @elseif($extension == 'txt')                                
                                 <iframe src="{{ $filePath }}" width="100%" height="500px"></iframe>
-                            @elseif(in_array($extension, ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx']))
-                                {{-- Display the first page of the document using Office Online --}}
-                                <iframe src="https://view.officeapps.live.com/op/embed.aspx?src={{ urlencode($filePath) }}&page=1" width="100%" height="500px"></iframe>
+                            @elseif(in_array($extension, ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx']))                                
+                            <iframe src="https://view.officeapps.live.com/op/embed.aspx?src={{ $encodedFilePath }}&page=1" width="100%" height="500px"></iframe>
                             @else
                                 <p>Preview tidak tersedia untuk file ini.</p>
                             @endif
@@ -130,7 +129,7 @@
         </section>
         <div id="pagination-links">{!! $arsipPesan->links() !!}</div>
     </main>
-    <script src="{{ asset('js/arsip.js') }}"></script>
+    {{-- <script src="{{ asset('js/arsip.js') }}"></script> --}}
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
 </html>
