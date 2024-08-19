@@ -9,7 +9,7 @@ $(document).ready(function() {
                 return "Tidak ada hasil";
             },
             searching: function() {
-                return "Mencari..."; // Customize searching text
+                return "Mencari...";
             }
         },
         ajax: {
@@ -37,7 +37,7 @@ $(document).ready(function() {
 
     // Search data
     $('#pegawai-list').on('select2:select', function(e) {
-        var data = e.params.data;
+        const data = e.params.data;
         $.ajax({
             url: dataPegawai,
             type: 'GET',
@@ -52,6 +52,42 @@ $(document).ready(function() {
                 $('#nomorWa').val(response.nomorWa).prop('disabled', true);
 
                 $('#fotoPegawai').attr('src', response.foto_pegawai);
+
+                // Atur Textarea sesuai radio
+                function updateTextarea() {
+                    const selectedValue = $('input[name="waktu"]:checked').val();
+                    const namaValue = $('#namaHidden').val();
+                    $('#pesan').val('Selamat ' + selectedValue + ' ' + namaValue);
+                }
+
+                updateTextarea();
+    
+                $('input[name="waktu"]').on('change', updateTextarea);
+
+                // Atur Waktu Saat Ini
+                function setDefaultTime() {
+                    const currentHour = new Date().getHours();
+                    
+                    let defaultId;
+                    
+                    if (currentHour >= 5 && currentHour < 12) {
+                        defaultId = "pagi";
+                    } else if (currentHour >= 12 && currentHour < 15) {
+                        defaultId = "siang";
+                    } else if (currentHour >= 15 && currentHour < 18) {
+                        defaultId = "sore";
+                    } else {
+                        defaultId = "malam";
+                    }
+                    
+                    // Set the default radio button
+                    $('#' + defaultId).prop('checked', true);
+                    
+                    // Trigger the change event to update the textarea with the default value
+                    $('#' + defaultId).trigger('change');
+                }
+            
+                setDefaultTime();
             }
         });
     });
@@ -76,9 +112,11 @@ $(document).ready(function() {
 
     // Progress Bar
     $('#sendBtn').on('click', function(e) {
-        e.preventDefault(); // Prevent the default form submission
+        e.preventDefault();
 
-        var form = $('#whatsappForm')[0]; // Get the form element
+        $(this).prop('disabled', true);
+
+        var form = $('#whatsappForm')[0];
         var formData = new FormData(form);
 
         // Tipe Pesan
@@ -91,29 +129,23 @@ $(document).ready(function() {
         xhr.upload.addEventListener('progress', function(e) {
             if (e.lengthComputable) {
                 $('#progress-container').show();
+
+                var percentComplete = (e.loaded / e.total) * 100;
+                $('#progress-bar').css('width', percentComplete + '%');
+
+                if (percentComplete >= 100) {
+                    // Ensure the progress bar stays at 100% for a minimum of 5 seconds
+                    setTimeout(function() {
+                        $('#progress-bar').css('width', '100%');
+                    }, 3000);
+            }
             }
         });
 
         // Handle form submission completion
         xhr.onload = function() {
             if (xhr.status === 200) {
-                // Simulate a delay before actually submitting the form
-                var delay = 5000; // 5 seconds
-                var startTime = Date.now();
-                var interval = setInterval(function() {
-                    var elapsedTime = Date.now() - startTime;
-                    var progress = Math.min(100, (elapsedTime / delay) * 100);
-    
-                    $('#progress-bar').css('width', progress + '%');
-    
-                    if (progress >= 100) {
-                        clearInterval(interval);
-                        setTimeout(function() {
-                            form.submit();
-                        }, 0); // Immediately submit the form after the progress completes
-                    }
-                }, 50); // Update the progress bar every 50ms
-                
+                form.submit();
             }
         };
 
@@ -122,6 +154,8 @@ $(document).ready(function() {
             alert('Network error.');
             $('#progress-bar').css('width', '0%'); // Reset progress bar
             $('#progress-container').hide(); // Hide progress bar
+
+            $('#sendBtn').prop('disabled', false);
         };
 
         // Submit the form data using AJAX
