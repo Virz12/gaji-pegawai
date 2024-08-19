@@ -8,6 +8,7 @@ use App\Models\template;
 use App\Models\config_api;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -72,11 +73,11 @@ class WhatsappController extends Controller
                         if (!in_array($value->getClientOriginalExtension(), ['jpeg', 'jpg', 'png'])) {
                             $fail('Gambar harus berformat jpeg, jpg, atau png.');
                         }
-                        if ($value->getSize() > 5120 * 1024) { 
+                        if ($value->getSize() >= 5120 * 1024) { 
                             $fail('Ukuran gambar maksimal adalah 5MB.');
                         }
-                        if ($value->getSize() < 5 * 1024) { 
-                            $fail('Ukuran gambar minimal adalah 5KB.');
+                        if ($value->getSize() <= 2 * 1024) { 
+                            $fail('Ukuran gambar minimal adalah 2KB.');
                         }
                     } elseif ($request->input('pesan_type') === 'dokumen') {
                         if (!in_array($value->getClientOriginalExtension(), [
@@ -91,11 +92,11 @@ class WhatsappController extends Controller
                             ])) {
                             $fail('Dokumen harus berformat pdf, txt, doc, docx, xls, xlsx, ppt, dan pptx');
                         }
-                        if ($value->getSize() > 102400 * 1024) { 
+                        if ($value->getSize() >= 102400 * 1024) { 
                             $fail('Ukuran dokumen maksimal adalah 100MB.');
                         }
-                        if ($value->getSize() < 5 * 1024) { 
-                            $fail('Ukuran dokumen minimal adalah 5KB.');
+                        if ($value->getSize() <= 2 * 1024) { 
+                            $fail('Ukuran dokumen minimal adalah 2KB.');
                         }
                     }
                 }
@@ -117,32 +118,41 @@ class WhatsappController extends Controller
             $media_id = new MediaObjectID($response->decodedBody()['id']);
 
             $pesanType = $request->input('pesan_type');
+            $isSent = false;            
+
             if ($pesanType === 'gambar') {
-                $this->whatsapp->sendImage(
+                $isSent = $this->whatsapp->sendImage(
                     $nomorWa, 
                     $media_id, 
                     $pesan);
             } elseif ($pesanType === 'dokumen') {
-                $this->whatsapp->sendDocument(
+                $isSent = $this->whatsapp->sendDocument(
                     $nomorWa, 
                     $media_id, 
                     $file->getClientOriginalName(),
                     $pesan);
             }
 
-            arsip_pesan::create([
-                'nip' => $nip,
-                'nama' => $nama,
-                'nomorWa' => $nomorWa,
-                'pesan' => $pesan,
-                'attachment' => $file->getClientOriginalName(),
-            ]);
+            if ($isSent) {
+                $newFileName = File::name($file->getClientOriginalName()) . time() . '.' . $file->extension();
+                $newPath = public_path('attachments/' . $newFileName);
         
-            flash()
-            ->killer(true)
-            ->layout('bottomRight')
-            ->timeout(3000)
-            ->success('<b>Berhasil!</b><br>Pesan Terkirim.');
+                File::move(storage_path('app/' . $path), $newPath);
+        
+                $arsipPesan = arsip_pesan::create([
+                    'nip' => $nip,
+                    'nama' => $nama,
+                    'nomorWa' => $nomorWa,
+                    'pesan' => $pesan,
+                    'attachment' => $newFileName
+                ]);
+        
+                flash()
+                ->killer(true)
+                ->layout('bottomRight')
+                ->timeout(3000)
+                ->success('<b>Berhasil!</b><br>Pesan Terkirim.');
+            }
             
         }else{
             $this->whatsapp->sendTextMessage($nomorWa, $pesan);

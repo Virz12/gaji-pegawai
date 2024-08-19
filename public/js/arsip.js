@@ -33,9 +33,26 @@ $(document).ready(function() {
                                             </li>
                                             <li class="list-group-item">
                                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> File</h4>
-                                                ${attachment ? `<span class="card-text fs-5">${attachment}</span>` : '-'}
+                                                ${attachment ? `<a data-bs-toggle="modal" data-bs-target="#Download${attachment}"  class="btn btn-primary">${attachment} Download</a>` : '-'}
                                             </li>
                                         </ul>
+                                    </div>
+                                </div>
+                            </div>                            
+                            <div class="modal fade" id="Download${attachment}" tabindex="-1" aria-labelledby="DownloadLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="DownlaodLabel">Download File</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            Apakah anda yakin ingin donlot data ini?<br>
+                                            <b> --</b>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{{ route('file.download', $arsip->attachment) }}" class="btn btn-primary">Download</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -372,4 +372,12 @@ class AdminController extends Controller
             return redirect('/settings');
         }                
     }
+
+    function download(arsip_pesan $arsip_pesan)
+    {        
+        $relativePath = $arsip_pesan->attachment;   
+        $fullPath = public_path("attachments/" . $relativePath);         
+
+        return response()->download($fullPath, "$relativePath");        
+    }
 }

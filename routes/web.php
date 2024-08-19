@@ -41,3 +41,6 @@ Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::post('/settings', [AdminController::class, 'settingsupdate']);
     Route::get('/hapustemplate/{template:id}',[WhatsappController::class, 'deletetemplate'])->name('main.templatedelete');
 });
+Route::middleware(['auth'])->group(function () {
+    Route::get('/download/{arsip_pesan}', [AdminController::class, 'download'])->name('file.download');
+});
