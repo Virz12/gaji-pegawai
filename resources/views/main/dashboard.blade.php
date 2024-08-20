@@ -114,8 +114,10 @@
                     
                     <div class="row mb-2 g-2">
                         <div class="col-12 col-sm-3 col-md-4 col-lg-4 col-xl-3 col-xxl-2">
-                            <div class="ratio ratio-1x1">
-                                <img id="fotoPegawai" class="rounded" src="{{ asset($datapegawai->foto_pegawai) }}" alt="Profile picture">                    
+                            <div class="ratio ratio-1x1" id="fotoPegawai">
+                                <label class="rounded bg-secondary-subtle">
+                                    <i class="fa-solid fa-user  position-absolute top-50 start-50 translate-middle" style="font-size: 10rem;"></i>                                
+                                </label>
                             </div>
                         </div>
                         <div class="col">

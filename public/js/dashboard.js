@@ -26,12 +26,30 @@ $(document).ready(function() {
                     results: data.map(function(item) {
                         return {
                             id: item.id,
-                            text: item.nama
+                            nama: item.nama,
+                            nip: item.nip
                         };
                     })
                 };
             },
             cache: true
+        },
+        templateResult: function(item) {
+            if (item.loading) {
+                return item.text;
+            }
+            return $(
+                `<div>
+                    <strong>${item.nama}</strong><br>
+                    <small>NIP : ${item.nip}</small>
+                </div>`
+            );
+        },
+        templateSelection: function(item) {
+            return item.nama || item.text;
+        },
+        escapeMarkup: function(markup) {
+            return markup;
         }
     });
 
@@ -51,8 +69,22 @@ $(document).ready(function() {
                 $('#nip').val(response.nip).prop('disabled', true);
                 $('#nomorWa').val(response.nomorWa).prop('disabled', true);
 
-                $('#fotoPegawai').attr('src', response.foto_pegawai);
+                const foto = response.foto_pegawai;
+                const kelamin = response.jenis_kelamin;
 
+                if (foto) {
+                    profilHtml = `<img class="rounded" src="${foto}" alt="Profile picture">`
+                } else {
+                    const backgroundColor = kelamin == 'Laki-laki' ? 'rgb(47, 196, 255)' : 'rgb(243, 173, 196)';
+                    profilHtml = `
+                        <label class="rounded " style="background-color:${backgroundColor}">
+                            <i class="fa-solid fa-user  position-absolute top-50 start-50 translate-middle" style="font-size: 10rem;"></i>                                
+                        </label>
+                    `
+                }
+                
+                $('#fotoPegawai').append(profilHtml);
+                
                 // Atur Textarea sesuai radio
                 function updateTextarea() {
                     const selectedValue = $('input[name="waktu"]:checked').val();

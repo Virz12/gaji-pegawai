@@ -97,7 +97,7 @@
                     <span class="card-header p-lg-5 p-5">
                         <div class="ratio ratio-1x1 ">
                         @if (File::exists($pegawai->foto_pegawai))                            
-                            <img class="rounded  " src="{{ asset($pegawai->foto_pegawai) }}" alt="Profile picture">                                                                                
+                            <img class="rounded" src="{{ asset($pegawai->foto_pegawai) }}" alt="Profile picture">                                                                                
                         @elseif ( $pegawai->jenis_kelamin == 'Laki-laki' )                
                             <label class="rounded" style="background-color:rgb(47, 196, 255)">
                                 <i class="fa-solid fa-user  position-absolute top-50 start-50 translate-middle" style="font-size: 10rem;"></i>
