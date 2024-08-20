@@ -95,34 +95,36 @@
             <div class="col">
                 <div class="card">
                     <span class="card-header p-lg-5 p-5">
-                    @if (File::exists($pegawai->foto_pegawai))
                         <div class="ratio ratio-1x1 ">
-                            <img class="rounded  " src="{{ asset($pegawai->foto_pegawai) }}" alt="Profile picture">                                                    
-                        </div>
-                    @else
-                        <div class="ratio ratio-1x1 ">
-                            <label class="rounded ">
-                                <i class="fa-solid fa-image fs-1 position-absolute top-50 start-50 translate-middle"></i>
+                        @if (File::exists($pegawai->foto_pegawai))                            
+                            <img class="rounded  " src="{{ asset($pegawai->foto_pegawai) }}" alt="Profile picture">                                                                                
+                        @elseif ( $pegawai->jenis_kelamin == 'Laki-laki' )                
+                            <label class="rounded" style="background-color:rgb(47, 196, 255)">
+                                <i class="fa-solid fa-user  position-absolute top-50 start-50 translate-middle" style="font-size: 10rem;"></i>
                             </label>
+                        @elseif ( $pegawai->jenis_kelamin == 'Perempuan' )
+                            <label class="rounded " style="background-color:rgb(243, 173, 196)">
+                                <i class="fa-solid fa-user  position-absolute top-50 start-50 translate-middle" style="font-size: 10rem;"></i>                                
+                            </label>
+                        @endif
                         </div>
-                    @endif
                     </span>
                     <div class="overflow-hidden rounded">
                         <ul class="list-group list-group-flush">                
                             <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Nama Pegawai</h4>
+                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"> Nama Pegawai</h4>
                                 <h5 class="card-text fw-normal">{{ $pegawai->nama }}</h5>
                             </li>
                             <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> NIP</h4>
+                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"> NIP</h4>
                                 <h5 class="card-text fw-normal">{{ $pegawai->nip }}</h5>
                             </li>
                             <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Nama Pegawai</h4>
+                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"> Jenis Kelamin</h4>
                                 <h5 class="card-text fw-normal">{{ $pegawai->jenis_kelamin }}</h5>
                             </li>
                             <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> Nomor Whatsapp</h4>
+                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"> Nomor Whatsapp</h4>
                                 <h5 class="card-text fw-normal">{{ $pegawai->nomorWa }}</h5>
                             </li>
                             <li class="list-group-item ">
@@ -146,7 +148,8 @@
                         </div>
                         <div class="modal-body text-center">
                             Apakah anda yakin ingin menghapus data ini?<br>
-                            <b>{{ $pegawai->nama }}</b>
+                            <b>{{ $pegawai->nama }}</b><br>
+                            <b>[NIP : {{ $pegawai->nip }}]</b>
                         </div>
                         <div class="modal-footer">
                             <form action="/hapuspegawai/{{ $pegawai->id }}">

@@ -81,19 +81,41 @@
             <form action="{{ route('main.updatepegawai', ['datapegawai' => $datapegawai]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <div class="input-group mb-3">
-                    <input class="form-control @error('foto_pegawai') is-invalid @enderror" type="file" accept="image/png, image/jpeg, image/jpg" name="foto_pegawai" id="foto_pegawai" aria-label="Foto Pegawai">
-                    <label class="input-group-text" for="foto_pegawai">Foto Pegawai</label>
-                </div>
-                    @error('foto_pegawai')
-                        <div class="text-danger"><small>{{ $message }}</small></div>
-                    @enderror
-                <div class="form-floating mb-3">
-                    <input type="number" value="{{$datapegawai->nip}}" name="nip" class="form-control border-2 @error('nip') is-invalid @enderror" id="nip" placeholder="" aria-label="nip" autocomplete="off" required>
-                    <label for="nip">NIP<span class="text-danger">*</span></label>
-                    @error('nip')
-                        <div class="text-danger"><small>{{ $message }}</small></div>
-                    @enderror
+                <div class="row mb-2 g-2">
+                    <div class="col-12 col-sm-2 col-md-4 col-lg-4 col-xl-3 col-xxl-2 ">
+                        <div class="ratio ratio-1x1">
+                        @if (File::exists($datapegawai->foto_pegawai))                            
+                            <img class="rounded  " src="{{ asset($datapegawai->foto_pegawai) }}" alt="Profile picture">                                                                                
+                        @elseif ( $datapegawai->jenis_kelamin == 'Laki-laki' )                
+                            <label class="rounded" style="background-color:rgb(47, 196, 255)">
+                                <i class="fa-solid fa-user  position-absolute top-50 start-50 translate-middle" style="font-size: 5rem;"></i>
+                            </label>
+                        @elseif ( $datapegawai->jenis_kelamin == 'Perempuan' )
+                            <label class="rounded " style="background-color:rgb(243, 173, 196)">
+                                <i class="fa-solid fa-user  position-absolute top-50 start-50 translate-middle" style="font-size: 5rem;"></i>                                
+                            </label>
+                        @endif                    
+                        </div>
+                    </div>
+                    <div class="col-9 ">                    
+                        <div class="row">                        
+                            <div class="input-group mb-3 mt-4">
+                                <input class="form-control @error('foto_pegawai') is-invalid @enderror" type="file" accept="image/png, image/jpeg, image/jpg" name="foto_pegawai" id="foto_pegawai" aria-label="Foto Pegawai">
+                                <label class="input-group-text" for="foto_pegawai">Foto Pegawai</label>
+                            </div>
+                                @error('foto_pegawai')
+                                    <div class="text-danger"><small>{{ $message }}</small></div>
+                                @enderror
+                            <div class="form-floating ">
+                                <input type="number" value="{{$datapegawai->nip}}" name="nip" class="form-control border-2 @error('nip') is-invalid @enderror" id="nip" placeholder="" aria-label="nip" autocomplete="off" required>
+                                <label class="ms-2" for="nip">NIP<span class="text-danger ">*</span></label>
+                                @error('nip')
+                                    <div class="text-danger"><small>{{ $message }}</small></div>
+                                @enderror
+                            </div>
+                            
+                        </div>
+                    </div>                    
                 </div>
                 <div class="form-floating mb-3">
                     <input type="text" value="{{$datapegawai->nama}}" name="nama" class="form-control border-2 @error('nama') is-invalid @enderror" id="nama" placeholder="" aria-label="nama" autocomplete="off" required>

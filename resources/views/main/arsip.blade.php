@@ -74,62 +74,24 @@
                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Pesan</h4>
                                 <p class="card-text fs-6">{{ $arsip->pesan }}</p>
                             </li>
-                            <li class="list-group-item">                                                                    
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> File</h4>
-                                @if ($arsip->attachment == true)
-                                    <span class="card-text fs-5">{{$arsip->attachment}}</span>
-                                    <div class="d-flex justify-content-between mt-1">
-                                        <a class="btn btn-primary w-75 me-1"  data-bs-toggle="modal" data-bs-target="#Preview{{ str_replace([' ', '.', '-'], '', $arsip->attachment) }}"><i class="fa-solid fa-eye"></i> Preview</a>
-                                        <a href="{{ route('file.download', ['arsip_pesan' => $arsip]) }}"  class="btn btn-success w-25 ms-1"><i class="fa-solid fa-circle-down "></i> Unduh</a>
-                                    </div>
-                                @else
-                                    <span class="card-text fs-5">-</span>
-                                @endif
-                            </li>                                                           
+                            @if ($arsip->attachment == true)
+                                <li class="list-group-item">                                    
+                                    <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> File</h4>                                    
+                                    <span class="card-text fs-5 ">{{$arsip->attachment}}</span>                                                                                                                                                                            
+                                    <a href="{{ route('file.download', ['arsip_pesan' => $arsip]) }}"  class="btn btn-success w-100"><i class="fa-solid fa-circle-down"></i> Unduh</a>
+                                </li>                            
+                            @endif
                         </ul>
                     </div>
                 </div>
-            </div>
-            {{-- Preview Modal --}}
-            <div class="modal fade" id="Preview{{ str_replace([' ', '.', '-'], '', $arsip->attachment) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $arsip->attachment }}</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body text-center">
-                            @php
-                                $extension = strtolower(pathinfo($arsip->attachment, PATHINFO_EXTENSION));  
-                                $filePath = asset('attachments/' . $arsip->attachment);
-                                $encodedFilePath = urlencode(asset($filePath));
-                            @endphp
-
-                            @if(in_array($extension, ['jpg', 'jpeg', 'png']))                                
-                                <img src="{{ $filePath }}" alt="Image" class="img-fluid">
-                            @elseif($extension == 'pdf')                                
-                                <embed src="{{ $filePath }}#page=1" type="application/pdf" width="100%" height="500px" />
-                            @elseif($extension == 'txt')                                
-                                <iframe src="{{ $filePath }}" width="100%" height="500px"></iframe>
-                            @elseif(in_array($extension, ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx']))                                
-                            <iframe src="https://view.officeapps.live.com/op/embed.aspx?src={{ $encodedFilePath }}&page=1" width="100%" height="500px"></iframe>
-                            @else
-                                <p>Preview tidak tersedia untuk file ini.</p>
-                            @endif
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>                        
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </div>            
         @empty
             <h2 class="text-secondary opacity-75 text-center">Arsip Kosong</h2>
         @endforelse
         </section>
         <div id="pagination-links">{!! $arsipPesan->links() !!}</div>
     </main>
-    {{-- <script src="{{ asset('js/arsip.js') }}"></script> --}}
+    <script src="{{ asset('js/arsip.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
 </html>

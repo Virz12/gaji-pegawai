@@ -194,7 +194,7 @@
                         <div class="col-12 col-xl-3" >
                             <button id="saveTemplateBtn" class="btn btn-success w-100"><i class="fa-solid fa-file-arrow-up"></i> Simpan</button>
                         </div>
-                    </div>
+                    </div>                    
                     <div class="input-group mt-2">
                         <label class="input-group-text" for="pesan">Pesan<span class="text-danger">*</span></label>
                         <textarea class="form-control @error('pesan') is-invalid @enderror" name="pesan" id="pesan" style="resize: none; height: 150px"></textarea>                        
@@ -235,8 +235,7 @@
                     <button type="submit" class="btn btn-success mt-2 w-50 w-lg-25"  id="sendBtn">Kirim</button>
                 </form>
             </div>
-        </section>
-
+        </section>        
         {{-- Confirmation Modal --}}
         @forelse ( $datatemplate as $template)
             <div class="modal fade" id="Hapus{{ $template->nama_template }}" tabindex="-1" aria-labelledby="Hapus" aria-hidden="true">

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use GuzzleHttp\Client;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
@@ -108,6 +109,8 @@ class WhatsappController extends Controller
         $nama = $request->input('nama');
         $nomorWa = $request->input('nomorWa');
         $pesan = $request->input('pesan');
+
+        
 
         if ($request->hasFile('attachment')) {
             $file = $request->file('attachment');
@@ -241,4 +244,5 @@ class WhatsappController extends Controller
         
         return redirect('/dashboard');
     }
+
 }

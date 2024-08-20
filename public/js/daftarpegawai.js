@@ -14,30 +14,48 @@ $(document).ready(function() {
 
                 if (data.length > 0) {
                     data.forEach(pegawai => {
+                        let foto_pegawai = pegawai.foto_pegawai;
+                        let jenis_kelamin = pegawai.jenis_kelamin;
+                        let imgHtml = '';
+                
+                        if (foto_pegawai && foto_pegawai !== '') {
+                            imgHtml = `<img class="rounded" src="/${foto_pegawai}" alt="Profile picture">`;
+                        } else if (jenis_kelamin === 'Laki-laki') {
+                            imgHtml = `
+                                <label class="rounded" style="background-color:rgb(47, 196, 255)">
+                                    <i class="fa-solid fa-user position-absolute top-50 start-50 translate-middle" style="font-size: 10rem;"></i>
+                                </label>`;
+                        } else if (jenis_kelamin === 'Perempuan') {
+                            imgHtml = `
+                                <label class="rounded" style="background-color:rgb(243, 173, 196)">
+                                    <i class="fa-solid fa-user position-absolute top-50 start-50 translate-middle" style="font-size: 10rem;"></i>
+                                </label>`;
+                        }
+
                         let pegawaiHtml = `
                             <div class="col">
                                 <div class="card">
                                     <span class="card-header p-lg-5 p-5">
                                         <div class="ratio ratio-1x1 ">
-                                            <img class="rounded" src="${pegawai.foto_pegawai}" alt="Profile picture">                                                    
+                                        ${imgHtml}
                                         </div>
                                     </span>
                                     <div class="overflow-hidden rounded">
                                         <ul class="list-group list-group-flush">                
                                             <li class="list-group-item">
-                                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Nama Pegawai</h4>
+                                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">Nama Pegawai</h4>
                                                 <h5 class="card-text fw-normal">${pegawai.nama}</h5>
                                             </li>
                                             <li class="list-group-item">
-                                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> NIP</h4>
+                                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">NIP</h4>
                                                 <h5 class="card-text fw-normal">${pegawai.nip}</h5>
                                             </li>
                                             <li class="list-group-item">
-                                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Nama Pegawai</h4>
+                                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">Jenis Kelamin</h4>
                                                 <h5 class="card-text fw-normal">${pegawai.jenis_kelamin}</h5>
                                             </li>
                                             <li class="list-group-item">
-                                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> Nomor Whatsapp</h4>
+                                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">Nomor Whatsapp</h4>
                                                 <h5 class="card-text fw-normal">${pegawai.nomorWa}</h5>
                                             </li>
                                             <li class="list-group-item ">
@@ -60,7 +78,8 @@ $(document).ready(function() {
                                         </div>
                                         <div class="modal-body text-center">
                                             Apakah anda yakin ingin menghapus data ini?<br>
-                                            <b>${pegawai.nama}</b>
+                                            <b>${pegawai.nama}</b><br>
+                                            <b>[NIP : ${pegawai.nip}]</b>
                                         </div>
                                         <div class="modal-footer">
                                             <form action="/hapuspegawai/${pegawai.id}">
