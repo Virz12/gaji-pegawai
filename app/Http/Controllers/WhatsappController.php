@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use App\Models\user;
 use App\Models\arsip_pesan;
 use App\Models\template;
@@ -12,19 +14,13 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use GuzzleHttp\Client;
+
+// netflie whatsapp cloud api
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
-use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
-use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
-use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
-use Netflie\WhatsAppCloudApi\Message\OptionsList\Row;
-use Netflie\WhatsAppCloudApi\Message\OptionsList\Section;
-use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
 use Netflie\WhatsAppCloudApi\Message\CtaUrl\TitleHeader;
-use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
-use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
+
 
 
 class WhatsappController extends Controller
@@ -110,7 +106,6 @@ class WhatsappController extends Controller
         $nomorWa = $request->input('nomorWa');
         $pesan = $request->input('pesan');
 
-        
 
         if ($request->hasFile('attachment')) {
             $file = $request->file('attachment');

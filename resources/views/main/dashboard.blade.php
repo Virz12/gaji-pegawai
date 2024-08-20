@@ -237,7 +237,8 @@
                     <button type="submit" class="btn btn-success mt-2 w-50 w-lg-25"  id="sendBtn">Kirim</button>
                 </form>
             </div>
-        </section>        
+        </section> 
+        
         {{-- Confirmation Modal --}}
         @forelse ( $datatemplate as $template)
             <div class="modal fade" id="Hapus{{ $template->nama_template }}" tabindex="-1" aria-labelledby="Hapus" aria-hidden="true">

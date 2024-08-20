@@ -22,7 +22,7 @@ class AdminController extends Controller
     {   
         if ($request->ajax()) {
             $query = $request->get('query');
-            $datapegawai = datapegawai::where('nama', 'LIKE', "%{$query}%")->get();
+            $datapegawai = datapegawai::whereAny(['nama','nip',], 'LIKE', "%{$query}%")->get();
 
             return response()->json($datapegawai);
         }
@@ -332,6 +332,9 @@ class AdminController extends Controller
     {
         $messages = [
             'required' => 'Kolom :attribute belum terisi.',
+            'numeric' => 'Kolom :attribute hanya berisi angka.',
+            'required' => 'Kolom :attribute belum terisi.',
+            'token_api.regex' => 'selain huruf besar atau kecil dan angka tidak diizinkan.',
         ];
 
         flash()
@@ -341,9 +344,9 @@ class AdminController extends Controller
         ->error('<b>Error!</b><br>Konfigurasi Gagal.');
 
         $request->validate([
-            'id_nomor' => 'required|string',
-            'id_bisnis' => 'required|string',
-            'token_api' => 'required|string',
+            'id_nomor' => 'required|numeric',
+            'id_bisnis' => 'required|numeric',
+            'token_api' => ['required','regex:/^(?!.*\s)(?!.*[\(\)\-\=\¡\£\_\+\`\~\.\,\<\>\/\;\:\'\"\\\|\[\]\{\}]).*$/'],
         ] ,$messages);
     
         $config = config_api::first();
