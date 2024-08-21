@@ -31,7 +31,6 @@ Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::get('/arsip/{datapegawai}', [AdminController::class, 'pesanArsip'])->name('main.arsip');
     Route::get('/settings', [AdminController::class, 'settings'])->name('main.settings');
     
-
     Route::post('/dashboard/template', [WhatsappController::class, 'simpantemplate'])->name('main.simpanTemplate');
     Route::post('/dashboard/send', [WhatsappController::class, 'whatsapp'])->name('main.whatsapp');
     Route::put('/ubahpassword/update', [AdminController::class, 'updatePassword'])->name('main.updatepassword');

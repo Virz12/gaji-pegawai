@@ -20,6 +20,8 @@ $(document).ready(function() {
                         let [date, time] = formatDate.split(', ');
 
                         let attachment = arsip.attachment;
+                        let header = arsip.header;
+                        let footer = arsip.footer;
                         let downloadUrl = downloadUrlTemplate.replace('__PLACEHOLDER__', arsip.id);
 
                         let arsipHtml = `
@@ -30,13 +32,13 @@ $(document).ready(function() {
                                         <ul class="list-group list-group-flush">                                            
                                             <li class="list-group-item">
                                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Pesan</h4>
-                                                <p class="card-text fs-6">${arsip.pesan}</p>
+                                                <p class="card-text fs-6">${header ? `${header}` : ''}<br><br>${arsip.body}<br><br>${footer ? `${footer}` : ''}</p>
                                             </li> 
                                             ${attachment ? `
                                             <li class="list-group-item">
                                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> File</h4>                                               
                                                 <span class="card-text fs-5">${attachment}</span>
-                                                <a href="${downloadUrl}"  class="btn btn-success w-100"><i class="fa-solid fa-circle-down "></i> Unduh</a>                                                
+                                                <a href="${downloadUrl}"  class="btn btn-success w-100 mt-2"><i class="fa-solid fa-circle-down "></i> Unduh</a>                                                
                                             </li>` : ''}
                                         </ul>
                                     </div>

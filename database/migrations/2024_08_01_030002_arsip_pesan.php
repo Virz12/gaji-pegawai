@@ -13,7 +13,9 @@ return new class extends Migration
             $table->string('nip');
             $table->string('nama');
             $table->string('nomorWa');
-            $table->string('pesan');
+            $table->text('header')->nullable();
+            $table->text('body');
+            $table->text('footer')->nullable();
             $table->string('attachment')->nullable();
             $table->timestamps();
         });

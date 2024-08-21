@@ -18,7 +18,8 @@ class template extends Model
 
     protected $fillable = [
         'nama_template',
-        'pesan',
+        'body',
+        'footer',
     ];
 
     public static function booted() {

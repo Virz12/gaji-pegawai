@@ -22,7 +22,9 @@ class AdminController extends Controller
     {   
         if ($request->ajax()) {
             $query = $request->get('query');
-            $datapegawai = datapegawai::whereAny(['nama','nip',], 'LIKE', "%{$query}%")->get();
+            $datapegawai = datapegawai::whereAny(['nama','nip',], 'LIKE', "%{$query}%")
+                                        ->orderBy('nama', 'ASC')
+                                        ->get();
 
             return response()->json($datapegawai);
         }
@@ -238,7 +240,7 @@ class AdminController extends Controller
         if ($request->ajax()) {
             $query = $request->get('query');
             $arsipPesan = arsip_pesan::where('nip', $datapegawai->nip)
-                                    ->whereAny(['nama', 'pesan', 'attachment','created_at'], 'LIKE', "%{$query}%")
+                                    ->whereAny(['nama', 'header', 'body', 'footer', 'attachment','created_at'], 'LIKE', "%{$query}%")
                                     ->orderBy('created_at', 'DESC')
                                     ->paginate(6);
 

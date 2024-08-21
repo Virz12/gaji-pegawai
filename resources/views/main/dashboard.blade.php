@@ -95,7 +95,6 @@
     </nav>
     {{-- Main --}}
     <main class="row mx-2 mb-4 justify-content-center">
-
         {{-- Buat Pesan --}}
         <section class="col-md-8 col-xxl-8 mt-4 mt-md-3">
             <div class="card p-3">
@@ -151,94 +150,112 @@
                     <div class="text-success">
                         <hr>
                     </div>
-                    <div class="row row-cols-2 row-cols-md-4 g-2 mb-2">
-                        <div class="col">
-                            <input type="radio" class="btn-check" name="waktu" id="pagi" value="pagi" checked autocomplete="off" >
-                            <label class="btn btn-outline-success rounded w-100" for="pagi">Pagi</label>
-                        </div>
-                        <div class="col">
-                            <input type="radio" class="btn-check" name="waktu" id="siang" value="siang" autocomplete="off" >
-                            <label class="btn btn-outline-success rounded w-100" for="siang">Siang</label>
-                        </div>
-                        <div class="col">
-                            <input type="radio" class="btn-check" name="waktu" id="sore" value="sore" autocomplete="off" >
-                            <label class="btn btn-outline-success rounded w-100" for="sore">Sore</label>
-                        </div>
-                        <div class="col">
-                            <input type="radio" class="btn-check" name="waktu" id="malam" value="malam" autocomplete="off" >
-                            <label class="btn btn-outline-success rounded w-100" for="malam">Malam</label>
-                        </div>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col-xl-9">
-                            <div class="input-group">
-                                <label class="input-group-text" for="nama_template">Template Text</label>
-                                <input class="form-control rounded-end rounded-sm-none  @error('nama_template') is-invalid @enderror" name="nama_template" id="nama_template" type="text"  placeholder="'NamaTemplate1'" autocomplete="off">                                
-                                <button class="input-group-text dropdown-toggle w-100 w-sm-auto rounded rounded-sm-end mt-2 mt-sm-0" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
-                                    Pilih Template
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-scrollable" aria-labelledby="templateSelectBtn">
-                                    @forelse ($datatemplate as $template)
-                                        <li class="d-flex justify-content-between">
-                                            <a class="dropdown-item" href="#" data-value="{{ $template->pesan }}" data-name="{{ $template->nama_template }}">{{ $template->nama_template }}</a>
-                                            <a class=" py-1 px-3" role="button" data-bs-toggle="modal" data-bs-target="#Hapus{{ $template->nama_template }}"><i class="fa-solid fa-trash-can fs-6 text-danger"></i></a>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                    @empty
-                                        
-                                    @endforelse
-                                </ul>                                
+                    @php
+                        $configApi = \App\Models\config_api::first(); 
+                    @endphp
+                    
+                    @if ($configApi)
+                        <div class="row row-cols-2 row-cols-md-4 g-2 mb-2">
+                            <div class="col">
+                                <input type="radio" class="btn-check" name="waktu" id="pagi" value="Pagi" checked autocomplete="off" >
+                                <label class="btn btn-outline-success rounded w-100" for="pagi">Pagi</label>
                             </div>
-                            @error('nama_template')
-                                <div class="text-danger"><small>{{ $message }}</small></div>
-                            @enderror
+                            <div class="col">
+                                <input type="radio" class="btn-check" name="waktu" id="siang" value="Siang" autocomplete="off" >
+                                <label class="btn btn-outline-success rounded w-100" for="siang">Siang</label>
+                            </div>
+                            <div class="col">
+                                <input type="radio" class="btn-check" name="waktu" id="sore" value="Sore" autocomplete="off" >
+                                <label class="btn btn-outline-success rounded w-100" for="sore">Sore</label>
+                            </div>
+                            <div class="col">
+                                <input type="radio" class="btn-check" name="waktu" id="malam" value="Malam" autocomplete="off" >
+                                <label class="btn btn-outline-success rounded w-100" for="malam">Malam</label>
+                            </div>
                         </div>
-                        <div class="col-12 col-xl-3" >
-                            <button id="saveTemplateBtn" class="btn btn-success w-100"><i class="fa-solid fa-file-arrow-up"></i> Simpan</button>
+                        <div class="row g-2">
+                            <div class="col-xl-9">
+                                <div class="input-group">
+                                    <label class="input-group-text" for="nama_template">Template Text</label>
+                                    <input class="form-control rounded-end rounded-sm-none  @error('nama_template') is-invalid @enderror" name="nama_template" id="nama_template" type="text"  placeholder="'NamaTemplate1'" autocomplete="off">                                
+                                    <button class="input-group-text dropdown-toggle w-100 w-sm-auto rounded rounded-sm-end mt-2 mt-sm-0" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
+                                        Pilih Template
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-scrollable" aria-labelledby="templateSelectBtn">
+                                        @forelse ($datatemplate as $template)
+                                            <li class="d-flex justify-content-between">
+                                                <a class="dropdown-item" href="#" data-value="{{ $template->pesan }}" data-fot="{{ $template->footer }}" data-name="{{ $template->nama_template }}">{{ $template->nama_template }}</a>
+                                                <a class=" py-1 px-3" role="button" data-bs-toggle="modal" data-bs-target="#Hapus{{ $template->nama_template }}"><i class="fa-solid fa-trash-can fs-6 text-danger"></i></a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                        @empty
+                                            
+                                        @endforelse
+                                    </ul>                                
+                                </div>
+                                @error('nama_template')
+                                    <div class="text-danger"><small>{{ $message }}</small></div>
+                                @enderror
+                            </div>
+                            <div class="col-12 col-xl-3" >
+                                <button id="saveTemplateBtn" class="btn btn-success w-100"><i class="fa-solid fa-file-arrow-up"></i> Simpan</button>
+                            </div>
                         </div>
-                    </div>                    
-                    <div class="input-group mt-2">
-                        <label class="input-group-text" for="pesan">Pesan<span class="text-danger">*</span></label>
-                        <textarea class="form-control @error('pesan') is-invalid @enderror" name="pesan" id="pesan" style="resize: none; height: 150px"></textarea>                        
-                    </div>
-                    @error('pesan')
-                        <div class="text-danger"><small>{{ $message }}</small></div>
-                    @enderror
-                    <div class="input-group mt-2">
-                        <label class="input-group-text" for="footer">Footer<span class="text-danger">*</span></label>
-                        <textarea class="form-control @error('footer') is-invalid @enderror" name="footer" id="footer" style="resize: none; height: 40px"></textarea>                        
-                    </div>
-                    @error('footer')
-                        <div class="text-danger"><small>{{ $message }}</small></div>
-                    @enderror
-                    <div class="input-group mt-2">
-                        <label class="input-group-text" for="attachment" data-toggle="tooltip" data-placement="top" title="Lampiran"><i class="fa-solid fa-file-circle-plus"></i></label>
-                        <input class="form-control @error('attachment') is-invalid @enderror" type="file" name="attachment" id="attachment" aria-label="File Attachment">
-                        <div class="w-100 w-sm-auto mt-2 mt-sm-0 d-flex">
-                            <input type="radio" class="btn-check" name="options-outlined" id="gambar" checked autocomplete="off" >
-                            <label class="btn btn-outline-success flex-fill rounded-start-2 rounded-end-0 rounded-sm-none" for="gambar"><i class="fa-solid fa-image"></i> Gambar</label>
-                            
-                            <input type="radio" class="btn-check" name="options-outlined" id="dokumen" autocomplete="off">
-                            <label class="btn btn-outline-success flex-fill rounded-start-0 rounded-end-2" for="dokumen"><i class="fa-solid fa-file"></i> Dokumen</label>
+                        <div class="input-group mt-2">
+                            <label class="input-group-text" for="header">Header</label>
+                            <textarea class="form-control @error('header') is-invalid @enderror" name="header" id="header" style="resize: none; height: 40px"></textarea>                        
                         </div>
-                    </div>
-                    @error('attachment')
-                        <div class="text-danger"><small>{{ $message }}</small></div>
-                    @enderror
-                    @error('pesan_type')
-                        <div class="text-danger"><small>{{ $message }}</small></div>
-                    @enderror
-                    <input type="hidden" name="pesan_type" id="pesan_type" value="">
+                        @error('header')
+                            <div class="text-danger"><small>{{ $message }}</small></div>
+                        @enderror                 
+                        <div class="input-group mt-2">
+                            <label class="input-group-text" for="body">Pesan<span class="text-danger">*</span></label>
+                            <textarea class="form-control @error('body') is-invalid @enderror" name="body" id="body" style="resize: none; height: 150px"></textarea>                        
+                        </div>
+                        @error('body')
+                            <div class="text-danger"><small>{{ $message }}</small></div>
+                        @enderror
+                        <div class="input-group mt-2">
+                            <label class="input-group-text" for="footer">Footer</label>
+                            <textarea class="form-control @error('footer') is-invalid @enderror" name="footer" id="footer" style="resize: none; height: 40px"></textarea>                        
+                        </div>
+                        @error('footer')
+                            <div class="text-danger"><small>{{ $message }}</small></div>
+                        @enderror
+                        <div class="input-group mt-2">
+                            <label class="input-group-text" for="attachment" data-toggle="tooltip" data-placement="top" title="Lampiran"><i class="fa-solid fa-file-circle-plus"></i></label>
+                            <input class="form-control @error('attachment') is-invalid @enderror" type="file" name="attachment" id="attachment" aria-label="File Attachment">
+                            <div class="w-100 w-sm-auto mt-2 mt-sm-0 d-flex">
+                                <input type="radio" class="btn-check" name="options-outlined" id="gambar" checked autocomplete="off" >
+                                <label class="btn btn-outline-success flex-fill rounded-start-2 rounded-end-0 rounded-sm-none" for="gambar"><i class="fa-solid fa-image"></i> Gambar</label>
+                                
+                                <input type="radio" class="btn-check" name="options-outlined" id="dokumen" autocomplete="off">
+                                <label class="btn btn-outline-success flex-fill rounded-start-0 rounded-end-2" for="dokumen"><i class="fa-solid fa-file"></i> Dokumen</label>
+                            </div>
+                        </div>
+                        @error('attachment')
+                            <div class="text-danger"><small>{{ $message }}</small></div>
+                        @enderror
+                        @error('pesan_type')
+                            <div class="text-danger"><small>{{ $message }}</small></div>
+                        @enderror
+                        <input type="hidden" name="pesan_type" id="pesan_type" value="">
 
-                    {{-- Progress Bar --}}
-                    <div id="progress-container" style="display: none; margin-top: 10px;">
-                        <div id="progress-bar" style="width: 0; height: 20px; background-color: #4caf50; transition: 1s;"></div>
+                        {{-- Progress Bar --}}
+                        <div id="progress-container" style="display: none; margin-top: 10px;">
+                            <div id="progress-bar" style="width: 0; height: 20px; background-color: #4caf50; transition: 1s;"></div>
+                        </div>
+                        <button type="submit" class="btn btn-success mt-2 w-50 w-lg-25"  id="sendBtn">Kirim</button>
+                    @else
+                    <div class="justify-content-center g-2 row bg-body-secondary p-5 rounded">
+                        <b class="text-center">Harap Masukkan Id Nomor, Id Bisnis, Dan Token Api Whatsapp Anda</b>
+                        <a href="/settings" class="btn btn-success w-25 "><i class="fa-solid fa-gear"></i> Settings</a>
                     </div>
-                    <button type="submit" class="btn btn-success mt-2 w-50 w-lg-25"  id="sendBtn">Kirim</button>
+                    @endif
                 </form>
             </div>
         </section> 
-        
+
         {{-- Confirmation Modal --}}
         @forelse ( $datatemplate as $template)
             <div class="modal fade" id="Hapus{{ $template->nama_template }}" tabindex="-1" aria-labelledby="Hapus" aria-hidden="true">

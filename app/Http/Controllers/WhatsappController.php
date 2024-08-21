@@ -62,7 +62,9 @@ class WhatsappController extends Controller
             'nip' => 'required|numeric',
             'nama' => 'required|regex:/^[a-zA-Z ]+$/',
             'nomorWa' => 'required|numeric',
-            'pesan' => 'required',
+            'header' => 'nullable',
+            'body' => 'required',
+            'footer' => 'nullable',
             'attachment' => [
                 'nullable',
                 'file',
@@ -105,8 +107,12 @@ class WhatsappController extends Controller
         $nip = $request->input('nip');
         $nama = $request->input('nama');
         $nomorWa = $request->input('nomorWa');
-        $pesan = $request->input('pesan');
 
+        $header = $request->input('header');
+        $body = $request->input('body');
+        $footer = $request->input('footer');
+
+        $pesan = $header . "\n\n" . $body . "\n\n" . $footer;
 
         if ($request->hasFile('attachment')) {
             $file = $request->file('attachment');
@@ -142,7 +148,9 @@ class WhatsappController extends Controller
                     'nip' => $nip,
                     'nama' => $nama,
                     'nomorWa' => $nomorWa,
-                    'pesan' => $pesan,
+                    'header' => $header,
+                    'body' => $body,
+                    'footer' => $footer,
                     'attachment' => $newFileName
                 ]);
         
@@ -160,7 +168,9 @@ class WhatsappController extends Controller
                 'nip' => $nip,
                 'nama' => $nama,
                 'nomorWa' => $nomorWa,
-                'pesan' => $pesan,
+                'header' => $header,
+                'body' => $body,
+                'footer' => $footer
             ]);
         
             flash()
@@ -185,10 +195,13 @@ class WhatsappController extends Controller
 
         if ($existingTemplate) {
             $request->validate([
-                'pesan' => 'required',
+                'body' => 'required',
+                'footer' => 'nullable',
             ], $messages);
 
-            $existingTemplate->update(['pesan' => $request->input('pesan')]);
+            $existingTemplate->update([ 'body' => $request->input('body'),
+                                        'footer' => $request->input('footer')
+                                            ]);
 
             flash()
             ->killer(true)
@@ -200,12 +213,14 @@ class WhatsappController extends Controller
         } else {
             $request->validate([
                 'nama_template' => 'required|regex:/^[a-zA-Z0-9]+$/|unique:template',
-                'pesan' => 'required',
+                'body' => 'required',
+                'footer' => 'nullable',
             ], $messages);
 
             $data = [   
                 'nama_template' => $request->input('nama_template'),
-                'pesan' => $request->input('pesan'),
+                'body' => $request->input('body'),
+                'footer' => $request->input('footer'),
             ];
 
             if ($template = template::create($data)) {
@@ -240,5 +255,4 @@ class WhatsappController extends Controller
         
         return redirect('/dashboard');
     }
-
 }

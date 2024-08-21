@@ -20,7 +20,9 @@ class arsip_pesan extends Model
         'nip',
         'nama',
         'nomorWa',
-        'pesan',
+        'header',
+        'body',
+        'footer',
         'attachment',
     ];
 

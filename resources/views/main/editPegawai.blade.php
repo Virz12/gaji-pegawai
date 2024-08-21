@@ -138,6 +138,7 @@
                 <div class="form-floating mb-3">
                     <input type="number" value="{{$datapegawai->nomorWa}}" name="nomorWa" class="form-control border-2 @error('nomorWa') is-invalid @enderror" id="nomorWa" placeholder="" aria-label="nomorWa" autocomplete="off" required>
                     <label for="nomorWa">Nomor WhatsApp<span class="text-danger">*</span></label>
+                    <div class="text-sedondary opacity-75"><small>Awali nomor dengan angka 62.</small></div>
                     @error('nomorWa')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror

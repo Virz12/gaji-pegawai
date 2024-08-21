@@ -72,13 +72,13 @@
                         <ul class="list-group list-group-flush">                
                             <li class="list-group-item">
                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Pesan</h4>
-                                <p class="card-text fs-6">{{ $arsip->pesan }}</p>
+                                <p class="card-text fs-6">{{ $arsip->header}}<br><br>{{ $arsip->body }}<br><br>{{ $arsip->footer }}</p>
                             </li>
                             @if ($arsip->attachment == true)
                                 <li class="list-group-item">                                    
                                     <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-file text-decoration-underline"></i> File</h4>                                    
                                     <span class="card-text fs-5 ">{{$arsip->attachment}}</span>                                                                                                                                                                            
-                                    <a href="{{ route('file.download', ['arsip_pesan' => $arsip]) }}"  class="btn btn-success w-100"><i class="fa-solid fa-circle-down"></i> Unduh</a>
+                                    <a href="{{ route('file.download', ['arsip_pesan' => $arsip]) }}"  class="btn btn-success w-100 mt-2"><i class="fa-solid fa-circle-down"></i> Unduh</a>
                                 </li>                            
                             @endif
                         </ul>

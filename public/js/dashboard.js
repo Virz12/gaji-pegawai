@@ -89,7 +89,7 @@ $(document).ready(function() {
                 function updateTextarea() {
                     const selectedValue = $('input[name="waktu"]:checked').val();
                     const namaValue = $('#namaHidden').val();
-                    $('#pesan').val('Selamat ' + selectedValue + ' ' + namaValue);
+                    $('#header').val('Selamat ' + selectedValue + ' ' + namaValue);
                 }
 
                 updateTextarea();
@@ -136,7 +136,9 @@ $(document).ready(function() {
     $('.dropdown-item').on('click', function() {
         var selectedTemplate = $(this).data('value');
         var templateName = $(this).data('name');
-        $('#pesan').val(selectedTemplate);
+        var footerTemplate = $(this).data('fot');
+        $('#body').val(selectedTemplate);
+        $('#footer').val(footerTemplate);
         $('#nama_template').val(templateName);
     });
 
@@ -169,7 +171,7 @@ $(document).ready(function() {
                     // Ensure the progress bar stays at 100% for a minimum of 5 seconds
                     setTimeout(function() {
                         $('#progress-bar').css('width', '100%');
-                    }, 4000);
+                    }, 5000);
             }
             }
         });
