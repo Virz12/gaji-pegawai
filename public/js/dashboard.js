@@ -169,7 +169,7 @@ $(document).ready(function() {
                     // Ensure the progress bar stays at 100% for a minimum of 5 seconds
                     setTimeout(function() {
                         $('#progress-bar').css('width', '100%');
-                    }, 3000);
+                    }, 4000);
             }
             }
         });

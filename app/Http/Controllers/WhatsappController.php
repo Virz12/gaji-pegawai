@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+
 use App\Models\user;
 use App\Models\arsip_pesan;
 use App\Models\template;
@@ -49,6 +49,7 @@ class WhatsappController extends Controller
             'required' => 'Kolom :attribute belum terisi.',
             'pesan_type.required' => 'Silakan pilih tipe pesan Gambar atau Dokumen ',
             'numeric' => ' :attribute hanya berisi angka',
+            'nama.regex' => 'Kolom :attribute hanya berisi huruf besar atau kecil dan spasi.',
         ];
 
         flash()
@@ -59,7 +60,7 @@ class WhatsappController extends Controller
 
         $request->validate([
             'nip' => 'required|numeric',
-            'nama' => 'required',
+            'nama' => 'required|regex:/^[a-zA-Z ]+$/',
             'nomorWa' => 'required|numeric',
             'pesan' => 'required',
             'attachment' => [

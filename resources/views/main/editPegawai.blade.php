@@ -82,7 +82,7 @@
                 @csrf
                 @method('PUT')
                 <div class="row mb-2 g-2">
-                    <div class="col-12 col-sm-2 col-md-4 col-lg-4 col-xl-3 col-xxl-2 ">
+                    <div class="col-12 col-sm-2 col-md-4 col-lg-4 col-xl-3 col-xxl-3 ">
                         <div class="ratio ratio-1x1">
                         @if (File::exists($datapegawai->foto_pegawai))                            
                             <img class="rounded  " src="{{ asset($datapegawai->foto_pegawai) }}" alt="Profile picture">                                                                                
@@ -99,7 +99,7 @@
                     </div>
                     <div class="col-9 ">                    
                         <div class="row">                        
-                            <div class="input-group mb-3 mt-4">
+                            <div class="input-group mb-3 mt-3">
                                 <input class="form-control @error('foto_pegawai') is-invalid @enderror" type="file" accept="image/png, image/jpeg, image/jpg" name="foto_pegawai" id="foto_pegawai" aria-label="Foto Pegawai">
                                 <label class="input-group-text" for="foto_pegawai">Foto Pegawai</label>
                             </div>
