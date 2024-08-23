@@ -11,11 +11,19 @@
     {{-- JQuery  --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script>
-        const search = "{{ route('main.daftarpegawai') }}";
+        const search = "{{ route('main.daftaradmin') }}";
     </script>
 
     {{-- Custom CSS --}}
     <style>
+        .end-reveal {
+            right: 1.3rem;
+        }
+
+        .top-reveal {
+            top: 1.85rem;
+        }
+
         @media screen and (min-width: 992px) {
             .w-lg-50 {
                 width: 50% !important;
@@ -41,7 +49,7 @@
             -moz-appearance: textfield;
         }
     </style>
-    <title>{{ config('app.name') }} | Daftar Pegawai</title>
+    <title>{{ config('app.name') }} | Daftar Admin</title>
 </head>
 <body class="min-vh-100 bg-body-secondary">
     {{-- NavBar --}}
@@ -57,10 +65,10 @@
                         <a class="nav-link text-black d-inline-block" href="/dashboard"><i class="fa-solid fa-comment"></i> Kirim Pesan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active fw-medium text-success d-inline-block" aria-current="page" href="/daftarpegawai"><i class="fa-solid fa-users"></i> Daftar Pegawai</a>
+                        <a class="nav-link text-black d-inline-block" href="/daftarpegawai"><i class="fa-solid fa-users"></i> Daftar Pegawai</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="/daftaradmin"><i class="fa-solid fa-user-tie"></i> Daftar Admin</a>
+                        <a class="nav-link active fw-medium text-success d-inline-block" aria-current="page" href="/daftaradmin"><i class="fa-solid fa-user-tie"></i> Daftar Admin</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-black d-inline-block" href="/riwayatpesan"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pesan</a>
@@ -87,7 +95,7 @@
     {{-- Main --}}
     <main class="container-fluid ps-3 my-4">
         <section class="row g-2 justify-content-between">
-            <a href="/tambahpegawai" class="btn btn-success mb-sm-3 ms-1 col-auto"><i class="fa-solid fa-plus me-2"></i>Tambah Pegawai</a>
+            <a data-bs-toggle="modal" data-bs-target="#tambahData" class="btn btn-success mb-sm-3 ms-1 col-auto"><i class="fa-solid fa-plus me-2"></i> Tambah Admin</a>
             <form action="" class="col-12 col-sm-auto">
                 <div class="input-group mb-3">
                     <label class="input-group-text shadow-sm" for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
@@ -96,56 +104,29 @@
             </form>
         </section>
         <section class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3 mb-3" id="pegawai-list">
-        @forelse ( $datapegawai as $pegawai)
+        @forelse ( $dataadmin as $admin)
             {{-- Card --}}
             <div class="col">
                 <div class="card">
-                    <span class="card-header p-lg-5 p-5">
-                        <div class="ratio ratio-1x1">
-                        @if (File::exists($pegawai->foto_pegawai))                            
-                            <img class="rounded" src="{{ asset($pegawai->foto_pegawai) }}" alt="Profile picture">                                                                                
-                        @elseif ( $pegawai->jenis_kelamin == 'Laki-laki' )                
-                            <label class="rounded" style="background-color:rgb(47, 196, 255)">
-                                <i class="fa-solid fa-user  position-absolute top-50 start-50 translate-middle" style="font-size: 5rem;"></i>
-                            </label>
-                        @elseif ( $pegawai->jenis_kelamin == 'Perempuan' )
-                            <label class="rounded " style="background-color:rgb(243, 173, 196)">
-                                <i class="fa-solid fa-user  position-absolute top-50 start-50 translate-middle" style="font-size: 5rem;"></i>                                
-                            </label>
-                        @endif
-                        </div>
-                    </span>
                     <div class="overflow-hidden rounded">
                         <ul class="list-group list-group-flush">                
                             <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"> Nama Pegawai</h4>
-                                <h5 class="card-text fw-normal">{{ $pegawai->nama }}</h5>
+                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"> Nama Admin</h4>
+                                <h5 class="card-text fw-normal">{{ $admin->username }}</h5>
                             </li>
                             <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"> NIP</h4>
-                                <h5 class="card-text fw-normal">{{ $pegawai->nip }}</h5>
-                            </li>
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"> Jenis Kelamin</h4>
-                                <h5 class="card-text fw-normal">{{ $pegawai->jenis_kelamin }}</h5>
-                            </li>
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"> Nomor Whatsapp</h4>
-                                <h5 class="card-text fw-normal">{{ $pegawai->nomorWa }}</h5>
+                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"> Nomor WhatsApp</h4>
+                                <h5 class="card-text fw-normal">9868769086</h5>
                             </li>
                             <li class="list-group-item ">
-                                <div class="d-flex justify-content-between ">
-                                    <a href="{{route('main.editpegawai',['datapegawai' => $pegawai])}}" class="btn btn-primary w-50 me-1"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
-                                    <a data-bs-toggle="modal" data-bs-target="#Hapus{{ $pegawai->nip }}" class="btn btn-danger w-50 ms-1"><i class="fa-solid fa-trash"></i> Hapus</a>
-                                </div>
-                                <a href="{{route('main.arsip',['datapegawai' => $pegawai])}}" class="btn btn-warning w-100 mt-2"><i class="fa-solid fa-message"></i> Arsip Pesan</a>
+                                <a data-bs-toggle="modal" data-bs-target="#Hapus{{ $admin->id }}" class="btn btn-danger w-100"><i class="fa-solid fa-trash"></i> Hapus</a>
                             </li>                                                
                         </ul>
                     </div>
                 </div>
             </div>
             {{-- Confirmation Modal --}}
-            <div class="modal fade" id="Hapus{{ $pegawai->nip }}" tabindex="-1" aria-labelledby="HapusLabel" aria-hidden="true">
+            <div class="modal fade" id="Hapus{{ $admin->id }}" tabindex="-1" aria-labelledby="HapusLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -154,12 +135,11 @@
                         </div>
                         <div class="modal-body text-center">
                             Apakah anda yakin ingin menghapus data ini?<br>
-                            <b>{{ $pegawai->nama }}</b><br>
-                            <b>[NIP : {{ $pegawai->nip }}]</b>
+                            <b>{{ $admin->username }}</b><br>
                         </div>
                         <div class="modal-footer">
-                            <form action="/hapuspegawai/{{ $pegawai->id }}">
-                            <form action="{{route('main.delete',['datapegawai' => $pegawai])}}">
+                            <form action="/hapusadmin/{{ $admin->id }}">
+                            <form action="{{route('main.deleteadmin',['dataadmin' => $admin])}}">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Hapus</button>
@@ -173,10 +153,47 @@
             <h2 class="m-auto text-secondary opacity-75 text-center">Arsip Kosong</h2>
         @endforelse
         </section>
-        <div id="pagination-links">{!! $datapegawai->links() !!}</div>
+        {{-- Add Modal --}}
+        <div class="modal fade" id="tambahData" tabindex="-1" aria-labelledby="TambahLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="TambahLabel">Tambah Data</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="POST">
+                            @csrf
+                            <div class="form-floating mb-3">
+                                <input type="text" name="username" class="form-control border-2 @error('username') is-invalid @enderror" id="username" placeholder="" aria-label="username" autocomplete="off" required>
+                                <label  for="username">Username Admin<span class="text-danger">*</span></label>
+                                @error('username')
+                                    <div class="text-danger"><small>{{ $message }}</small></div>
+                                @enderror
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" name="password" class="form-control border-2 @error('password') is-invalid @enderror" id="password" placeholder="" aria-label="password" autocomplete="off" required>
+                                <label  for="password">Password Admin<span class="text-danger">*</span></label>
+                                <span id="togglePassword" class="toggle-password-icon position-absolute end-0 top-50 translate-middle-y me-3" style="cursor: pointer;">
+                                    <i class="fa-regular fa-eye fa-lg" id="reveal-password"></i>
+                                </span>
+                                @error('password')
+                                    <div class="text-danger text-left"><small>{{ $message }}</small></div>
+                                @enderror
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-success me-2">Tambah</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="pagination-links">{!! $dataadmin->links() !!}</div>
     </main>
     {{-- Script --}}
-    <script src="{{ asset('js/daftarpegawai.js') }}"></script>
+    <script src="{{ asset('js/daftaradmin.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
 </html>

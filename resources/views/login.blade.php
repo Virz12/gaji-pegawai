@@ -7,8 +7,22 @@
     {{-- Bootstrap --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
+    {{-- JQuery  --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
     {{-- Css --}}
     <link rel="stylesheet" href="{{asset('css/login.css')}}" >
+
+    {{-- Custom CSS --}}
+    <style>
+        .end-reveal {
+            right: 1.3rem;
+        }
+
+        .top-reveal {
+            top: 1.85rem;
+        }
+    </style>
 
     <title>{{ config('app.name') }} | Login</title>
 </head>
@@ -23,7 +37,7 @@
                 <div class="mx-auto mt-3" style="width: 100px;">
                     <img src="{{asset('img/logo.png')}}" class="logo img-fluid" >
                 </div>
-                <h2 class="text-center mt-3"><strong>Pusat Survey Geologi WhatsApp Sender</strong></h2>
+                <h2 class="text-center mt-3"><strong>PSG WhatsApp Sender</strong></h2>
                 <div class="d-flex align-items-center justify-content-center px-2 pb-2 mt-2">
                     <form action="" method="POST" style="width: 460px;" class="shadow-lg  mt-4 p-3 card bg-white" style="border-radius: 1rem;">
                         @csrf
@@ -38,6 +52,9 @@
                         <div class="form-floating mb-3">
                             <input type="password" name="password" value="{{ @old('password') }}" id="password" maxlength="50" class="form-control form-control-lg border-2 border-warning @error('password') is-invalid @enderror" placeholder="" autocomplete="off" @required(true)>
                             <label class="form-label " for="password"><i class="fa-solid fa-key"></i> Sandi</label>
+                            <span id="togglePassword" class="toggle-password-icon position-absolute end-0 top-50 translate-middle-y me-3" style="cursor: pointer;">
+                                <i class="fa-regular fa-eye fa-lg" id="reveal-password"></i>
+                            </span>
                             @error('password')
                                 <div class="text-danger"><small>{{ $message }}</small></div>
                             @enderror
@@ -51,5 +68,26 @@
         </div>
     </div>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
+    {{-- JQuery Script --}}
+    <script>
+        $(document).ready(function() {
+            $('#togglePassword').on('click', function() {
+                let passwordField = $('#password');
+                let passwordFieldType = passwordField.attr('type');
+                
+                if (passwordFieldType === 'password') {
+                    passwordField.attr('type', 'text');
+                    $('#reveal-password').removeClass('fa-regular').addClass('fa-solid');
+                } else {
+                    passwordField.attr('type', 'password');
+                    $('#reveal-password').removeClass('fa-solid').addClass('fa-regular');
+                }
+            });
+
+            if($('.form-control').hasClass('is-invalid')) {
+                $('#togglePassword').removeClass('end-0 top-50').addClass('end-reveal top-reveal');
+            }
+        });
+    </script>
 </body>
 </html>

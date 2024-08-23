@@ -20,6 +20,7 @@ $(document).ready(function() {
                         let [date, time] = formatDate.split(', ');
 
                         let attachment = arsip.attachment;
+                        let nama = arsip.nama;
                         let header = arsip.header;
                         let footer = arsip.footer;
                         let downloadUrl = downloadUrlTemplate.replace('__PLACEHOLDER__', arsip.id);
@@ -30,6 +31,10 @@ $(document).ready(function() {
                                     <h5 class="card-header d-flex justify-content-between"><span><i class="fa-solid fa-calendar"></i> ${date}</span><span><i class="fa-solid fa-clock"></i> ${time}</span></h5>
                                     <div class="overflow-hidden rounded">
                                         <ul class="list-group list-group-flush">                                            
+                                            <li class="list-group-item">
+                                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Nama</h4>
+                                                <p class="card-text fs-6">${nama}</p>
+                                            </li> 
                                             <li class="list-group-item">
                                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold"><i class="fa-solid fa-envelope text-decoration-underline"></i> Pesan</h4>
                                                 <p class="card-text fs-6">${header ? `${header}` : ''}<br><br>${arsip.body}<br><br>${footer ? `${footer}` : ''}</p>
@@ -51,7 +56,7 @@ $(document).ready(function() {
 
                     $('#pagination-links').html(response.pagination);
                 } else {
-                    $('#arsip-list').append('<h2 class="text-secondary opacity-75 text-center">Arsip Kosong</h2>');
+                    $('#arsip-list').append('<h2 class="text-secondary opacity-75 w-100 text-center">Arsip Kosong</h2>');
                 }
             }
         });

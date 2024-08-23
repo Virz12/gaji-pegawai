@@ -52,7 +52,7 @@ class AdminController extends Controller
             $query = $request->get('query');
             $datapegawai = datapegawai::whereAny(['nama', 'nip', 'jenis_kelamin', 'nomorWa'], 'LIKE', "%{$query}%")
                 ->orderBy('updated_at','DESC')
-                ->paginate(5);
+                ->paginate(12);
     
             return response()->json([
                 'data' => $datapegawai->items(),
@@ -60,9 +60,28 @@ class AdminController extends Controller
             ]);
         }
 
-        $datapegawai = datapegawai::orderBy('updated_at','DESC')->paginate(5);
+        $datapegawai = datapegawai::orderBy('updated_at','DESC')->paginate(12);
 
         return view('main.daftarpegawai')->with('datapegawai', $datapegawai);
+    }
+
+    public function daftaradmin(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = $request->get('query');
+            $dataadmin = user::whereAny(['username'], 'LIKE', "%{$query}%")
+                ->orderBy('updated_at','DESC')
+                ->paginate(12);
+    
+            return response()->json([
+                'data' => $dataadmin->items(),
+                'pagination' => (string) $dataadmin->links()
+            ]);
+        }
+
+        $dataadmin = user::orderBy('updated_at','DESC')->paginate(12);
+
+        return view('main.daftaradmin')->with('dataadmin', $dataadmin);
     }
 
     public function tambahpegawai()
@@ -136,10 +155,57 @@ class AdminController extends Controller
             return redirect('/tambahpegawai');
         }
     }
+
+    function storeadmin(Request $request)
+    {
+        $messages = [
+            'required' => 'Kolom :attribute belum terisi.',
+            'numeric' => 'Kolom :attribute hanya boleh berisi angka.',
+            'username.regex' => 'Kolom :attribute hanya berisi huruf besar atau kecil dan spasi.',
+            'password.min' => 'Kolom :attribute minimal berisi 8 karakter.',
+            'password.max' => 'Kolom :attribute maximal berisi 50 karakter.',
+            'password.regex'=>'hanya berisi Huruf, Angka(0-9), a-z, A-Z ,karakter khusus yang Diizinkan[!@#$?&*] masing-masing Minimal 1 dan Tanpa Spasi'
+        ];
+
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->error('<b>Error!</b><br>Penambahan Admin Gagal.');
+
+        $validator = Validator::make($request->all(),[
+            'username' => 'required|regex:/^[a-zA-Z ]+$/',
+            'password' => ['required','min:8','max:50','regex:/^(?!.*\s)(?=.*[a-z])(?=.*[A-Z])(?!.*[\(\)\-\=\¡\£\_\+\`\~\.\,\<\>\/\;\:\'\"\\\|\[\]\{\}])(?=.*\d)(?=.*[\!\@\#\$\?\&\*]).*$/'],
+            // 'nomorWa' => 'required|numeric',
+        ],$messages)->validate();
+
+        
+        $data = [
+            'username' => $request->input('username'),
+            'password' => $request->input('password'),
+            // 'nomorWa' => $request->input('nomorWa'),
+        ];
+
+        if($dataadmin = user::create($data)){
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->success('<b>Berhasil!</b><br>Data Admin Sudah Ditambah.');
+
+            return redirect('/daftaradmin')->withInput();
+        }else{
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->error('<b>Error!</b><br>Penambahan Admin Gagal.');
+            return redirect('/daftaradmin');
+        }
+    }
     
     public function editpegawai(datapegawai $datapegawai)
     {
-
         return view('main.editpegawai')
                     ->with('datapegawai', $datapegawai);
     }
@@ -235,6 +301,19 @@ class AdminController extends Controller
         return redirect('/daftarpegawai');
     }
 
+    public function deleteadmin(user $dataadmin) 
+    {   
+        user::destroy($dataadmin->id);
+
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->success('<b>Berhasil!</b><br>Data Admin Sudah Dihapus.');
+        
+        return redirect('/daftaradmin');
+    }
+
     public function pesanArsip( Request $request, datapegawai $datapegawai)
     {
         if ($request->ajax()) {
@@ -242,7 +321,7 @@ class AdminController extends Controller
             $arsipPesan = arsip_pesan::where('nip', $datapegawai->nip)
                                     ->whereAny(['nama', 'header', 'body', 'footer', 'attachment','created_at'], 'LIKE', "%{$query}%")
                                     ->orderBy('created_at', 'DESC')
-                                    ->paginate(6);
+                                    ->paginate(15);
 
             return response()->json([
                 'data' => $arsipPesan->items(),
@@ -252,11 +331,31 @@ class AdminController extends Controller
 
         $arsipPesan = arsip_pesan::orderBy('created_at', 'DESC')
                                     ->where('nip', $datapegawai->nip)
-                                    ->paginate(6);
+                                    ->paginate(15);
 
         return view('main.arsip')
                 ->with('arsipPesan', $arsipPesan)
                 ->with('datapegawai', $datapegawai);
+    }
+
+    public function riwayatpesan(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = $request->get('query');
+            $arsipPesan = arsip_pesan::whereAny(['nama', 'header', 'body', 'footer', 'attachment','created_at'], 'LIKE', "%{$query}%")
+                                    ->orderBy('created_at', 'DESC')
+                                    ->paginate(15);
+
+            return response()->json([
+                'data' => $arsipPesan->items(),
+                'pagination' => (string) $arsipPesan->links()
+            ]);
+        }
+
+        $arsipPesan = arsip_pesan::orderBy('created_at', 'DESC')->paginate(15);
+
+        return view('main.riwayatpesan')
+                ->with('arsipPesan', $arsipPesan);
     }
 
     public function ubahpw()

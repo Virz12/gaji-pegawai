@@ -6,9 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{-- Bootstrap --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    {{-- JQuery  --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     
     {{-- Custom CSS --}}
     <style>
+        .end-reveal {
+            right: 1rem;
+        }
+
+        .top-reveal {
+            top: 1.9rem;
+        }
+
         @media screen and (min-width: 992px) {
             .w-lg-50 {
                 width: 50% !important;
@@ -25,23 +36,29 @@
 </head>
 <body class="min-vh-100 overflow-hidden bg-body-secondary">
     {{-- NavBar --}}
-    <nav class="navbar navbar-expand-md bg-white shadow">
+    <nav class="navbar navbar-expand-lg bg-white shadow">
         <div class="container-fluid">
             <a class="navbar-brand text-success ms-2" href="#"><strong>Whatsapp Sender</strong></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                <ul class="nav nav-underline ms-auto mb-2 mb-md-0 me-auto flex-column flex-md-row">
+                <ul class="nav nav-underline ms-auto mb-2 mb-lg-0 me-auto flex-column flex-lg-row">
                     <li class="nav-item">
                         <a class="nav-link text-black d-inline-block" href="/dashboard"><i class="fa-solid fa-comment"></i> Kirim Pesan</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-black d-inline-block" href="/daftarpegawai"><i class="fa-solid fa-users"></i> Daftar Pegawai</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-black d-inline-block" href="/daftaradmin"><i class="fa-solid fa-user-tie"></i> Daftar Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-black d-inline-block" href="/riwayatpesan"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pesan</a>
+                    </li>
                 </ul>
                 <hr>
-                <div class="d-md-flex justify-content-end me-2 mt-2 mt-md-0 mb-2 mb-md-0" style="width: 165px">
+                <div class="d-lg-flex justify-content-end me-2 mt-2 mt-lg-0 mb-2 mb-lg-0" style="width: 165px">
                     <span class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ Auth::user()->username }}
@@ -68,6 +85,9 @@
                 <div class="form-floating mb-3">
                     <input type="password" name="passwordSekarang" class="form-control border-2 @error('passwordSekarang') is-invalid @enderror" id="passwordSekarang" placeholder="" aria-label="passwordSekarang" required>
                     <label for="passwordSekarang">Password Sekarang<span class="text-danger">*</span></label>
+                    <span class="toggle-password-icon position-absolute end-0 top-50 translate-middle-y me-3" style="cursor: pointer;">
+                        <i class="fa-regular fa-eye fa-lg"></i>
+                    </span>
                     @error('passwordSekarang')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
@@ -75,6 +95,9 @@
                 <div class="form-floating mb-3">
                     <input type="password" name="password" class="form-control border-2 @error('password') is-invalid @enderror" id="passwordBaru" placeholder="" aria-label="passwordBaru" required>
                     <label  for="passwordBaru">Password Baru<span class="text-danger">*</span></label>
+                    <span class="toggle-password-icon position-absolute end-0 top-50 translate-middle-y me-3" style="cursor: pointer;">
+                        <i class="fa-regular fa-eye fa-lg"></i>
+                    </span>
                     @error('password')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
@@ -82,6 +105,9 @@
                 <div class="form-floating mb-3">
                     <input type="password" name="passwordKonfirmasi" class="form-control border-2 @error('passwordKonfirmasi') is-invalid @enderror" id="passwordKonfirmasi" placeholder="" aria-label="passwordKonfirmasi" required>
                     <label for="passwordKonfirmasi">Konfirmasi Password<span class="text-danger">*</span></label>
+                    <span class="toggle-password-icon position-absolute end-0 top-50 translate-middle-y me-3" style="cursor: pointer;">
+                        <i class="fa-regular fa-eye fa-lg"></i>
+                    </span>
                     @error('passwordKonfirmasi')
                         <div class="text-danger"><small>{{ $message }}</small></div>
                     @enderror
@@ -116,5 +142,28 @@
         </div>
     </main>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
+    {{-- JQuery Script --}}
+    <script>
+        $(document).ready(function() {
+            $('.toggle-password-icon').on('click', function() {
+                let passwordField = $(this).siblings('.form-control');
+                let passwordFieldType = passwordField.attr('type');
+                
+                if (passwordFieldType === 'password') {
+                    passwordField.attr('type', 'text');
+                    $(this).children('.fa-eye').removeClass('fa-regular').addClass('fa-solid');
+                } else {
+                    passwordField.attr('type', 'password');
+                    $(this).children('.fa-eye').removeClass('fa-solid').addClass('fa-regular');
+                }
+            });
+
+            $('.form-control').each(function() {
+                if($(this).hasClass('is-invalid')) {
+                    $(this).siblings('.toggle-password-icon').removeClass('end-0 top-50').addClass('end-reveal top-reveal');
+                }
+            })
+        });
+    </script>
 </body>
 </html>

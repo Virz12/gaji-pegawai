@@ -120,6 +120,8 @@ $(document).ready(function() {
                 }
             
                 setDefaultTime();
+
+                $('#sendBtn').prop('disabled', false);
             }
         });
     });
@@ -196,4 +198,7 @@ $(document).ready(function() {
         xhr.open('POST', $('#whatsappForm').attr('action'), true);
         xhr.send(formData);
     });
+
+    // Disable Button Send
+    $('#sendBtn').prop('disabled', true);
 });

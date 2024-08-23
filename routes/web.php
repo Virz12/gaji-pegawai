@@ -29,7 +29,12 @@ Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::get('/tambahpegawai', [AdminController::class, 'tambahpegawai'])->name('main.tambahpegawai');
     Route::get('/editpegawai/{datapegawai}', [AdminController::class, 'editpegawai'])->name('main.editpegawai');
     Route::get('/arsip/{datapegawai}', [AdminController::class, 'pesanArsip'])->name('main.arsip');
+    Route::get('/riwayatpesan', [AdminController::class, 'riwayatpesan'])->name('main.riwayatpesan');
     Route::get('/settings', [AdminController::class, 'settings'])->name('main.settings');
+    
+    Route::get('/daftaradmin', [AdminController::class, 'daftaradmin'])->name('main.daftaradmin');
+    Route::post('/daftaradmin', [AdminController::class, 'storeadmin']);
+    Route::get('/hapusadmin/{dataadmin}',[AdminController::class, 'deleteadmin'])->name('main.deleteadmin');
 
     Route::post('/dashboard/template', [WhatsappController::class, 'simpantemplate'])->name('main.simpanTemplate');
     Route::post('/dashboard/send', [WhatsappController::class, 'whatsapp'])->name('main.whatsapp');

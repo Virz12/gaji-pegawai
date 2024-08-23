@@ -23,12 +23,12 @@ $(document).ready(function() {
                         } else if (jenis_kelamin === 'Laki-laki') {
                             imgHtml = `
                                 <label class="rounded" style="background-color:rgb(47, 196, 255)">
-                                    <i class="fa-solid fa-user position-absolute top-50 start-50 translate-middle" style="font-size: 10rem;"></i>
+                                    <i class="fa-solid fa-user position-absolute top-50 start-50 translate-middle" style="font-size: 5rem;"></i>
                                 </label>`;
                         } else if (jenis_kelamin === 'Perempuan') {
                             imgHtml = `
                                 <label class="rounded" style="background-color:rgb(243, 173, 196)">
-                                    <i class="fa-solid fa-user position-absolute top-50 start-50 translate-middle" style="font-size: 10rem;"></i>
+                                    <i class="fa-solid fa-user position-absolute top-50 start-50 translate-middle" style="font-size: 5rem;"></i>
                                 </label>`;
                         }
 

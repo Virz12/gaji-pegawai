@@ -107,6 +107,12 @@ class WhatsappController extends Controller
 
         $pesan = $header . "\n\n" . $body . "\n\n" . $footer;
 
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->error('<b>Error!</b><br>Nomor tersebut belum terdaftar');
+
         try {
             if ($request->hasFile('attachment')) {
                 $file = $request->file('attachment');
