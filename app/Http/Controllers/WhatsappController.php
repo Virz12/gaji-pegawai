@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use GuzzleHttp\Client;
-
 use App\Models\user;
 use App\Models\arsip_pesan;
 use App\Models\template;
@@ -22,7 +20,6 @@ use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Message\CtaUrl\TitleHeader;
 
 
-
 class WhatsappController extends Controller
 {
     protected $whatsapp;
@@ -30,10 +27,6 @@ class WhatsappController extends Controller
     public function __construct()
     {
         $config = config_api::first();
-
-        if (!$config) {
-            throw new \Exception('WhatsApp configuration not found.');
-        }
 
         $this->whatsapp = new WhatsAppCloudApi([
             'from_phone_number_id' => $config->id_nomor,
@@ -114,70 +107,84 @@ class WhatsappController extends Controller
 
         $pesan = $header . "\n\n" . $body . "\n\n" . $footer;
 
-        if ($request->hasFile('attachment')) {
-            $file = $request->file('attachment');
-            $path = $file->store('public/attachments');
-            $filePath = storage_path('app/' . $path);
+        try {
+            if ($request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                $path = $file->store('public/attachments');
+                $filePath = storage_path('app/' . $path);
+                            
+                $response = $this->whatsapp->uploadMedia($filePath);
+                $media_id = new MediaObjectID($response->decodedBody()['id']);
+
+                $pesanType = $request->input('pesan_type');
+                $isSent = false;            
+
+                if ($pesanType === 'gambar') {
+                    $isSent = $this->whatsapp->sendImage(
+                        $nomorWa, 
+                        $media_id, 
+                        $pesan);
+                } elseif ($pesanType === 'dokumen') {
+                    $isSent = $this->whatsapp->sendDocument(
+                        $nomorWa, 
+                        $media_id, 
+                        $file->getClientOriginalName(),
+                        $pesan);
+                }
+
+                if ($isSent) {
+                    $newFileName = File::name($file->getClientOriginalName()) . time() . '.' . $file->extension();
+                    $newPath = public_path('attachments/' . $newFileName);
             
-            $response = $this->whatsapp->uploadMedia($filePath);
-            $media_id = new MediaObjectID($response->decodedBody()['id']);
+                    File::move(storage_path('app/' . $path), $newPath);
+            
+                    $arsipPesan = arsip_pesan::create([
+                        'nip' => $nip,
+                        'nama' => $nama,
+                        'nomorWa' => $nomorWa,
+                        'header' => $header,
+                        'body' => $body,
+                        'footer' => $footer,
+                        'attachment' => $newFileName
+                    ]);
+            
+                    flash()
+                    ->killer(true)
+                    ->layout('bottomRight')
+                    ->timeout(3000)
+                    ->success('<b>Berhasil!</b><br>Pesan Terkirim.');
+                }
+            }else{            
+                $this->whatsapp->sendTextMessage($nomorWa, $pesan);
 
-            $pesanType = $request->input('pesan_type');
-            $isSent = false;            
-
-            if ($pesanType === 'gambar') {
-                $isSent = $this->whatsapp->sendImage(
-                    $nomorWa, 
-                    $media_id, 
-                    $pesan);
-            } elseif ($pesanType === 'dokumen') {
-                $isSent = $this->whatsapp->sendDocument(
-                    $nomorWa, 
-                    $media_id, 
-                    $file->getClientOriginalName(),
-                    $pesan);
-            }
-
-            if ($isSent) {
-                $newFileName = File::name($file->getClientOriginalName()) . time() . '.' . $file->extension();
-                $newPath = public_path('attachments/' . $newFileName);
-        
-                File::move(storage_path('app/' . $path), $newPath);
-        
-                $arsipPesan = arsip_pesan::create([
+                arsip_pesan::create([
                     'nip' => $nip,
                     'nama' => $nama,
                     'nomorWa' => $nomorWa,
                     'header' => $header,
                     'body' => $body,
-                    'footer' => $footer,
-                    'attachment' => $newFileName
+                    'footer' => $footer
                 ]);
-        
+            
                 flash()
                 ->killer(true)
                 ->layout('bottomRight')
                 ->timeout(3000)
                 ->success('<b>Berhasil!</b><br>Pesan Terkirim.');
             }
-            
-        }else{
-            $this->whatsapp->sendTextMessage($nomorWa, $pesan);
+        } catch (\Netflie\WhatsAppCloudApi\Response\ResponseException $e) {
 
-            arsip_pesan::create([
-                'nip' => $nip,
-                'nama' => $nama,
-                'nomorWa' => $nomorWa,
-                'header' => $header,
-                'body' => $body,
-                'footer' => $footer
-            ]);
-        
-            flash()
-            ->killer(true)
-            ->layout('bottomRight')
-            ->timeout(3000)
-            ->success('<b>Berhasil!</b><br>Pesan Terkirim.');
+            $errorData = $e->responseData();
+            $errorCode = $e->httpStatusCode(); 
+            // Periksa apakah kode kesalahan adalah 190
+            if (isset($errorData['error']['code']) && $errorData['error']['code'] == 190) {
+
+                flash()
+                    ->killer(true)
+                    ->layout('bottomRight')
+                    ->timeout(5000)
+                    ->error('<b>Gagal!</b><br>Token expired atau tidak valid.');
+            } 
         }
 
         return redirect('/dashboard');

@@ -367,7 +367,7 @@ class AdminController extends Controller
             ->layout('bottomRight')
             ->timeout(3000)
             ->success('<b>Berhasil!</b><br>Konfigurasi Diubah.');
-            return redirect('/dashboard');
+            return redirect('/logout');
         }else {
             flash()
             ->killer(true)

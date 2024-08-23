@@ -176,7 +176,7 @@
                         <div class="row g-2">
                             <div class="col-xl-9">
                                 <div class="input-group">
-                                    <label class="input-group-text" for="nama_template">Template Text</label>
+                                    <label class="input-group-text" for="nama_template">Nama Template</label>
                                     <input class="form-control rounded-end rounded-sm-none  @error('nama_template') is-invalid @enderror" name="nama_template" id="nama_template" type="text"  placeholder="'NamaTemplate1'" autocomplete="off">                                
                                     <button class="input-group-text dropdown-toggle w-100 w-sm-auto rounded rounded-sm-end mt-2 mt-sm-0" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
                                         Pilih Template
@@ -184,7 +184,7 @@
                                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-scrollable" aria-labelledby="templateSelectBtn">
                                         @forelse ($datatemplate as $template)
                                             <li class="d-flex justify-content-between">
-                                                <a class="dropdown-item" href="#" data-value="{{ $template->pesan }}" data-fot="{{ $template->footer }}" data-name="{{ $template->nama_template }}">{{ $template->nama_template }}</a>
+                                                <a class="dropdown-item" href="#" data-value="{{ $template->body }}" data-fot="{{ $template->footer }}" data-name="{{ $template->nama_template }}">{{ $template->nama_template }}</a>
                                                 <a class=" py-1 px-3" role="button" data-bs-toggle="modal" data-bs-target="#Hapus{{ $template->nama_template }}"><i class="fa-solid fa-trash-can fs-6 text-danger"></i></a>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
@@ -255,7 +255,6 @@
                 </form>
             </div>
         </section> 
-
         {{-- Confirmation Modal --}}
         @forelse ( $datatemplate as $template)
             <div class="modal fade" id="Hapus{{ $template->nama_template }}" tabindex="-1" aria-labelledby="Hapus" aria-hidden="true">
