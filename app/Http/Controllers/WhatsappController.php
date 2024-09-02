@@ -40,6 +40,7 @@ class WhatsappController extends Controller
     {
         $messages = [
             'required' => 'Kolom :attribute belum terisi.',
+            'body.required' => 'Kolom pesan belum terisi.',
             'pesan_type.required' => 'Silakan pilih tipe pesan Gambar atau Dokumen ',
             'numeric' => ' :attribute hanya berisi angka',
             'nama.regex' => 'Kolom :attribute hanya berisi huruf besar atau kecil dan spasi.',
@@ -267,5 +268,13 @@ class WhatsappController extends Controller
         ->success('<b>Berhasil!</b><br>Template Dihapus.');
         
         return redirect('/dashboard');
+    }
+
+    function download(arsip_pesan $arsip_pesan)
+    {        
+        $relativePath = $arsip_pesan->attachment;   
+        $fullPath = public_path("attachments/" . $relativePath);         
+
+        return response()->download($fullPath, "$relativePath");        
     }
 }

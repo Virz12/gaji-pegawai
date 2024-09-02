@@ -6,6 +6,7 @@ use App\Models\user;
 use App\Models\template;
 use App\Models\datapegawai;
 use App\Models\arsip_pesan;
+use App\Models\config_api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
 
-class AdminController extends Controller
+class SuperAdminController extends Controller
 {
     public function index(Request $request, datapegawai $datapegawai)
     {   
@@ -30,7 +31,7 @@ class AdminController extends Controller
 
         $datatemplate = template::orderBy('nama_template','ASC')->get();
         
-        return view('Admin.admindashboard')
+        return view('Super-Admin.dashboard')
                     ->with('datatemplate', $datatemplate)
                     ->with('datapegawai', $datapegawai);
     }
@@ -61,7 +62,7 @@ class AdminController extends Controller
 
         $datapegawai = datapegawai::orderBy('updated_at','DESC')->paginate(12);
 
-        return view('Admin.admindaftarpegawai')->with('datapegawai', $datapegawai);
+        return view('Super-Admin.daftarpegawai')->with('datapegawai', $datapegawai);
     }
 
     public function daftaradmin(Request $request)
@@ -80,13 +81,13 @@ class AdminController extends Controller
 
         $dataadmin = user::orderBy('created_at','DESC')->paginate(12);
 
-        return view('Admin.dataadmin')
+        return view('Super-Admin.daftaradmin')
                     ->with('dataadmin', $dataadmin);
     }
 
     public function tambahpegawai()
     {
-        return view('Admin.admintambahpegawai');
+        return view('Super-Admin.tambahpegawai');
     }
 
     function storepegawai(Request $request)
@@ -145,20 +146,127 @@ class AdminController extends Controller
             ->timeout(3000)
             ->success('<b>Berhasil!</b><br>Data Pegawai Sudah Ditambah.');
 
-            return redirect('/admindaftarpegawai')->withInput();
+            return redirect('/daftarpegawai')->withInput();
         }else{
             flash()
             ->killer(true)
             ->layout('bottomRight')
             ->timeout(3000)
             ->error('<b>Error!</b><br>Penambahan Pegawai Gagal.');
-            return redirect('/admintambahpegawai');
+            return redirect('/tambahpegawai');
         }
     }
+
+    function storeadmin(Request $request)
+    {
+        $messages = [
+            'required' => 'Kolom :attribute belum terisi.',
+            'numeric' => 'Kolom :attribute hanya boleh berisi angka.',
+            'username.regex' => 'Kolom :attribute hanya berisi huruf besar atau kecil dan spasi.',
+            'password.min' => 'Kolom :attribute minimal berisi 8 karakter.',
+            'password.max' => 'Kolom :attribute maximal berisi 50 karakter.',
+            'password.regex'=>'hanya berisi Huruf, Angka(0-9), a-z, A-Z ,karakter khusus yang Diizinkan[!@#$?&*] masing-masing Minimal 1 dan Tanpa Spasi'
+        ];
+
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->error('<b>Error!</b><br>Penambahan Admin Gagal.');
+
+        $validator = Validator::make($request->all(),[
+            'username' => 'required|regex:/^[a-zA-Z ]+$/',
+            'password' => ['required','min:8','max:50','regex:/^(?!.*\s)(?=.*[a-z])(?=.*[A-Z])(?!.*[\(\)\-\=\¡\£\_\+\`\~\.\,\<\>\/\;\:\'\"\\\|\[\]\{\}])(?=.*\d)(?=.*[\!\@\#\$\?\&\*]).*$/'],
+            'role' => 'required',
+            // 'nomorWa' => 'required|numeric',
+        ],$messages)->validate();
+
+        
+        $data = [
+            'username' => $request->input('username'),
+            'password' => $request->input('password'),
+            'role' => $request->input('role'),
+            // 'nomorWa' => $request->input('nomorWa'),
+        ];
+
+        if($dataadmin = user::create($data)){
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->success('<b>Berhasil!</b><br>Data Admin Sudah Ditambah.');
+
+            return redirect('/daftaradmin')->withInput();
+        }else{
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->error('<b>Error!</b><br>Penambahan Admin Gagal.');
+            return redirect('/daftaradmin');
+        }
+    }
+
+    public function editadmin(user $user)
+    {
+        return view('Super-Admin.editadmin')
+                    ->with('user', $user);
+    }
+
+    function updateadmin(user $user,Request $request)
+    {
+        $messages = [
+            'required' => 'Kolom :attribute belum terisi.',
+            'numeric' => 'Kolom :attribute hanya boleh berisi angka.',
+            'username.regex' => 'Kolom :attribute hanya berisi huruf besar atau kecil dan spasi.',
+            'password.min' => 'Kolom :attribute minimal berisi 8 karakter.',
+            'password.max' => 'Kolom :attribute maximal berisi 50 karakter.',
+            'password.regex'=>'hanya berisi Huruf, Angka(0-9), a-z, A-Z ,karakter khusus yang Diizinkan[!@#$?&*] masing-masing Minimal 1 dan Tanpa Spasi'
+        ];
+
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->error('<b>Error!</b><br> '. $user->username .' Gagal Diupdate.');
+
+        $validator = Validator::make($request->all(),[
+            'username' => 'required|regex:/^[a-zA-Z ]+$/',
+            'password' => ['required','min:8','max:50','regex:/^(?!.*\s)(?=.*[a-z])(?=.*[A-Z])(?!.*[\(\)\-\=\¡\£\_\+\`\~\.\,\<\>\/\;\:\'\"\\\|\[\]\{\}])(?=.*\d)(?=.*[\!\@\#\$\?\&\*]).*$/'],
+            'role' => 'required',
+            // 'nomorWa' => 'required|numeric',
+        ],$messages)->validate();
+
+        
+        $data = [
+            'username' => $request->input('username'),
+            'password' => $request->input('password'),
+            'role' => $request->input('role'),
+            // 'nomorWa' => $request->input('nomorWa'),
+        ];
+
+        if($user->update($data)){
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->success('<b>Berhasil!</b><br>Data '. $user->username .' Diupdate.');
+
+            return redirect('/daftaradmin')->withInput();
+        }else{
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->error('<b>Error!</b><br> '. $user->username .' Gagal Diupdate.');
+            return redirect('/editadmin');
+        }
+    }
+
     
     public function editpegawai(datapegawai $datapegawai)
     {
-        return view('Admin.admineditpegawai')
+        return view('Super-Admin.editpegawai')
                     ->with('datapegawai', $datapegawai);
     }
 
@@ -224,14 +332,14 @@ class AdminController extends Controller
             ->layout('bottomRight')
             ->timeout(3000)
             ->success('<b>Berhasil!</b><br>Data Pegawai Diperbarui.');
-            return redirect('/admindaftarpegawai');
+            return redirect('/daftarpegawai');
         }else {
             flash()
             ->killer(true)
             ->layout('bottomRight')
             ->timeout(3000)
             ->error('<b>Error!</b><br>Pegawai Gagal Diperbarui.');
-            return redirect('/admineditpegawai');
+            return redirect('/editpegawai');
         }
         
     }
@@ -250,7 +358,20 @@ class AdminController extends Controller
         ->timeout(3000)
         ->success('<b>Berhasil!</b><br>Data Pegawai Sudah Dihapus.');
         
-        return redirect('/admindaftarpegawai');
+        return redirect('/daftarpegawai');
+    }
+
+    public function deleteadmin(user $dataadmin) 
+    {   
+        user::destroy($dataadmin->id);
+
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->success('<b>Berhasil!</b><br>Data Admin Sudah Dihapus.');
+        
+        return redirect('/daftaradmin');
     }
 
     public function pesanArsip( Request $request, datapegawai $datapegawai)
@@ -272,7 +393,7 @@ class AdminController extends Controller
                                     ->where('nip', $datapegawai->nip)
                                     ->paginate(15);
 
-        return view('Admin.adminarsip')
+        return view('Super-Admin.arsip')
                 ->with('arsipPesan', $arsipPesan)
                 ->with('datapegawai', $datapegawai);
     }
@@ -293,13 +414,13 @@ class AdminController extends Controller
 
         $arsipPesan = arsip_pesan::orderBy('created_at', 'DESC')->paginate(15);
 
-        return view('Admin.adminriwayatpesan')
+        return view('Super-Admin.riwayatpesan')
                 ->with('arsipPesan', $arsipPesan);
     }
 
     public function ubahpw()
     {
-        return view('Admin.adminubahpassword');
+        return view('Super-Admin.ubahpassword');
     }
 
     function updatePassword(Request $request)
@@ -340,7 +461,7 @@ class AdminController extends Controller
                 ->timeout(3000)
                 ->error('<b>Error!</b><br>Perubahan Password Gagal.');
 
-                return redirect('/adminubahpassword')->withErrors([
+                return redirect('/ubahpassword')->withErrors([
                     'password' => 'Password tidak sama',
                     'passwordKonfirmasi' => 'Password tidak sama'
                 ])->withInput();
@@ -352,7 +473,7 @@ class AdminController extends Controller
             ->timeout(3000)
             ->error('<b>Error!</b><br>Perubahan Password Gagal.');
             
-            return redirect('/adminubahpassword')->withErrors(['passwordSekarang' => 'Password tidak sesuai'])->withInput();
+            return redirect('/ubahpassword')->withErrors(['passwordSekarang' => 'Password tidak sesuai'])->withInput();
         }
         flash()
         ->killer(true)
@@ -360,6 +481,87 @@ class AdminController extends Controller
         ->timeout(3000)
         ->success('<b>Berhasil!</b><br>Password Sudah Diubah.');
 
-        return redirect('/adminubahpassword');
+        return redirect('/ubahpassword');
+    }
+
+    function settings() 
+    {
+        return view('Super-Admin.settings');
+    }
+
+    function settingsupdate(Request $request) 
+    {
+        $messages = [
+            'required' => 'Kolom :attribute belum terisi.',
+            'numeric' => 'Kolom :attribute hanya berisi angka.',
+            'required' => 'Kolom :attribute belum terisi.',
+            'token_api.regex' => 'selain huruf besar atau kecil dan angka tidak diizinkan.',
+        ];
+
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->error('<b>Error!</b><br>Konfigurasi Gagal.');
+
+        $request->validate([
+            'id_nomor' => 'required|numeric',
+            'id_bisnis' => 'required|numeric',
+            'token_api' => ['required','regex:/^(?!.*\s)(?!.*[\(\)\-\=\¡\£\_\+\`\~\.\,\<\>\/\;\:\'\"\\\|\[\]\{\}]).*$/'],
+        ] ,$messages);
+    
+        $config = config_api::first();
+    
+        if (!$config) {
+            $config = new config_api();
+        }
+        
+        $config->id_nomor = $request->input('id_nomor');
+        $config->id_bisnis = $request->input('id_bisnis');
+        $config->token_api = $request->input('token_api');
+
+        if($config->save()){
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->success('<b>Berhasil!</b><br>Konfigurasi Diubah.');
+            return redirect('/logout');
+        }else {
+            flash()
+            ->killer(true)
+            ->layout('bottomRight')
+            ->timeout(3000)
+            ->error('<b>Error!</b><br>Konfigurasi Gagal.');
+            return redirect('/settings');
+        }                
+    }
+
+    public function aktif(string $id)
+    {
+        $user = user::where('id', $id)->first();
+        user::where('id',$id)->update(['status' => 'Aktif']);
+
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->success('<b>Berhasil!</b><br>Status '. $user->username .' Diubah Menjadi Aktif.');
+
+        return redirect('/daftaradmin');
+    }
+
+    public function nonaktif(string $id)
+    {
+        $user = user::where('id', $id)->first();
+        user::where('id',$id)->update(['status' => 'Nonaktif']);
+
+        flash()
+        ->killer(true)
+        ->layout('bottomRight')
+        ->timeout(3000)
+        ->success('<b>Berhasil!</b><br>Status '. $user->username .' Diubah Menjadi Nonaktif.');
+
+        return redirect('/daftaradmin');
     }
 }

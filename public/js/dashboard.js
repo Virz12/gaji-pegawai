@@ -78,7 +78,7 @@ $(document).ready(function() {
                     const backgroundColor = kelamin == 'Laki-laki' ? 'rgb(47, 196, 255)' : 'rgb(243, 173, 196)';
                     profilHtml = `
                         <label class="rounded " style="background-color:${backgroundColor}">
-                            <i class="fa-solid fa-user  position-absolute top-50 start-50 translate-middle" style="font-size: 10rem;"></i>                                
+                            <i class="fa-solid fa-user  position-absolute top-50 start-50 translate-middle" style="font-size: 7rem;"></i>                                
                         </label>
                     `
                 }

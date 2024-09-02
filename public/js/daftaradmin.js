@@ -6,22 +6,26 @@ $(document).ready(function() {
     }
 
     // Show Password
-    $('#togglePassword').on('click', function() {
-        let passwordField = $('#password');
+    $(document).on('click', '.toggle-password-icon', function() {
+        let passwordField = $(this).siblings('.form-control');
         let passwordFieldType = passwordField.attr('type');
         
         if (passwordFieldType === 'password') {
             passwordField.attr('type', 'text');
-            $('#reveal-password').removeClass('fa-regular').addClass('fa-solid');
+            $(this).children('.fa-eye').removeClass('fa-regular').addClass('fa-solid');
         } else {
             passwordField.attr('type', 'password');
-            $('#reveal-password').removeClass('fa-solid').addClass('fa-regular');
+            $(this).children('.fa-eye').removeClass('fa-solid').addClass('fa-regular');
         }
     });
 
-    if($('#password').hasClass('is-invalid')) {
-        $('#togglePassword').removeClass('end-0 top-50').addClass('end-reveal top-reveal');
-    }
+    $('.form-control').each(function() {
+        if($(this).hasClass('is-invalid')) {
+            $(this).siblings('.toggle-password-icon').removeClass('end-0 top-50').addClass('end-reveal top-reveal');
+        }
+    })
+
+    
 
     // Fetch Data Pegawai
     function fetchData(query = '', page = 1) {
@@ -36,21 +40,51 @@ $(document).ready(function() {
 
                 if (data.length > 0) {
                     data.forEach(admin => {
+                        let status = admin.status;
+                        let aktifHtml = '';
+                        let nonaktifHtml = '';
+
+                        if ( status === 'Aktif' ){
+                            aktifHtml = `<button class="btn fw-normal  rounded-pill btn-success fs-6 w-50 me-1" >Aktif</button>`;
+                        } else {
+                            aktifHtml = `<a href="/aktif/${admin.id }" class="text-decoration-none  w-50">
+                                            <button type="submit" class=" btn fw-normal  rounded-pill btn-outline-success fs-6 w-100 me-1">Aktif</button></a>`;
+                        }
+                        if ( status === 'Nonaktif' ){
+                            nonaktifHtml = `<button type="submit" class="btn fw-normal  rounded-pill btn-danger fs-6 w-50 ms-1" >Nonakktif</button>`;
+                        } else {
+                            nonaktifHtml = `<a href="/nonaktif/${admin.id }" class="text-decoration-none w-50">
+                                                    <button type="submit" class=" btn fw-normal  rounded-pill btn-outline-danger fs-6 w-100 ms-1">Nonaktif</button></a>`;
+                        }
+
+
                         let adminHtml = `
                             <div class="col">
                                 <div class="card">
                                     <div class="overflow-hidden rounded">
-                                        <ul class="list-group list-group-flush">                
+                                        <ul class="list-group list-group-flush">
+                                            <div class="d-flex justify-content-end pt-2 pe-2">
+                                                <a  href="/editadmin/${admin.id}" class="btn btn-warning w-15 " ><i class="fa-solid fa-pencil text-white"></i></a>
+                                                <a data-bs-toggle="modal" data-bs-target="#Hapus${admin.id}" class="btn btn-danger w-15  ms-1"><i class="fa-solid fa-trash"></i></a>
+                                            </div>                   
                                             <li class="list-group-item">
                                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">Nama Admin</h4>
                                                 <h5 class="card-text fw-normal">${admin.username}</h5>
                                             </li>
                                             <li class="list-group-item">
                                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">Nomor WhatsApp</h4>
-                                                <h5 class="card-text fw-normal"></h5>
+                                                <h5 class="card-text fw-normal">453534535</h5>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">Role</h4>
+                                                <h5 class="card-text fw-normal">${admin.role}</h5>
                                             </li>
                                             <li class="list-group-item ">
-                                                <a data-bs-toggle="modal" data-bs-target="#Hapus${admin.id}" class="btn btn-danger w-100"><i class="fa-solid fa-trash"></i> Hapus</a>
+                                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">Status</h4>
+                                                <div class="d-flex justify-content-between mt-3">
+                                                ${aktifHtml}
+                                                ${nonaktifHtml}
+                                                </div>
                                             </li>                                                
                                         </ul>
                                     </div>
@@ -86,7 +120,7 @@ $(document).ready(function() {
                 } else {
                     $('#pegawai-list').append('<h2 class="m-auto text-secondary opacity-75 text-center">Data Kosong</h2>');
                 }
-            }
+            }            
         });
     }
 

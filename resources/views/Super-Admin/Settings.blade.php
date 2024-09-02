@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {{-- Bootstrap --}}
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    {{-- Custom CSS --}}
+    <style>
+        @media screen and (min-width: 992px) {
+            .w-lg-50 {
+                width: 50% !important;
+            }
+        }
+
+        @media screen and (min-width: 1400px) {
+            .w-xxl-25 {
+                width: 25% !important;
+            }
+        }
+
+        /* Remove Arrow on Number Input */
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+    <title>{{ config('app.name') }} | Settings</title>
+</head>
+<body class="min-vh-100 bg-body-secondary">
+    {{-- NavBar --}}
+    <nav class="navbar navbar-expand-lg bg-white shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand text-success ms-2" href="#"><strong>Whatsapp Sender</strong></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <ul class="nav nav-underline ms-auto mb-2 mb-lg-0 me-auto flex-column flex-lg-row">
+                    <li class="nav-item">
+                        <a class="nav-link text-black d-inline-block" href="/dashboard"><i class="fa-solid fa-comment"></i> Kirim Pesan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-black d-inline-block" href="/daftarpegawai"><i class="fa-solid fa-users"></i> Daftar Pegawai</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-black d-inline-block" href="/daftaradmin"><i class="fa-solid fa-user-tie"></i> Daftar Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-black d-inline-block" href="/riwayatpesan"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pesan</a>
+                    </li>
+                </ul>
+                <hr>
+                <div class="d-lg-flex justify-content-end me-2 mt-2 mt-lg-0 mb-2 mb-lg-0" style="width: 165px">
+                    <span class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ Auth::user()->username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/ubahpassword"><i class="fa-solid fa-lock me-2"></i> Ubah Password</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/settings"><i class="fa-solid fa-gear me-2"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket me-2"></i> Log Out</a></li>
+                        </ul>
+                    </span>                
+                </div>
+            </div>
+        </div>
+    </nav>
+    {{-- Main Card --}}
+    <main class="d-flex align-items-center justify-content-center" style="height: calc(100vh - 58px)">
+        <div class="card p-3 w-75 w-lg-50 w-xxl-25">
+            <h4 class="mb-3"><strong>Settings</strong></h4>
+            <form action="" method="POST">
+                @csrf
+                <div class="form-floating mb-3">
+                    <input type="number" name="id_nomor" class="form-control border-2 @error('id_nomor') is-invalid @enderror" id="id_nomor" placeholder="" aria-label="Nomor Telpon API" autocomplete="off" required>
+                    <label for="phone_api">ID Nomor Telepon<span class="text-danger">*</span></label>
+                    @error('id_nomor')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="number" name="id_bisnis" class="form-control border-2 @error('id_bisnis') is-invalid @enderror" id="id_bisnis" placeholder="" aria-label="Bisnis ID" autocomplete="off" required>
+                    <label for="token_api">ID Bisnis<span class="text-danger">*</span></label>
+                    @error('id_bisnis')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" name="token_api" class="form-control border-2 @error('token_api') is-invalid @enderror" id="token_api" placeholder="" aria-label="Token API" autocomplete="off" required>
+                    <label for="business_id">Token API<span class="text-danger">*</span></label>
+                    @error('token_api')
+                        <div class="text-danger"><small>{{ $message }}</small></div>
+                    @enderror
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <a href="/dashboard"class="btn btn-secondary w-100">Kembali</a>
+                    </div>
+                    <div class="col-6">
+                        <a class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#konfirmasiButton">Ubah</a>
+                    </div>
+                </div>
+                {{-- Confirmation Modal --}}
+                <div class="modal fade" id="konfirmasiButton" tabindex="-1" aria-labelledby="ubahLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="ubahLabel">Ubah Settings API</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <strong>Apakah anda yakin ingin mengubah Data ini?</strong>
+                                <br>
+                                <strong class="text-danger">Website akan mulai ulang setelah konfirmasi</strong>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                                <button type="submit" class="btn btn-success">Ubah</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+    {{-- Script --}}
+    <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
+</body>
+</html>

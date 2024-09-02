@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\WhatsappController;
+use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,35 +17,69 @@ Route::middleware(['preventBackHistory','guest'])->group(function () {
 
 Route::middleware(['preventBackHistory','auth'])->group(function () {
     Route::get('/home', function() {        
-            return redirect('/dashboard');        
+        if (Auth::user()->role == 'Super-Admin') {
+            return redirect ('/dashboard');
+        }elseif (Auth::user()->role == 'Admin') {
+            return redirect ('/admindashboard');
+        }       
     });
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
-Route::middleware(['preventBackHistory','auth'])->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('main.dashboard');
-    Route::get('/datapegawai', [AdminController::class, 'datapegawai'])->name('main.datapegawai');
-    Route::get('/ubahpassword', [AdminController::class, 'ubahpw'])->name('main.ubahpassword');
-    Route::get('/daftarpegawai', [AdminController::class, 'daftarpegawai'])->name('main.daftarpegawai');
-    Route::get('/tambahpegawai', [AdminController::class, 'tambahpegawai'])->name('main.tambahpegawai');
-    Route::get('/editpegawai/{datapegawai}', [AdminController::class, 'editpegawai'])->name('main.editpegawai');
-    Route::get('/arsip/{datapegawai}', [AdminController::class, 'pesanArsip'])->name('main.arsip');
-    Route::get('/riwayatpesan', [AdminController::class, 'riwayatpesan'])->name('main.riwayatpesan');
-    Route::get('/settings', [AdminController::class, 'settings'])->name('main.settings');
-    
-    Route::get('/daftaradmin', [AdminController::class, 'daftaradmin'])->name('main.daftaradmin');
-    Route::post('/daftaradmin', [AdminController::class, 'storeadmin']);
-    Route::get('/hapusadmin/{dataadmin}',[AdminController::class, 'deleteadmin'])->name('main.deleteadmin');
 
-    Route::post('/dashboard/template', [WhatsappController::class, 'simpantemplate'])->name('main.simpanTemplate');
-    Route::post('/dashboard/send', [WhatsappController::class, 'whatsapp'])->name('main.whatsapp');
-    Route::put('/ubahpassword/update', [AdminController::class, 'updatePassword'])->name('main.updatepassword');
-    Route::post('/tambahpegawai', [AdminController::class, 'storepegawai']);
-    Route::put('/updatepegawai/{datapegawai}', [AdminController::class, 'updatepegawai'])->name('main.updatepegawai');
-    Route::get('/hapuspegawai/{datapegawai}',[AdminController::class, 'deletepegawai'])->name('main.delete');
-    Route::post('/settings', [AdminController::class, 'settingsupdate']);
-    Route::get('/hapustemplate/{template:id}',[WhatsappController::class, 'deletetemplate'])->name('main.templatedelete');
+//Super Admin
+Route::middleware(['preventBackHistory','auth','userAccess:Super-Admin'])->group(function () {
+    Route::get('/dashboard', [SuperAdminController::class, 'index'])->name('Super-Admin.dashboard');
+    Route::get('/datapegawai', [SuperAdminController::class, 'datapegawai'])->name('Super-Admin.datapegawai');
+    Route::get('/ubahpassword', [SuperAdminController::class, 'ubahpw'])->name('Super-Admin.ubahpassword');
+    Route::get('/daftarpegawai', [SuperAdminController::class, 'daftarpegawai'])->name('Super-Admin.daftarpegawai');
+    Route::get('/tambahpegawai', [SuperAdminController::class, 'tambahpegawai'])->name('Super-Admin.tambahpegawai');
+    Route::get('/editpegawai/{datapegawai}', [SuperAdminController::class, 'editpegawai'])->name('Super-Admin.editpegawai');
+    Route::get('/arsip/{datapegawai}', [SuperAdminController::class, 'pesanArsip'])->name('Super-Admin.arsip');
+    Route::get('/riwayatpesan', [SuperAdminController::class, 'riwayatpesan'])->name('Super-Admin.riwayatpesan');
+    Route::get('/settings', [SuperAdminController::class, 'settings'])->name('Super-Admin.settings');
+    Route::get('/editadmin/{user}', [SuperAdminController::class, 'editadmin'])->name('Super-Admin.editadmin');
+    
+    Route::get('/daftaradmin', [SuperAdminController::class, 'daftaradmin'])->name('Super-Admin.daftaradmin');
+    Route::post('/tambahadmin', [SuperAdminController::class, 'storeadmin'])->name('Super-Admin.tambahadmin');
+    Route::put('/updateadmin/{user}', [SuperAdminController::class, 'updateadmin'])->name('Super-Admin.updateadmin');
+    Route::get('/hapusadmin/{dataadmin}',[SuperAdminController::class, 'deleteadmin'])->name('Super-Admin.deleteadmin');
+    Route::get('/aktif/{user:id}',[SuperAdminController::class, 'aktif']);
+    Route::get('/nonaktif/{user:id}',[SuperAdminController::class, 'nonaktif']);
+
+    Route::post('/dashboard/template', [WhatsappController::class, 'simpantemplate'])->name('Super-Admin.simpanTemplate');
+    Route::post('/dashboard/send', [WhatsappController::class, 'whatsapp'])->name('Super-Admin.whatsapp');
+    Route::put('/ubahpassword/update', [SuperAdminController::class, 'updatePassword'])->name('Super-Admin.updatepassword');
+    Route::post('/tambahpegawai', [SuperAdminController::class, 'storepegawai']);
+    Route::put('/updatepegawai/{datapegawai}', [SuperAdminController::class, 'updatepegawai'])->name('Super-Admin.updatepegawai');
+    Route::get('/hapuspegawai/{datapegawai}',[SuperAdminController::class, 'deletepegawai'])->name('Super-Admin.delete');
+    Route::post('/settings', [SuperAdminController::class, 'settingsupdate']);
+    Route::get('/hapustemplate/{template:id}',[WhatsappController::class, 'deletetemplate'])->name('Super-Admin.templatedelete');
 });
+
+//Admin
+Route::middleware(['preventBackHistory','auth','userAccess:Admin'])->group(function () {
+    Route::get('/admindashboard', [AdminController::class, 'index'])->name('Admin.admindashboard');
+    Route::get('/pegawai', [AdminController::class, 'datapegawai'])->name('Admin.datapegawai');
+    Route::get('/adminubahpassword', [AdminController::class, 'ubahpw'])->name('Admin.adminubahpassword');
+    Route::get('/admindaftarpegawai', [AdminController::class, 'daftarpegawai'])->name('Admin.admindaftarpegawai');
+    Route::get('/admintambahpegawai', [AdminController::class, 'tambahpegawai'])->name('Admin.admintambahpegawai');
+    Route::get('/admineditpegawai/{datapegawai}', [AdminController::class, 'editpegawai'])->name('Admin.admineditpegawai');
+    Route::get('/adminarsip/{datapegawai}', [AdminController::class, 'pesanArsip'])->name('Admin.adminarsip');
+    Route::get('/adminriwayatpesan', [AdminController::class, 'riwayatpesan'])->name('Admin.adminriwayatpesan');
+    
+    Route::get('/dataadmin', [AdminController::class, 'daftaradmin'])->name('Admin.dataadmin');
+
+    Route::post('/dadmindashboar/template', [WhatsappController::class, 'simpantemplate'])->name('Admin.simpanTemplate');
+    Route::post('/admindashboard/send', [WhatsappController::class, 'whatsapp'])->name('Admin.whatsapp');
+    Route::put('/adminubahpassword/update', [AdminController::class, 'updatePassword'])->name('Admin.updatepassword');
+    Route::post('/admintambahpegawai', [AdminController::class, 'storepegawai']);
+    Route::put('/adminupdatepegawai/{datapegawai}', [AdminController::class, 'updatepegawai'])->name('Admin.updatepegawai');
+    Route::get('/adminhapuspegawai/{datapegawai}',[AdminController::class, 'deletepegawai'])->name('Admin.delete');
+    Route::get('/adminhapustemplate/{template:id}',[WhatsappController::class, 'deletetemplate'])->name('Admin.templatedelete');
+});
+
+
 Route::middleware(['auth'])->group(function () {
-    Route::get('/download/{arsip_pesan}', [AdminController::class, 'download'])->name('file.download');
+    Route::get('/download/{arsip_pesan}', [WhatsappController::class, 'download'])->name('file.download');
 });

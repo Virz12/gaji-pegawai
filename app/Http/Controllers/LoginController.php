@@ -26,7 +26,7 @@ class LoginController extends Controller
         ];
 
         $request->validate ([
-            'username' => 'required|regex:/^[a-zA-Z]+$/|max:15|lowercase',
+            'username' => 'required|regex:/^[a-zA-Z]+$/|max:15',
             'password' => 'required|max:50',
         ],$messages);
 
@@ -37,8 +37,20 @@ class LoginController extends Controller
 
         if(Auth::attempt($inputeddata)) {
             $user = Auth::user();
-            if ($user) {
+            if ($user->role == 'Super-Admin') {
                 return redirect('/dashboard'); 
+            }elseif ($user->role == 'Admin') {
+                if ($user->status == 'Aktif'){
+                    return redirect('/admindashboard');
+                }else{
+                    Auth::logout();
+                    flash()
+                    ->killer(true)
+                    ->layout('bottomRight')
+                    ->timeout(3000)
+                    ->error('<b>Error!</b><br>Akun Anda Ditangguhkan !');
+                    return redirect('/login')->withInput();
+                }
             }
         }else {
             return redirect('/login')  

@@ -15,7 +15,7 @@ class UserAccess
      */
     public function handle(Request $request, Closure $next, $role): Response
     {
-        if(auth()->user()){
+        if(auth()->user()->role == $role){
             return $next($request);
         }
         return redirect('home');

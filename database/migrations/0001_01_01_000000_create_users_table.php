@@ -11,7 +11,9 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('username', 15);
-            $table->string('password');
+            $table->string('password');            
+            $table->enum('role',['Super-Admin', 'Admin']);
+            $table->enum('status',['Aktif','Nonaktif'])->default('Aktif');
             $table->rememberToken();
             $table->timestamps();
         });
