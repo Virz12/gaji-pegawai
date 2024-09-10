@@ -51,7 +51,7 @@ $(document).ready(function() {
                                             <button type="submit" class=" btn fw-normal  rounded-pill btn-outline-success fs-6 w-100 me-1">Aktif</button></a>`;
                         }
                         if ( status === 'Nonaktif' ){
-                            nonaktifHtml = `<button type="submit" class="btn fw-normal  rounded-pill btn-danger fs-6 w-50 ms-1" >Nonakktif</button>`;
+                            nonaktifHtml = `<button type="submit" class="btn fw-normal  rounded-pill btn-danger fs-6 w-50 ms-1" >Nonaktif</button>`;
                         } else {
                             nonaktifHtml = `<a href="/nonaktif/${admin.id }" class="text-decoration-none w-50">
                                                     <button type="submit" class=" btn fw-normal  rounded-pill btn-outline-danger fs-6 w-100 ms-1">Nonaktif</button></a>`;
