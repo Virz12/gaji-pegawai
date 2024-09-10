@@ -127,7 +127,7 @@
         <div id="pagination-links">{!! $dataadmin->links() !!}</div>
     </main>
     {{-- Script --}}
-    {{-- <script src="{{ asset('js/daftaradmin.js') }}"></script> --}}
+    <script src="{{ asset('js/dataadmin.js') }}"></script>
     <script src="https://kit.fontawesome.com/e814145206.js" crossorigin="anonymous"></script>
 </body>
 </html>

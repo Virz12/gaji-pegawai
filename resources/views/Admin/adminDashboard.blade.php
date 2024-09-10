@@ -88,7 +88,7 @@
                         <a class="nav-link text-black d-inline-block" href="/admindaftarpegawai"><i class="fa-solid fa-users"></i> Daftar Pegawai</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black d-inline-block" href="/admindaftaradmin"><i class="fa-solid fa-user-tie"></i> Daftar Admin</a>
+                        <a class="nav-link text-black d-inline-block" href="/dataadmin"><i class="fa-solid fa-user-tie"></i> Daftar Admin</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-black d-inline-block" href="/adminriwayatpesan"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pesan</a>

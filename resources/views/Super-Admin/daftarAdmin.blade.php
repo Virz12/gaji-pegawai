@@ -119,10 +119,6 @@
                                 <h5 class="card-text fw-normal">{{ $admin->username }}</h5>
                             </li>                            
                             <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">Nomor WhatsApp</h4>
-                                <h5 class="card-text fw-normal">9868769086</h5>
-                            </li>
-                            <li class="list-group-item">
                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">Role</h4>
                                 <h5 class="card-text fw-normal">{{ $admin->role }}</h5>
                             </li>
