@@ -111,7 +111,7 @@
                         @elseif ( $pegawai->jenis_kelamin == 'Perempuan' )
                             <label class="rounded " style="background-color:rgb(243, 173, 196)">
                                 <i class="fa-solid fa-user  position-absolute top-50 start-50 translate-middle" style="font-size: 5rem;"></i>                                
-                            </label>
+                            </label> 
                         @endif
                         </div>
                     </span>

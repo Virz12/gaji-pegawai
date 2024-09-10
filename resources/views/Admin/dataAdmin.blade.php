@@ -92,8 +92,7 @@
     </nav>
     {{-- Main --}}
     <main class="container-fluid ps-3 my-4">
-        <section class="row g-2 justify-content-between">
-            <a data-bs-toggle="modal" data-bs-target="#tambahData" class="btn btn-success mb-sm-3 ms-1 col-auto"><i class="fa-solid fa-plus me-2"></i> Tambah Admin</a>
+        <section class="row g-2 justify-content-end">            
             <div class="col-12 col-sm-auto">
                 <div class="input-group mb-3">
                     <label class="input-group-text shadow-sm" for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
@@ -111,11 +110,7 @@
                             <li class="list-group-item ">
                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">Username</h4>
                                 <h5 class="card-text fw-normal">{{ $admin->username }}</h5>
-                            </li>                            
-                            <li class="list-group-item">
-                                <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">Nomor WhatsApp</h4>
-                                <h5 class="card-text fw-normal">9868769086</h5>
-                            </li>
+                            </li>                                                        
                             <li class="list-group-item">
                                 <h4 class="card-title link-underline-dark link-offset-3 text-decoration-underline fw-bold">Role</h4>
                                 <h5 class="card-text fw-normal">{{ $admin->role }}</h5>

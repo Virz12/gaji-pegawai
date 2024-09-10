@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
     {
         $data_Admin = [
             [
-                'username' => 'BudiAdmin',
+                'username' => 'admin',
                 'password' => bcrypt('admin123'),
                 'role' => 'Super-Admin',
                 'status' => 'Aktif'
