@@ -31,27 +31,7 @@ Pengiriman pesan whatsapp melalui website menggunakan whatsapp cloud api
 ### Package whatsapp cloud api<br>
 https://github.com/netflie/whatsapp-cloud-api
 
-Install package melalui Composer
-```bash
-    composer install
-```
-Update package Composer
-```bash
-    composer update
-```
-Install package melalui NPM
-```bash
-    npm install
-```
-Update package NPM
-```bash
-    npm update
-```
-Jalankan key generate Aplikasi
-```bash
-    php artisan key:generate
-```
-Ubah nama file .env.example menjadi .env dan ubah bagian dibawah ini sesuai kebutuhan
+Ubah .env sesuai kebutuhan
 ```bash
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
@@ -61,18 +41,26 @@ Ubah nama file .env.example menjadi .env dan ubah bagian dibawah ini sesuai kebu
     DB_PASSWORD=
 ```
 
-Jalankan migration 
+Jalankan migration jika belum ada database
 ```bash
     php artisan migrate
 ```
-Jalankan database seeders untuk akun admin
+
+Jalankan database seeders untuk akun admin (dijalankan hanya ketika database kosong!)
 ```bash
     php artisan db:seed 
 ```
-Jalankan laravel server lokal (jika ingin menjalankan server lokal)
-```bash
-    php artisan serve
-```
+
+## Persyaratan Pengiriman whatsapp
+- membutuhkan token,id nomor,id bisnis
+- nomor penerima harus terdaftar di whatsapp<br>
+  jika menggunakan Uji gratis hanya tersedia 5 nomor penerima dan harus memverifikasi terlebih dahulu
+- harus mengirim template terlebih dahulu ke nomor penerima saat pertamakali.<br>
+template harus dari meta facebook bussines:<br>
+https://business.facebook.com/wa/manage/message-templates/
+<br>
+Jika persyaratan terpenuhi pengriman pesan akan berjalan dan terkirim ke penerima 
+
 
                                                                 
 
