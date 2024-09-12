@@ -1,0 +1,53 @@
+{
+    "name": "php-flasher/flasher-noty-laravel",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://php-flasher.io",
+    "description": "Use Noty.js for engaging flash notifications in Laravel with PHPFlasher. Combine the power of Noty.js and Laravel for rich, interactive user notifications.",
+    "keywords": [
+        "laravel",
+        "noty.js",
+        "flash-notifications",
+        "phpflasher",
+        "user-feedback",
+        "open-source"
+    ],
+    "support": {
+        "issues": "https://github.com/php-flasher/php-flasher/issues",
+        "source": "https://github.com/php-flasher/php-flasher"
+    },
+    "authors": [
+        {
+            "name": "Younes ENNAJI",
+            "email": "younes.ennaji.pro@gmail.com",
+            "homepage": "https://www.linkedin.com/in/younes--ennaji/",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.2",
+        "php-flasher/flasher-laravel": "^2.0.1",
+        "php-flasher/flasher-noty": "^2.0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Flasher\\Noty\\Laravel\\": ""
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Flasher\\Noty\\Laravel\\FlasherNotyServiceProvider"
+            ],
+            "aliases": {
+                "Noty": "Flasher\\Noty\\Laravel\\Facade\\Noty"
+            }
+        }
+    }
+}

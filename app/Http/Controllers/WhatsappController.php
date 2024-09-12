@@ -18,6 +18,7 @@ use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Message\CtaUrl\TitleHeader;
+use Netflie\WhatsAppCloudApi\Response\ResponseException;
 
 
 class WhatsappController extends Controller
