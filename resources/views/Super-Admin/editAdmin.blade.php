@@ -33,6 +33,13 @@
                 width: 25% !important;
             }
         }
+        .end-reveal {
+            right: 1.3rem;
+        }
+
+        .top-reveal {
+            top: 1.85rem;
+        }
 
         /* Remove Arrow on Number Input */
         /* Chrome, Safari, Edge, Opera */
