@@ -90,7 +90,7 @@
                 </div>
             </div>            
         @empty
-            <h2 class="text-secondary opacity-75 text-center">Arsip Kosong</h2>
+            <h2 class="text-secondary opacity-75 text-center w-100">Arsip Kosong</h2>
         @endforelse
         </section>
         <div id="pagination-links">{!! $arsipPesan->links() !!}</div>

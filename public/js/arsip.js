@@ -51,7 +51,7 @@ $(document).ready(function() {
 
                     $('#pagination-links').html(response.pagination);
                 } else {
-                    $('#arsip-list').append('<h2 class="text-secondary opacity-75 text-center">Arsip Kosong</h2>');
+                    $('#arsip-list').append('<h2 class="text-secondary opacity-75 text-center w-100">Arsip Kosong</h2>');
                 }
             }
         });
